@@ -415,3 +415,21 @@ npm run lint
 * ❌ Member workout/fitness tracking logs.
 * ❌ Multi-branch / multiple gym location support.
 * ❌ Native iOS/Android mobile apps.
+
+---
+
+## 10. AI Agent Workflow & Specialized Skill Guidelines
+
+### 10.1 Mandatory Post-Feature Ponytail Review
+* **After every feature development or code change**, the AI agent **MUST** perform a `ponytail` / `ponytail-review` pass to review diffs for unnecessary complexity, over-engineering, unused flexibility, and dead code.
+* The codebase must remain minimal, lean, and strictly YAGNI-compliant (`net: -<N> lines possible` or `Lean already. Ship.`).
+
+### 10.2 Proactive Domain Skill Utilization
+The agent **MUST** proactively leverage the best specialized skills available at its disposal across all phases of the project:
+* **Database & SQL:** `sql-pro` for schema audits, migrations, parameterized query design, indexing, and PostgreSQL performance.
+* **Backend API:** `fastapi-developer` / `backend-developer` / `python-pro` for async REST endpoints, Pydantic schemas, dependency injection, and security.
+* **Frontend Web:** `react-specialist` / `frontend-developer` / `typescript-pro` for React 18 component architecture, Zustand state management, Tailwind tokens, and form validation.
+* **Design & UX:** `ui-designer` / `accessibility-tester` for visual hierarchy, dark industrial aesthetics, responsive layout, and WCAG compliance.
+* **Security & Quality:** `security-auditor` / `code-reviewer` for Fernet AES-256 encryption, Supabase RLS verification, and token handling.
+* **Complexity & Debt Management:** `ponytail` / `ponytail-review` / `ponytail-debt` / `ponytail-gain` to ruthlessly eliminate bloat.
+

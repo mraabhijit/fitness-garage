@@ -5,6 +5,24 @@
 
 ---
 
+## 0. Official Documentation Index
+
+| # | Document | Purpose |
+|---|---|---|
+| 1 | [`01_PRD_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/01_PRD_Fitness_Garage.md) | Product requirements, problem statement, features, and user personas |
+| 2 | [`02_Technical_Architecture_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/02_Technical_Architecture_Fitness_Garage.md) | System topology, component interactions, cloud topology, and stack |
+| 3 | [`03_Database_Schema_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/03_Database_Schema_Fitness_Garage.md) | PostgreSQL schema, raw parameterized SQL with asyncpg, migrations, RLS |
+| 4 | [`04_API_Specification_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/04_API_Specification_Fitness_Garage.md) | Complete REST API reference (35 endpoints), schemas, error envelopes |
+| 5 | [`05_Frontend_Component_Architecture_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/05_Frontend_Component_Architecture_Fitness_Garage.md) | React 18+ component tree, Tailwind tokens, Zustand stores, router |
+| 6 | [`06_Admin_Dashboard_Specification_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/06_Admin_Dashboard_Specification_Fitness_Garage.md) | 11 admin modules, wireframes, CRUD workflows, bulk import |
+| 7 | [`07_Member_Portal_Specification_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/07_Member_Portal_Specification_Fitness_Garage.md) | Member portal, 3-way auth, status badges, payment history, invoices |
+| 8 | [`08_SEO_Strategy_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/08_SEO_Strategy_Fitness_Garage.md) | Local SEO, 5 JSON-LD schemas, Core Web Vitals, Open Graph, sitemap |
+| 9 | [`09_Project_Milestones_Deliverables_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/09_Project_Milestones_Deliverables_Fitness_Garage.md) | 6 project phases, timeline, deliverables register, risk mitigations |
+| 10 | [`10_Dev_Handover_README_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/10_Dev_Handover_README_Fitness_Garage.md) | Developer setup, operational guides, storage conventions, checklists |
+| 11 | [`11_Dev_Methodology_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/11_Dev_Methodology_Fitness_Garage.md) | Branching, 11-step workflow, Ponytail review, Definition of Done |
+
+---
+
 ## 1. Project Overview & Identity
 
 ### 1.1 Purpose & Problem Statement
@@ -112,6 +130,7 @@ To ensure compliance and privacy, all Personally Identifiable Information (PII) 
   3. `email_address`
 - **Mechanism:** Fernet symmetric encryption (`AES-256-CBC` with `HMAC-SHA256`) via Python's `cryptography` package.
 - **Key Storage:** `AES_ENCRYPTION_KEY` stored in environment variables (never committed).
+- **Execution Boundary:** Handled **strictly** in the FastAPI router/service layer — never in raw query modules, and never exposed to the frontend.
 
 ### 3.2 Row Level Security (RLS)
 Postgres Row Level Security provides defense-in-depth:
@@ -204,7 +223,7 @@ achievements (label, value, display_order, is_active)
 * **Success List:** `{ "data": [ ... ], "total": 42, "next_cursor": "uuid", "message": "Operation successful" }`
 * **Error:** `{ "error": "ERROR_CODE", "message": "Detailed description", "status": 400 }`
 
-### 5.2 Endpoint Catalog
+### 5.2 Endpoint Catalog (35 Total Endpoints)
 | Method | Route | Auth Role | Description |
 |---|---|---|---|
 | `GET` | `/health` | Open | Health check & keep-alive ping |
@@ -418,13 +437,152 @@ npm run lint
 
 ---
 
-## 10. AI Agent Workflow & Specialized Skill Guidelines
+## 10. SEO Strategy & Technical Implementation
 
-### 10.1 Mandatory Post-Feature Ponytail Review
+> Extracted from [`docs/08_SEO_Strategy_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/08_SEO_Strategy_Fitness_Garage.md).
+
+### 10.1 SEO Objectives & NAP Consistency
+* **Objective:** Local search visibility for "[City] gym", "personal trainer [City]", "fitness classes [City]" and brand dominance for "Fitness Garage".
+* **NAP (Name, Address, Phone):** Must be identical across website footer, Contact page, Google Business Profile, and schema markup.
+* **Single Source of Truth:** All contact information and map embeds are pulled dynamically from `site_config` (`gym_name`, `gym_address`, `gym_phone`, `gym_email`, `gym_maps_embed_url`). No hardcoded addresses in JSX.
+
+### 10.2 Structured Data (JSON-LD Schemas)
+1. **`GymOrSportsClub` (Home / `index.html`):** Static/dynamic injection with `PostalAddress`, `GeoCoordinates`, `openingHoursSpecification`, `amenityFeature`, and `sameAs` Google Place CID.
+2. **`BreadcrumbList` (`PageWrapper.tsx`):** Injected dynamically on inner pages via `breadcrumbs` prop.
+3. **`ItemList` (Services Page):** Dynamically generated list of `Service` items populated from `GET /public/services`.
+4. **`Person` (Trainers Page):** Dynamic `ItemList` of `Person` schemas generated from `GET /public/trainers`.
+5. **`AggregateRating` & `Review` (Testimonials Page):** Aggregated rating and individual reviews generated from `GET /public/reviews`.
+
+### 10.3 Technical SEO & Metadata Pattern (`PageWrapper`)
+* Every public page is wrapped in `<PageWrapper>` which injects:
+  - Canonical URL `<link rel="canonical" href="..." />`
+  - Unique `<title>` (Pattern: `[Page Topic] — Fitness Garage, [City]` ≤ 60 chars)
+  - Unique `<meta name="description">` (≤ 155 chars)
+  - Open Graph tags (`og:title`, `og:description`, `og:image`, `og:url`, `og:type`)
+  - Twitter Card tags (`twitter:card="summary_large_image"`, etc.)
+* **Robots & Indexing:**
+  - `public/robots.txt` allows all public pages and explicitly disallows `/member/`, `/admin/`, `/login`, `/api/`.
+  - `public/sitemap.xml` lists all 8 public routes with priority and change frequencies.
+  - Protected routes (`ProtectedMemberRoute`, `ProtectedAdminRoute`) inject `<meta name="robots" content="noindex, nofollow" />`.
+
+### 10.4 Core Web Vitals Optimization
+* **LCP (< 2.5s):** Preload first hero slide with `<link rel="preload" as="image" href="..." />`. Supabase Storage CDN delivery.
+* **CLS (< 0.1):** Explicit `width` and `height` on all `<img>` tags. Skeleton loading states during data fetch.
+* **FID / INP (< 200ms):** Vite manual chunk splitting (`vendor`, `auth`, `forms`), lazy loading routes with `React.lazy()`.
+* **Font Loading:** Google Fonts preconnected with `display=swap`.
+
+---
+
+## 11. Project Milestones, Phases & Deliverables
+
+> Extracted from [`docs/09_Project_Milestones_Deliverables_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/09_Project_Milestones_Deliverables_Fitness_Garage.md).
+
+### 11.1 6-Phase Roadmap Overview
+```
+Phase 0 │ Project Setup & Infrastructure         (Week 1)
+Phase 1 │ Database & Backend Foundation          (Week 2)
+Phase 2 │ Public Website Frontend                (Weeks 3–4)
+Phase 3 │ Admin Dashboard                        (Weeks 5–6)
+Phase 4 │ Member Portal                          (Week 7)
+Phase 5 │ Integrations & SEO                     (Week 8, First Half)
+Phase 6 │ QA, Hardening & Deployment             (Week 8, Second Half)
+```
+
+### 11.2 Milestone Acceptance Highlights
+* **Phase 0:** Monorepo setup, Vite + React frontend, FastAPI backend, Supabase project, Vercel/Render CI/CD, AES key generation, keep-alive ping.
+* **Phase 1:** 14 SQL migrations (000–013), `db/migrate.py`, connection pool, AES-256 encrypt/decrypt helper, Supabase JWT auth guards, 9 query modules, 4 service layers, 35 endpoints, pytest suite.
+* **Phase 2:** 8 public marketing pages, Tailwind design tokens, Zustand stores, custom hooks, component primitives, responsive layouts (375px, 768px, 1280px).
+* **Phase 3:** 11 admin modules, `AdminSidebar`, CRUD for all entities, bulk Excel/CSV importer, invoice PDF generator, toast alerts, confirmation modals.
+* **Phase 4:** 3-way member auth (Email/Password, Magic Link, Phone OTP), auto-linking for imported members, expiry countdowns with 14-day amber / red alerts, signed invoice downloads, mobile payment cards.
+* **Phase 5:** Google Places API sync (24h cache), 5 JSON-LD schemas, robots.txt, sitemap.xml, Core Web Vitals optimization (Lighthouse ≥ 85).
+* **Phase 6:** End-to-end user testing, security penetration tests (PII ciphertext verification, RLS bypass checks), 200+ member import, 6 admin accounts setup, `v1.0.0` release.
+
+---
+
+## 12. Development Methodology & Workflow Protocol
+
+> Extracted from [`docs/11_Dev_Methodology_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/11_Dev_Methodology_Fitness_Garage.md).
+
+### 12.1 Git Branching & Commit Conventions
+* **Branch Structure:**
+  - `main`: Production-only code. Deploys automatically to Vercel and Render.
+  - `develop`: Integration branch. All features merge here first.
+  - `feature/<scope>/<description>`: Feature branches created from `develop`.
+  - `fix/<scope>/<description>`: Bug fixes created from `develop`.
+  - `chore/<scope>/<description>`: Config, deps, docs.
+* **Scopes:** `frontend`, `backend`, `db`, `infra`, `docs`.
+* **Commit Message Format:** `<type>(<scope>): <description>` (e.g. `feat(backend): add bulk member import endpoint`).
+* **Release Tagging:** Semantic versioning (`v1.0.0` at launch).
+
+### 12.2 11-Step Feature Lifecycle
+```
+Step 1: Create feature branch from develop (git checkout -b feature/<scope>/<desc>)
+Step 2: Build feature using specialized domain skills (FastAPI, React, asyncpg, Tailwind)
+Step 3: Review using Ponytail Skill (ponytail-review for DRY, SOLID, KISS, YAGNI, PII, SQL)
+Step 4: Implement review changes (resolve all FAILs and document WARNs)
+Step 5: Test feature (pytest unit tests, Swagger manual verification, responsive viewport checks)
+Step 6: Run regression suite (full pytest suite + frontend npm run build && npm run lint)
+Step 7: Pre-commit checks (black, isort, flake8, mypy, bandit, eslint, prettier)
+Step 8: Commit changes with conventional commit syntax
+Step 9: Push branch and create PR to develop with standard PR template
+Step 10: PR review and squash-merge into develop
+Step 11: Delete feature branch immediately
+```
+
+### 12.3 Definition of Done (10 Binary Gates)
+1. Code matches the specification exactly — no scope creep, no omissions.
+2. Ponytail review completed — all `FAIL` items resolved.
+3. Feature tests passing.
+4. Full regression suite passing.
+5. Pre-commit hooks passing.
+6. PR description completed with all checklist items verified.
+7. CI pipeline green.
+8. PR squash-merged to `develop`.
+9. Feature branch deleted.
+10. Zero `TODO`, `FIXME`, `console.log`, `print()`, or leftover debug code.
+
+---
+
+## 13. Operational Handbook & Common Development Tasks
+
+> Extracted from [`docs/10_Dev_Handover_README_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/10_Dev_Handover_README_Fitness_Garage.md).
+
+### 13.1 Supabase Storage & Section-Named Folders
+* Assets are stored in section-named folders. Admin drops media into the respective folder in Supabase Storage — no custom file manager UI needed.
+* Use `buildStorageUrl(folder, filename)` to construct public URLs.
+* Invoices are stored in the private bucket `invoices/<member_id>/<payment_id>.pdf` and accessed **strictly** via temporary signed URLs (60-min expiry).
+
+### 13.2 Common Developer Tasks Guide
+* **Add a Public Endpoint:**
+  1. Add SQL function in `db/queries/<resource>_queries.py`.
+  2. Add Pydantic schema in `schemas/<resource>.py`.
+  3. Add router endpoint in `routers/public/<resource>.py`.
+  4. Add API call in `frontend/src/services/publicService.ts`.
+  5. Add test in `backend/tests/test_<resource>.py`.
+* **Add an Admin Module:**
+  1. Add query in `db/queries/`, schema in `schemas/`, router in `routers/admin/` with `require_admin`.
+  2. Register router in `main.py`.
+  3. Add nav item to `AdminSidebar.tsx`.
+  4. Create page in `pages/admin/<Page>Page.tsx` and register in `router/index.tsx` inside `ProtectedAdminRoute`.
+  5. Add route constant in `constants/routes.ts` and service in `adminService.ts`.
+* **Key Rotation (AES-256):** Must be executed via transactional migration script (read all rows, decrypt with old key, re-encrypt with new key, commit, update `AES_ENCRYPTION_KEY` on Render). Never update key without migrating data.
+
+### 13.3 Known Constraints & Gotchas
+* **Render Free Tier Spin-Down:** Mitigated via cron-job.org keep-alive pinging `GET /health` every 10 min. First request after deployment takes ~30s.
+* **Phone OTP / Twilio:** Supabase Phone OTP requires Twilio credentials in Supabase Dashboard. If Twilio is not configured, the Phone OTP tab must be hidden.
+* **PII Search Filter:** Member search (`?search=<term>`) decrypts member records in memory on the backend. For 200+ members this is instant (<10ms).
+* **Invoice Number Sequence:** `invoice_last_sequence` in `site_config` must be incremented using a PostgreSQL `SELECT ... FOR UPDATE` row lock during payment creation.
+* **`asyncpg.Record` Immutability:** `asyncpg` returns read-only records. Convert to dict before mutation: `row = dict(record)`.
+
+---
+
+## 14. AI Agent Workflow & Specialized Skill Guidelines
+
+### 14.1 Mandatory Post-Feature Ponytail Review
 * **After every feature development or code change**, the AI agent **MUST** perform a `ponytail` / `ponytail-review` pass to review diffs for unnecessary complexity, over-engineering, unused flexibility, and dead code.
 * The codebase must remain minimal, lean, and strictly YAGNI-compliant (`net: -<N> lines possible` or `Lean already. Ship.`).
 
-### 10.2 Proactive Domain Skill Utilization
+### 14.2 Proactive Domain Skill Utilization
 The agent **MUST** proactively leverage the best specialized skills available at its disposal across all phases of the project:
 * **Database & SQL:** `sql-pro` for schema audits, migrations, parameterized query design, indexing, and PostgreSQL performance.
 * **Backend API:** `fastapi-developer` / `backend-developer` / `python-pro` for async REST endpoints, Pydantic schemas, dependency injection, and security.
@@ -432,4 +590,3 @@ The agent **MUST** proactively leverage the best specialized skills available at
 * **Design & UX:** `ui-designer` / `accessibility-tester` for visual hierarchy, dark industrial aesthetics, responsive layout, and WCAG compliance.
 * **Security & Quality:** `security-auditor` / `code-reviewer` for Fernet AES-256 encryption, Supabase RLS verification, and token handling.
 * **Complexity & Debt Management:** `ponytail` / `ponytail-review` / `ponytail-debt` / `ponytail-gain` to ruthlessly eliminate bloat.
-

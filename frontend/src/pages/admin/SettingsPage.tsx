@@ -49,7 +49,7 @@ export const SettingsPage: React.FC = () => {
     try {
       const res = await adminService.syncReviews();
       alert(`Google Reviews sync complete! Synced: ${res.synced_count ?? 0} reviews.`);
-    } catch (err: any) {
+    } catch {
       alert('Review sync failed');
     } finally {
       setIsSyncing(false);

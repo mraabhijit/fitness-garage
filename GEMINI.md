@@ -519,19 +519,19 @@ Phase 6 │ QA, Hardening & Deployment             (Week 8, Second Half)
 Step 1: Create feature branch from develop (git checkout -b feature/<scope>/<desc>)
 Step 2: Build feature using specialized domain skills (FastAPI, React, asyncpg, Tailwind)
 Step 3: Review using Ponytail Skill (ponytail-review for DRY, SOLID, KISS, YAGNI, PII, SQL)
-Step 4: Implement review changes (resolve all FAILs and document WARNs)
-Step 5: Test feature (pytest unit tests, Swagger manual verification, responsive viewport checks)
-Step 6: Run regression suite (full pytest suite + frontend npm run build && npm run lint)
-Step 7: Pre-commit checks (black, isort, flake8, mypy, bandit, eslint, prettier)
-Step 8: Commit changes with conventional commit syntax
-Step 9: Push branch and create PR to develop with standard PR template
-Step 10: PR review and squash-merge into develop
-Step 11: Delete feature branch immediately
+Step 4: Save review output to review-docs/<feature-name>.md
+Step 5: Implement review changes (No progress allowed until review output is saved in review-docs/ and each comment is resolved/addressed, or explicitly documented with technical rationale if omitted)
+Step 6: Test feature (pytest unit tests, Swagger manual verification, responsive viewport checks)
+Step 7: Run regression suite (full pytest suite + frontend npm run build && npm run lint)
+Step 8: Pre-commit checks (black, isort, flake8, mypy, bandit, eslint, prettier)
+Step 9: Commit changes with conventional commit syntax
+Step 10: Push branch and create PR to develop with standard PR template
+Step 11: PR review, squash-merge into develop, and delete feature branch immediately
 ```
 
 ### 12.3 Definition of Done (10 Binary Gates)
 1. Code matches the specification exactly — no scope creep, no omissions.
-2. Ponytail review completed — all `FAIL` items resolved.
+2. Ponytail review output saved to `review-docs/<feature-name>.md` with 100% of comments resolved in code or explicitly rationalized.
 3. Feature tests passing.
 4. Full regression suite passing.
 5. Pre-commit hooks passing.
@@ -578,8 +578,13 @@ Step 11: Delete feature branch immediately
 
 ## 14. AI Agent Workflow & Specialized Skill Guidelines
 
-### 14.1 Mandatory Post-Feature Ponytail Review
-* **After every feature development or code change**, the AI agent **MUST** perform a `ponytail` / `ponytail-review` pass to review diffs for unnecessary complexity, over-engineering, unused flexibility, and dead code.
+### 14.1 Mandatory Post-Feature Ponytail Review & Output Persistence
+* **After every feature development or code change on a branch**, the AI agent **MUST** perform a `ponytail` / `ponytail-review` pass to review diffs for unnecessary complexity, over-engineering, unused flexibility, and dead code.
+* **Output Persistence in `review-docs/`:** The full `ponytail-review` output **MUST** be saved into the `review-docs/` directory named directly against the feature being developed (e.g. `review-docs/<feature-name>.md` or `review-docs/feature-frontend-member-portal-and-seo.md`).
+* **Enforced Progression Gate:** **No progress is permitted** until:
+  1. The review output file is saved in `review-docs/`.
+  2. Each comment, warning, and failure identified in the review is explicitly addressed and resolved in code.
+  3. If any comment is intentionally not addressed in code, its technical rationale must be explicitly documented in the review file explaining why it was omitted.
 * The codebase must remain minimal, lean, and strictly YAGNI-compliant (`net: -<N> lines possible` or `Lean already. Ship.`).
 
 ### 14.2 Proactive Domain Skill Utilization

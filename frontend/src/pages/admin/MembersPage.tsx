@@ -54,6 +54,7 @@ export const MembersPage: React.FC = () => {
 
   useEffect(() => {
     loadMembers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, statusFilter]);
 
   const handleSearch = (e: React.FormEvent) => {

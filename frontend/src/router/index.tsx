@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import { PageWrapper } from '../components/layout/PageWrapper';
+import { MemberLayout } from '../components/layout/MemberLayout';
 import { ProtectedMemberRoute } from './ProtectedMemberRoute';
 import { ProtectedAdminRoute } from './ProtectedAdminRoute';
 
@@ -18,10 +19,12 @@ import { ContactPage } from '../pages/public/ContactPage';
 import { MemberLoginPage } from '../pages/auth/MemberLoginPage';
 import { AdminLoginPage } from '../pages/auth/AdminLoginPage';
 
-// Member Portal
+// Member Portal Pages
 import { MemberDashboardPage } from '../pages/member/MemberDashboardPage';
+import { MembershipStatusPage } from '../pages/member/MembershipStatusPage';
+import { PaymentHistoryPage } from '../pages/member/PaymentHistoryPage';
 
-// Admin Dashboard
+// Admin Dashboard Pages
 import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
 import { MembersPage } from '../pages/admin/MembersPage';
 import { MemberImportPage } from '../pages/admin/MemberImportPage';
@@ -55,18 +58,16 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // Protected Member Portal Routes
+  // Protected Member Portal Routes (wrapped in ProtectedMemberRoute and MemberLayout)
   {
     element: <ProtectedMemberRoute />,
     children: [
       {
-        element: (
-          <PageWrapper showFooter={false}>
-            <Outlet />
-          </PageWrapper>
-        ),
+        element: <MemberLayout />,
         children: [
           { path: ROUTES.MEMBER_DASHBOARD, element: <MemberDashboardPage /> },
+          { path: ROUTES.MEMBER_MEMBERSHIP, element: <MembershipStatusPage /> },
+          { path: ROUTES.MEMBER_PAYMENTS, element: <PaymentHistoryPage /> },
         ],
       },
     ],

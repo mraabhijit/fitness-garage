@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
 import { useAuthStore } from '../store/authStore';
 
 export const ProtectedMemberRoute: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuthStore();
+
+  useEffect(() => {
+    (document.querySelector('meta[name="robots"]') ??
+      document.head.appendChild(Object.assign(document.createElement('meta'), { name: 'robots' }))
+    ).setAttribute('content', 'noindex, nofollow');
+  }, []);
 
   if (isLoading) {
     return (

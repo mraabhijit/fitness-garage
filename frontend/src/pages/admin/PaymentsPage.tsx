@@ -52,6 +52,7 @@ export const PaymentsPage: React.FC = () => {
 
   useEffect(() => {
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const handleRecordPayment = async (e: React.FormEvent) => {

@@ -4,12 +4,71 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fitness Garage — Push Beyond Your Limits</title>
-    <meta name="description" content="Fitness Garage — Premier gym offering personal training, group classes, strength & conditioning, and transformation programs." />
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Fitness Garage — Gym &amp; Personal Training</title>
+    <meta name="description" content="Fitness Garage — Premier gym offering personal training, group classes, strength &amp; conditioning, and transformation programs." />
+    
+    <!-- Open Graph Default Fallbacks -->
+    <meta property="og:site_name" content="Fitness Garage" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content="Fitness Garage — Gym &amp; Personal Training" />
+    <meta property="og:description" content="Push beyond your limits at Fitness Garage. Elite dark industrial strength training arena, certified coaching, and flexible membership plans." />
+    <meta property="og:image" content="/og-default.svg" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Fitness Garage — Gym &amp; Personal Training" />
+    <meta name="twitter:description" content="Push beyond your limits at Fitness Garage. Elite dark industrial strength training arena, certified coaching, and flexible membership plans." />
+    <meta name="twitter:image" content="/og-default.svg" />
+
+    <!-- Google Fonts Preconnect & Swap -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- JSON-LD LocalBusiness / GymOrSportsClub Schema -->
+    <script type="application/ld+json" id="gym-schema">
+    {
+      "@context": "https://schema.org",
+      "@type": "GymOrSportsClub",
+      "name": "Fitness Garage",
+      "url": "https://fitnessgarage.com",
+      "logo": "https://fitnessgarage.com/logo.svg",
+      "image": "https://fitnessgarage.com/og-default.svg",
+      "description": "Fitness Garage is a premier gym offering strength training, personal coaching, group fitness, zumba, and custom transformation programs.",
+      "telephone": "+91 98765 43210",
+      "email": "contact@fitnessgarage.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "123 Iron Works Way",
+        "addressLocality": "Fitness District",
+        "addressCountry": "IN"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          "opens": "05:30",
+          "closes": "22:30"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Sunday"],
+          "opens": "06:00",
+          "closes": "13:00"
+        }
+      ],
+      "priceRange": "₹₹",
+      "currenciesAccepted": "INR",
+      "paymentAccepted": "Cash, Card, UPI, Bank Transfer",
+      "amenityFeature": [
+        { "@type": "LocationFeatureSpecification", "name": "Personal Training", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Strength Arena", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Zumba & Group Classes", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Locker & Shower Rooms", "value": true }
+      ]
+    }
+    </script>
   </head>
   <body class="bg-garage-black text-garage-white font-body min-h-screen antialiased selection:bg-garage-chrome selection:text-garage-black">
     <div id="root"></div>

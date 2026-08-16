@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#1A1A1A" />
+  <!-- Industrial accents -->
+  <line x1="0" y1="620" x2="1200" y2="620" stroke="#D4AF37" stroke-width="10" />
+  <line x1="0" y1="0" x2="1200" y2="0" stroke="#2C2C2C" stroke-width="4" />
+  <rect x="60" y="60" width="1080" height="510" rx="16" fill="#2C2C2C" fill-opacity="0.4" stroke="#3D3D3D" stroke-width="2" />
+
+  <!-- Chrome Slash Background Graphic -->
+  <path d="M 850 60 L 970 60 L 750 570 L 630 570 Z" fill="#D4AF37" opacity="0.12" />
+
+  <!-- Badge -->
+  <rect x="120" y="140" width="280" height="40" rx="20" fill="#D4AF37" fill-opacity="0.15" stroke="#D4AF37" stroke-width="1.5" stroke-opacity="0.4" />
+  <text x="260" y="166" font-family="'Inter', sans-serif" font-size="16" font-weight="700" fill="#D4AF37" text-anchor="middle" letter-spacing="2">FORGE YOUR ULTIMATE PHYSIQUE</text>
+
+  <!-- Main Headline -->
+  <text x="120" y="270" font-family="'Bebas Neue', Arial Black, sans-serif" font-size="96" font-weight="900" fill="#F0F0F0" letter-spacing="4">FITNESS <tspan fill="#D4AF37">/</tspan> GARAGE</text>
+
+  <text x="120" y="345" font-family="'Inter', sans-serif" font-size="32" font-weight="600" fill="#9A9A9A">Push Beyond Limits · Elite Dark Industrial Strength Sanctum</text>
+
+  <!-- Details Pill -->
+  <text x="120" y="440" font-family="'Inter', sans-serif" font-size="22" font-weight="400" fill="#F0F0F0">Personal Training · Strength &amp; Conditioning · Zumba · Member Portal</text>
+  <text x="120" y="490" font-family="'Inter', sans-serif" font-size="20" font-weight="700" fill="#D4AF37">https://fitnessgarage.com</text>
+</svg>

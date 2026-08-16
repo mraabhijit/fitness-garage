@@ -2,8 +2,17 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Clock, Instagram, Facebook, Youtube } from 'lucide-react';
 import { ROUTES } from '../../constants/routes';
+import { useSiteConfigStore } from '../../store/siteConfigStore';
 
 export const Footer: React.FC = () => {
+  const getConfig = useSiteConfigStore((s) => s.getConfig);
+
+  const gymName = getConfig('gym_name', 'Fitness Garage');
+  const gymAddress = getConfig('gym_address', '123 Iron Works Way, Fitness District');
+  const gymPhone = getConfig('gym_phone', '+91 98765 43210');
+  const gymEmail = getConfig('gym_email', 'contact@fitnessgarage.com');
+  const aboutTagline = getConfig('about_tagline', 'Push beyond your limits. Fitness Garage is your premium dark industrial strength and transformation sanctum.');
+
   return (
     <footer className="bg-[#121212] border-t border-garage-mid/60 text-garage-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -15,20 +24,20 @@ export const Footer: React.FC = () => {
                 FG
               </div>
               <span className="font-display text-2xl tracking-wider uppercase text-garage-white">
-                FITNESS <span className="text-garage-chrome">/</span> GARAGE
+                {gymName.toUpperCase()}
               </span>
             </Link>
             <p className="text-sm text-garage-muted font-body leading-relaxed">
-              Push beyond your limits. Fitness Garage is your premium dark industrial strength and transformation sanctum.
+              {aboutTagline}
             </p>
             <div className="flex space-x-3 pt-2">
-              <a href="#" className="p-2 rounded-lg bg-garage-dark hover:bg-garage-chrome hover:text-garage-black text-garage-muted transition-colors">
+              <a href="#" aria-label="Instagram" className="p-2 rounded-lg bg-garage-dark hover:bg-garage-chrome hover:text-garage-black text-garage-muted transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
-              <a href="#" className="p-2 rounded-lg bg-garage-dark hover:bg-garage-chrome hover:text-garage-black text-garage-muted transition-colors">
+              <a href="#" aria-label="Facebook" className="p-2 rounded-lg bg-garage-dark hover:bg-garage-chrome hover:text-garage-black text-garage-muted transition-colors">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="#" className="p-2 rounded-lg bg-garage-dark hover:bg-garage-chrome hover:text-garage-black text-garage-muted transition-colors">
+              <a href="#" aria-label="YouTube" className="p-2 rounded-lg bg-garage-dark hover:bg-garage-chrome hover:text-garage-black text-garage-muted transition-colors">
                 <Youtube className="w-4 h-4" />
               </a>
             </div>
@@ -62,7 +71,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to={ROUTES.GALLERY} className="text-garage-muted hover:text-garage-white transition-colors">
-                  Gym & Transformations
+                  Gym &amp; Transformations
                 </Link>
               </li>
               <li>
@@ -96,7 +105,7 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Col 4: Contact */}
+          {/* Col 4: Contact / NAP */}
           <div>
             <h4 className="text-lg font-bold font-display uppercase tracking-wider text-garage-chrome mb-4">
               Visit Us
@@ -104,22 +113,26 @@ export const Footer: React.FC = () => {
             <ul className="space-y-3 text-sm text-garage-muted font-body">
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-garage-chrome mt-0.5 shrink-0" />
-                <span>123 Iron Works Way, Fitness District</span>
+                <span>{gymAddress}</span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-garage-chrome shrink-0" />
-                <span>+91 98765 43210</span>
+                <a href={`tel:${gymPhone}`} className="hover:text-garage-white transition-colors">
+                  {gymPhone}
+                </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-garage-chrome shrink-0" />
-                <span>contact@fitnessgarage.com</span>
+                <a href={`mailto:${gymEmail}`} className="hover:text-garage-white transition-colors">
+                  {gymEmail}
+                </a>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="mt-12 pt-8 border-t border-garage-mid/40 flex flex-col sm:flex-row items-center justify-between text-xs text-garage-muted">
-          <p>© {new Date().getFullYear()} Fitness Garage. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {gymName}. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
             <Link to={ROUTES.MEMBER_LOGIN} className="hover:text-garage-white transition-colors">
               Member Portal

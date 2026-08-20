@@ -20,9 +20,9 @@ export interface MembershipPlan {
   duration: PlanDuration
   price: number
   description: string | null
-  is_active: boolean
-  created_at: string
-  updated_at: string
+  is_active?: boolean
+  created_at?: string
+  updated_at?: string
 }
 
 export interface Member {
@@ -38,8 +38,8 @@ export interface Member {
   expiry_date: string
   imported: boolean
   notes: string | null
-  created_at: string
-  updated_at: string
+  created_at?: string
+  updated_at?: string
 }
 
 export interface Payment {
@@ -54,8 +54,8 @@ export interface Payment {
   recorded_by: string | null
   member_name?: string | null
   plan_name?: string | null
-  created_at: string
-  updated_at: string
+  created_at?: string
+  updated_at?: string
 }
 
 export interface Trainer {
@@ -68,10 +68,10 @@ export interface Trainer {
   bio: string | null
   photo_filename: string | null
   photo_url?: string | null
-  display_order: number
-  is_active: boolean
-  created_at: string
-  updated_at: string
+  display_order?: number
+  is_active?: boolean
+  created_at?: string
+  updated_at?: string
 }
 
 export interface Service {
@@ -81,47 +81,89 @@ export interface Service {
   description: string | null
   icon_filename: string | null
   icon_url?: string | null
-  display_order: number
-  is_active: boolean
-  created_at: string
-  updated_at: string
+  display_order?: number
+  is_active?: boolean
+  created_at?: string
+  updated_at?: string
 }
 
 export interface GalleryItem {
   id: string
-  folder_path: 'assets/gallery' | 'assets/transformations'
-  file_name: string
+  folder?: 'gallery' | 'transformations' | string
+  folder_path?: 'assets/gallery' | 'assets/transformations' | string
+  filename?: string
+  file_name?: string
   media_type: 'image' | 'video'
   caption: string | null
   url?: string | null
-  display_order: number
-  is_active: boolean
-  uploaded_by: string | null
-  created_at: string
-  updated_at: string
+  display_order?: number
+  is_active?: boolean
+  uploaded_by?: string | null
+  created_at?: string
+  updated_at?: string
 }
 
 export interface Review {
   id: string
-  google_review_id: string
+  google_review_id?: string
   reviewer_name: string
   review_text: string | null
   rating: number
   review_date: string
-  last_synced_at: string
-  is_visible: boolean
-  created_at: string
-  updated_at: string
+  last_synced_at?: string
+  is_visible?: boolean
+  created_at?: string
+  updated_at?: string
 }
 
 export interface Achievement {
   id: string
   label: string
   value: string | null
-  display_order: number
-  is_active: boolean
-  created_at: string
-  updated_at: string
+  display_order?: number
+  is_active?: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+export interface SiteConfig {
+  gym_name: string
+  tagline: string
+  about_story: string
+  address: string
+  phone: string
+  email: string
+  google_maps_embed_url: string
+  google_form_url: string
+  google_place_id: string
+  opening_hours: string
+  [key: string]: string
+}
+
+export interface HeroSlide {
+  filename: string
+  media_type: 'image' | 'video'
+  alt: string
+}
+
+export interface HeroStat {
+  value: string
+  label: string
+}
+
+export interface CTAButton {
+  label: string
+  href: string
+  variant: 'primary' | 'secondary' | 'ghost'
+}
+
+export interface HeroData {
+  slideshow_interval_ms: number
+  slides: HeroSlide[]
+  headline_before: string
+  headline_after: string
+  cta_buttons: CTAButton[]
+  stats: HeroStat[]
 }
 
 export interface SiteConfigItem {
@@ -129,7 +171,7 @@ export interface SiteConfigItem {
   config_key: string
   config_value: string
   description: string | null
-  updated_at: string
+  updated_at?: string
 }
 
 export interface ApiResponse<T> {

@@ -1,0 +1,28 @@
+{
+  "achievements": [
+    {
+      "id": "1",
+      "label": "Active Athletes",
+      "value": "500+",
+      "display_order": 1
+    },
+    {
+      "id": "2",
+      "label": "Years of Excellence",
+      "value": "8+",
+      "display_order": 2
+    },
+    {
+      "id": "3",
+      "label": "Certified Coaches",
+      "value": "6",
+      "display_order": 3
+    },
+    {
+      "id": "4",
+      "label": "Proven Transformations",
+      "value": "250+",
+      "display_order": 4
+    }
+  ]
+}

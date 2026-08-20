@@ -1,34 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Flame, ShieldCheck, Star } from 'lucide-react'
+import { ArrowRight, Flame } from 'lucide-react'
 import { ROUTES } from '../../constants/routes'
 import { publicService } from '../../services/publicService'
-import type { Achievement, MembershipPlan, Review, Service } from '../../types'
+import type { HeroData, MembershipPlan, Service } from '../../types'
 import { Button } from '../../components/common/Button'
-import { Card } from '../../components/common/Card'
 import { SectionHeading } from '../../components/common/SectionHeading'
-import { StatBlock } from '../../components/common/StatBlock'
-import { formatCurrency } from '../../utils/formatters'
+import { HeroSlideshow } from '../../features/hero/HeroSlideshow'
+import { HeroStats } from '../../features/hero/HeroStats'
+import { ServiceCard } from '../../features/services/ServiceCard'
+import { PlanCard } from '../../features/plans/PlanCard'
+import { GoogleReviews } from '../../features/reviews/GoogleReviews'
 
 export const HomePage: React.FC = () => {
   const [services, setServices] = useState<Service[]>([])
   const [plans, setPlans] = useState<MembershipPlan[]>([])
-  const [reviews, setReviews] = useState<Review[]>([])
-  const [achievements, setAchievements] = useState<Achievement[]>([])
+  const [heroData, setHeroData] = useState<HeroData | null>(null)
 
   useEffect(() => {
     async function loadData() {
       try {
-        const [servicesRes, plansRes, reviewsRes, achRes] = await Promise.all([
+        const [servicesRes, plansRes, heroRes] = await Promise.all([
           publicService.getServices(),
           publicService.getPlans(),
-          publicService.getReviews(),
-          publicService.getAchievements(),
+          publicService.getHeroData(),
         ])
         setServices(servicesRes.slice(0, 4))
         setPlans(plansRes.slice(0, 4))
-        setReviews(reviewsRes.slice(0, 3))
-        setAchievements(achRes)
+        setHeroData(heroRes)
       } catch (err) {
         console.error('Error fetching homepage data', err)
       }
@@ -40,7 +39,13 @@ export const HomePage: React.FC = () => {
     <div className="flex flex-col min-h-screen">
       {/* 1. HERO SECTION */}
       <section className="relative min-h-[90vh] flex items-center justify-center bg-garage-black overflow-hidden px-4">
-        {/* Background gradient grid effect */}
+        {heroData?.slides && (
+          <HeroSlideshow
+            slides={heroData.slides}
+            intervalMs={heroData.slideshow_interval_ms}
+          />
+        )}
+
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-garage-dark via-garage-black to-black opacity-80" />
 
         <div className="relative z-10 max-w-5xl mx-auto text-center py-20">
@@ -50,7 +55,9 @@ export const HomePage: React.FC = () => {
           </div>
 
           <h1 className="text-5xl sm:text-7xl md:text-8xl font-display font-extrabold uppercase tracking-tight text-garage-white leading-none mb-6">
-            PUSH <span className="text-garage-chrome">/</span> BEYOND LIMITS
+            {heroData?.headline_before || 'PUSH'}{' '}
+            <span className="text-garage-chrome">/</span>{' '}
+            {heroData?.headline_after || 'BEYOND LIMITS'}
           </h1>
 
           <p className="text-lg md:text-xl text-garage-muted max-w-2xl mx-auto font-body mb-10 leading-relaxed">
@@ -73,23 +80,14 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. STATS / ACHIEVEMENTS BAR */}
-      <section className="bg-garage-dark border-y border-garage-mid py-12 px-4">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6">
-          {achievements.length > 0 ? (
-            achievements.map((ach) => (
-              <StatBlock key={ach.id} value={ach.value || '100+'} label={ach.label} />
-            ))
-          ) : (
-            <>
-              <StatBlock value="500+" label="Active Athletes" />
-              <StatBlock value="12+" label="Years of Grit" />
-              <StatBlock value="8" label="Certified Coaches" />
-              <StatBlock value="100%" label="Transformation Rate" />
-            </>
-          )}
-        </div>
-      </section>
+      {/* 2. STATS BAR */}
+      {heroData?.stats && (
+        <section className="bg-garage-dark border-y border-garage-mid py-12 px-4">
+          <div className="max-w-7xl mx-auto">
+            <HeroStats stats={heroData.stats} />
+          </div>
+        </section>
+      )}
 
       {/* 3. SERVICES HIGHLIGHT */}
       <section className="py-24 px-4 bg-garage-black">
@@ -101,19 +99,8 @@ export const HomePage: React.FC = () => {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service) => (
-              <Card key={service.id} variant="default" hoverEffect className="p-6">
-                <div className="w-12 h-12 rounded-lg bg-garage-chrome/10 border border-garage-chrome/30 flex items-center justify-center text-garage-chrome mb-4">
-                  <ShieldCheck className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-display uppercase tracking-wider text-garage-white mb-2">
-                  {service.name}
-                </h3>
-                <p className="text-sm text-garage-muted font-body leading-relaxed">
-                  {service.description ||
-                    'State-of-the-art equipment designed for maximum muscle engagement.'}
-                </p>
-              </Card>
+            {services.map((service, idx) => (
+              <ServiceCard key={service.id} service={service} index={idx} />
             ))}
           </div>
 
@@ -138,38 +125,7 @@ export const HomePage: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {plans.map((plan) => (
-              <Card
-                key={plan.id}
-                variant={plan.tier === 'pt' ? 'chrome' : 'default'}
-                hoverEffect
-                className="p-6 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded bg-garage-mid text-garage-white">
-                      {plan.tier.toUpperCase()}
-                    </span>
-                    <span className="text-xs text-garage-muted uppercase">{plan.duration}</span>
-                  </div>
-                  <div className="text-3xl md:text-4xl font-display text-garage-chrome font-extrabold mb-4">
-                    {formatCurrency(plan.price)}
-                  </div>
-                  <p className="text-xs text-garage-muted font-body mb-6">
-                    {plan.description ||
-                      'Full unrestricted gym access with free locker facilities and coaching support.'}
-                  </p>
-                </div>
-
-                <Link to={ROUTES.CONTACT} className="w-full">
-                  <Button
-                    variant={plan.tier === 'pt' ? 'primary' : 'outline'}
-                    size="sm"
-                    className="w-full"
-                  >
-                    Enroll Now
-                  </Button>
-                </Link>
-              </Card>
+              <PlanCard key={plan.id} plan={plan} />
             ))}
           </div>
 
@@ -192,29 +148,7 @@ export const HomePage: React.FC = () => {
             subtitle="Real member feedback synced live from Google Maps reviews."
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {reviews.map((review) => (
-              <Card key={review.id} variant="default" className="p-6">
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(review.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-garage-chrome text-garage-chrome" />
-                  ))}
-                </div>
-                <p className="text-sm text-garage-muted italic mb-6 font-body">
-                  "
-                  {review.review_text ||
-                    'Incredible gym aesthetic, top-tier trainers, and a serious lifting atmosphere!'}
-                  "
-                </p>
-                <div className="flex items-center justify-between border-t border-garage-mid/50 pt-4 text-xs">
-                  <span className="font-bold text-garage-white uppercase">
-                    {review.reviewer_name}
-                  </span>
-                  <span className="text-garage-muted">Verified Google Review</span>
-                </div>
-              </Card>
-            ))}
-          </div>
+          <GoogleReviews limit={3} />
         </div>
       </section>
 

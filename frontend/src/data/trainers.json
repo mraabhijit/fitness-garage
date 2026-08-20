@@ -1,0 +1,59 @@
+{
+  "trainers": [
+    {
+      "id": "1",
+      "name": "Marcus Vance",
+      "slug": "marcus-vance",
+      "specialization": "Head Strength Coach & Powerlifting",
+      "experience_years": 8,
+      "certifications": ["CSCS Certified", "IPF Level 2 Coach", "First Aid & CPR"],
+      "bio": "Specializes in barbell biomechanics, powerlifting periodization, and building raw strength from the ground up.",
+      "photo_filename": "marcus-vance.jpg",
+      "display_order": 1
+    },
+    {
+      "id": "2",
+      "name": "Elena Rostova",
+      "slug": "elena-rostova",
+      "specialization": "Hypertrophy & Body Recomposition",
+      "experience_years": 6,
+      "certifications": ["ACE Certified Personal Trainer", "ISSA Nutrition Specialist"],
+      "bio": "Passionate about body transformations, hypertrophy training, and empowering athletes with sustainable nutrition.",
+      "photo_filename": "elena-rostova.jpg",
+      "display_order": 2
+    },
+    {
+      "id": "3",
+      "name": "Devon Miller",
+      "slug": "devon-miller",
+      "specialization": "Functional Mobility & Athletic Conditioning",
+      "experience_years": 5,
+      "certifications": ["NASM-CPT", "FMS Certified", "Kettlebell Athletics L2"],
+      "bio": "Focuses on explosive athletic conditioning, injury resilience, and functional movement patterns.",
+      "photo_filename": "devon-miller.jpg",
+      "display_order": 3
+    },
+    {
+      "id": "4",
+      "name": "Priya Sharma",
+      "slug": "priya-sharma",
+      "specialization": "HIIT, Calisthenics & Endurance",
+      "experience_years": 4,
+      "certifications": ["CrossFit Level 1", "REPs Certified Trainer"],
+      "bio": "Dynamic coach focusing on high-energy conditioning circuits, metabolic stamina, and calisthenic body control.",
+      "photo_filename": "priya-sharma.jpg",
+      "display_order": 4
+    },
+    {
+      "id": "5",
+      "name": "Alex Mercer",
+      "slug": "alex-mercer",
+      "specialization": "Weight Loss & Lifestyle Transformation",
+      "experience_years": 7,
+      "certifications": ["ACSM Certified", "Precision Nutrition L1"],
+      "bio": "Dedicated to lifestyle transformations, behavioral habit coaching, and sustainable fat-loss regimens.",
+      "photo_filename": "alex-mercer.jpg",
+      "display_order": 5
+    }
+  ]
+}

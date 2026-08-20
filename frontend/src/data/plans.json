@@ -1,0 +1,60 @@
+{
+  "plans": [
+    {
+      "id": "1",
+      "tier": "basic",
+      "duration": "monthly",
+      "price": 1500,
+      "description": "Full access to gym floor, cardio arena, and locker facilities for 1 month."
+    },
+    {
+      "id": "2",
+      "tier": "basic",
+      "duration": "quarterly",
+      "price": 4000,
+      "description": "3 months of full gym access with complimentary fitness assessment."
+    },
+    {
+      "id": "3",
+      "tier": "basic",
+      "duration": "half_yearly",
+      "price": 7500,
+      "description": "6 months access including 1 free personal trainer orientation session."
+    },
+    {
+      "id": "4",
+      "tier": "basic",
+      "duration": "annual",
+      "price": 13500,
+      "description": "12 months unlimited access, 2 trainer sessions, and priority locker access."
+    },
+    {
+      "id": "5",
+      "tier": "pt",
+      "duration": "monthly",
+      "price": 5000,
+      "description": "Full gym access plus 12 dedicated 1-on-1 personal training sessions per month."
+    },
+    {
+      "id": "6",
+      "tier": "pt",
+      "duration": "quarterly",
+      "price": 14000,
+      "description": "3 months with 36 personal coaching sessions, customized diet chart, and biometric tracking."
+    },
+    {
+      "id": "7",
+      "tier": "pt",
+      "duration": "half_yearly",
+      "price": 26000,
+      "description": "6 months comprehensive coaching with 72 sessions and bi-weekly nutrition reviews."
+    },
+    {
+      "id": "8",
+      "tier": "pt",
+      "duration": "annual",
+      "price": 48000,
+      "description": "Full year VIP personal coaching with unlimited guidance, nutrition planning, and transformation tracking."
+    }
+  ]
+}

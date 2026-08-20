@@ -57,22 +57,24 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, featured = false }) =>
     <Card
       variant={isPt ? 'chrome' : 'default'}
       hoverEffect
-      className="p-8 flex flex-col justify-between relative group border-garage-mid/60 hover:border-garage-chrome/50 transition-all"
+      className="p-6 xl:p-8 flex flex-col justify-between relative group border-garage-mid/60 hover:border-garage-chrome/50 transition-all"
     >
       <div>
-        <div className="flex justify-between items-center mb-6">
-          <span
-            className={`text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full ${
-              isPt
-                ? 'bg-garage-chrome text-garage-black'
-                : 'bg-garage-mid text-garage-white'
-            }`}
-          >
-            {plan.tier === 'pt' ? 'Personal Coaching' : 'Standard'}
-          </span>
-          <span className="text-xs font-bold uppercase tracking-wider text-garage-muted">
-            {DURATION_LABELS[plan.duration] || plan.duration.replace('_', ' ')}
-          </span>
+        <div className="grid grid-cols-2 items-center gap-2 mb-6">
+          <div className="flex items-center">
+            <span
+              className={`w-full inline-flex items-center justify-center text-center text-[10px] sm:text-xs font-bold uppercase tracking-wider py-1 px-2 rounded-full truncate ${
+                isPt ? 'bg-garage-chrome text-garage-black' : 'bg-garage-mid text-garage-white'
+              }`}
+            >
+              {plan.tier === 'pt' ? 'Personal Coaching' : 'Standard'}
+            </span>
+          </div>
+          <div className="flex items-center justify-end">
+            <span className="text-xs font-bold uppercase tracking-wider text-garage-muted whitespace-nowrap text-right">
+              {DURATION_LABELS[plan.duration] || plan.duration.replace('_', ' ')}
+            </span>
+          </div>
         </div>
 
         <div className="mb-2">
@@ -81,11 +83,9 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, featured = false }) =>
           </span>
         </div>
 
-        <div className="flex items-center gap-2 mb-6 min-h-[22px]">
+        <div className="flex flex-wrap items-center gap-2 mb-6 min-h-[22px]">
           {monthlyEquivalent && (
-            <span className="text-xs text-garage-muted font-body">
-              {monthlyEquivalent}
-            </span>
+            <span className="text-xs text-garage-muted font-body">{monthlyEquivalent}</span>
           )}
           {plan.badge && (
             <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-garage-chrome/15 text-garage-chrome border border-garage-chrome/30">
@@ -94,9 +94,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, featured = false }) =>
           )}
         </div>
 
-        <p className="text-sm text-garage-muted mb-6 font-body">
-          {plan.description}
-        </p>
+        <p className="text-sm text-garage-muted mb-6 font-body">{plan.description}</p>
 
         <ul className="space-y-3 mb-8 text-sm text-garage-muted font-body">
           {features.map((feature, idx) => (
@@ -109,11 +107,7 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, featured = false }) =>
       </div>
 
       <Link to={ROUTES.CONTACT} className="w-full">
-        <Button
-          variant={isPt ? 'primary' : 'outline'}
-          size="md"
-          className="w-full"
-        >
+        <Button variant={isPt ? 'primary' : 'outline'} size="md" className="w-full">
           Enquire Now
         </Button>
       </Link>

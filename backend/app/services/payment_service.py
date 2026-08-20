@@ -1,8 +1,9 @@
 from datetime import date
-from decimal import Decimal
 from typing import List, Optional, Tuple
 from uuid import UUID
+
 import asyncpg
+
 from app.core.security import decrypt_pii
 from app.schemas.payment import PaymentCreate, PaymentResponse
 from app.services.invoice_service import generate_invoice_pdf, upload_invoice_to_storage
@@ -87,6 +88,8 @@ async def record_payment(
         notes=data.notes,
         recorded_by=admin_user_id,
     )
+    if not payment_rec:
+        raise RuntimeError("Failed to create payment record")
     payment_id = payment_rec["id"]
 
     # 3. Generate & upload invoice PDF if requested
@@ -109,4 +112,4 @@ async def record_payment(
         await payment_queries.update_payment_invoice_path(pool, payment_id, invoice_path)
 
     fresh_rec = await payment_queries.get_payment_by_id(pool, payment_id)
-    return record_to_payment_response(fresh_rec or payment_rec)
+    return record_to_payment_response(fresh_rec if fresh_rec is not None else payment_rec)

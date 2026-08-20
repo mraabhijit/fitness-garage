@@ -1,25 +1,55 @@
-import React, { useState } from 'react';
-import { SectionHeading } from '../../components/common/SectionHeading';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { FormField } from '../../components/forms/FormField';
-import { TextareaField } from '../../components/forms/TextareaField';
-import { MapPin, Phone, Mail, Clock, Send, CheckCircle2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { SectionHeading } from '../../components/common/SectionHeading'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { FormField } from '../../components/forms/FormField'
+import { TextareaField } from '../../components/forms/TextareaField'
+import { CheckCircle2, Clock, ExternalLink, Mail, MapPin, Phone, Send } from 'lucide-react'
+import { publicService } from '../../services/publicService'
+import type { SiteConfig } from '../../types'
+
+const DEFAULT_CONFIG: SiteConfig = {
+  gym_name: 'Fitness Garage',
+  tagline: 'Forge Your Ultimate Physique',
+  about_story: '',
+  address: 'Maa, Sarda Path, Colony Bazar, Kala Pahar, Gopinath Nagar, Guwahati, Assam 781018',
+  phone: '+91 70021 57184',
+  email: 'contact@fitnessgarage.com',
+  google_maps_embed_url:
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3581.488349275037!2d91.738850!3d26.1519396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a5b2a02da4f27%3A0x47c15d7aac48af26!2sFITNESS%20GARAGE%20GYM%20GUWAHATI!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin',
+  google_maps_place_url:
+    'https://www.google.com/maps/place/FITNESS+GARAGE+GYM+GUWAHATI/@26.1519396,91.7414249,17z/data=!3m1!4b1!4m6!3m5!1s0x375a5b2a02da4f27:0x47c15d7aac48af26!8m2!3d26.1519396!4d91.7414249!16s%2Fg%2F11n0g3x3yp',
+  google_form_url:
+    'https://docs.google.com/forms/d/e/1FAIpQLSc_EXAMPLE_FORM_ID/viewform?embedded=true',
+  google_place_id: 'ChIJN1t_tDeuEmsRUsoyG83frY4',
+  opening_hours: 'Mon–Sat: 6:00 AM – 10:30 PM, Sun: 9:00 AM – 2:00 PM',
+}
 
 export const ContactPage: React.FC = () => {
-  const [submitted, setSubmitted] = useState(false);
+  const [config, setConfig] = useState<SiteConfig>(DEFAULT_CONFIG)
+  const [submitted, setSubmitted] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
     message: '',
-  });
+  })
+
+  useEffect(() => {
+    publicService.getSiteConfig().then(setConfig).catch(console.error)
+  }, [])
+
+  const address = config.address || DEFAULT_CONFIG.address
+  const phone = config.phone || DEFAULT_CONFIG.phone
+  const email = config.email || DEFAULT_CONFIG.email
+  const hours = config.opening_hours || DEFAULT_CONFIG.opening_hours
+  const mapsEmbedUrl = config.google_maps_embed_url || DEFAULT_CONFIG.google_maps_embed_url
+  const mapsPlaceUrl = config.google_maps_place_url || DEFAULT_CONFIG.google_maps_place_url
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Simulate submission / lead capture
-    setSubmitted(true);
-  };
+    e.preventDefault()
+    setSubmitted(true)
+  }
 
   return (
     <div className="py-16 md:py-24 px-4 max-w-7xl mx-auto">
@@ -33,9 +63,20 @@ export const ContactPage: React.FC = () => {
         {/* Contact Info & Hours */}
         <div className="space-y-8">
           <Card className="p-8 space-y-6">
-            <h3 className="text-2xl font-display uppercase tracking-wider text-garage-white">
-              Location & Details
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-2xl font-display uppercase tracking-wider text-garage-white">
+                Location & Details
+              </h3>
+              <a
+                href={mapsPlaceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-garage-chrome hover:underline inline-flex items-center gap-1 font-semibold"
+              >
+                <span>Directions</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
 
             <div className="space-y-4 text-sm font-body">
               <div className="flex items-start gap-4">
@@ -43,8 +84,10 @@ export const ContactPage: React.FC = () => {
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">Address</h5>
-                  <p className="text-garage-muted mt-0.5">123 Iron Works Way, Fitness District, Bangalore, 560001</p>
+                  <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">
+                    Address
+                  </h5>
+                  <p className="text-garage-muted mt-0.5">{address}</p>
                 </div>
               </div>
 
@@ -53,8 +96,15 @@ export const ContactPage: React.FC = () => {
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">Phone</h5>
-                  <p className="text-garage-muted mt-0.5">+91 98765 43210 / +91 98765 43211</p>
+                  <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">
+                    Phone
+                  </h5>
+                  <a
+                    href={`tel:${phone.replace(/\s+/g, '')}`}
+                    className="text-garage-muted hover:text-garage-chrome transition-colors mt-0.5 block"
+                  >
+                    {phone}
+                  </a>
                 </div>
               </div>
 
@@ -63,8 +113,15 @@ export const ContactPage: React.FC = () => {
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">Email</h5>
-                  <p className="text-garage-muted mt-0.5">contact@fitnessgarage.com</p>
+                  <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">
+                    Email
+                  </h5>
+                  <a
+                    href={`mailto:${email}`}
+                    className="text-garage-muted hover:text-garage-chrome transition-colors mt-0.5 block"
+                  >
+                    {email}
+                  </a>
                 </div>
               </div>
 
@@ -73,11 +130,23 @@ export const ContactPage: React.FC = () => {
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">Operating Hours</h5>
-                  <p className="text-garage-muted mt-0.5">Mon – Sat: 05:30 AM – 10:30 PM</p>
-                  <p className="text-garage-muted">Sunday: 06:00 AM – 01:00 PM</p>
+                  <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">
+                    Operating Hours
+                  </h5>
+                  <p className="text-garage-muted mt-0.5">{hours}</p>
                 </div>
               </div>
+            </div>
+
+            {/* Embedded Google Maps */}
+            <div className="pt-4 border-t border-garage-mid/40">
+              <iframe
+                title="Fitness Garage Guwahati Location"
+                src={mapsEmbedUrl}
+                className="w-full h-64 rounded-xl border border-garage-mid/60"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
           </Card>
         </div>
@@ -96,9 +165,16 @@ export const ContactPage: React.FC = () => {
                   Message Transmitted!
                 </h4>
                 <p className="text-sm text-garage-muted max-w-sm mx-auto font-body">
-                  Thank you for reaching out. One of our head coaches will contact you within 24 hours.
+                  Thank you for reaching out. One of our head coaches will contact you within 24
+                  hours.
                 </p>
-                <Button variant="secondary" size="sm" onClick={() => setSubmitted(false)}>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    setSubmitted(false)
+                  }}
+                >
                   Send Another Message
                 </Button>
               </div>
@@ -109,7 +185,9 @@ export const ContactPage: React.FC = () => {
                   placeholder="e.g. John Smith"
                   required
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, name: e.target.value })
+                  }}
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
@@ -118,14 +196,18 @@ export const ContactPage: React.FC = () => {
                     type="tel"
                     required
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, phone: e.target.value })
+                    }}
                   />
                   <FormField
                     label="Email Address"
                     placeholder="e.g. john@example.com"
                     type="email"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, email: e.target.value })
+                    }}
                   />
                 </div>
                 <TextareaField
@@ -133,7 +215,9 @@ export const ContactPage: React.FC = () => {
                   placeholder="Tell us about your fitness goals or questions..."
                   rows={4}
                   value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, message: e.target.value })
+                  }}
                 />
                 <Button
                   type="submit"
@@ -150,5 +234,5 @@ export const ContactPage: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

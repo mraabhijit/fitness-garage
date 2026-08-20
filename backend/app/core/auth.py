@@ -1,10 +1,12 @@
 import logging
 from typing import Any, Dict, List, Optional
 from uuid import UUID
+
 import jwt
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
+
 from app.core.config import settings
 
 logger = logging.getLogger("fitness_garage.auth")
@@ -77,7 +79,7 @@ async def get_current_user(
         )
 
 
-def require_roles(allowed_roles: List[str]):
+def require_roles(allowed_roles: List[str]) -> Any:
     async def role_checker(
         current_user: AuthenticatedUser = Depends(get_current_user),
     ) -> AuthenticatedUser:

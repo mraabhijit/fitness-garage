@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "id": "1",
+      "folder": "gallery",
+      "filename": "gym-floor-1.jpg",
+      "media_type": "image",
+      "caption": "Main barbell and powerlifting arena",
+      "display_order": 1
+    },
+    {
+      "id": "2",
+      "folder": "gallery",
+      "filename": "gym-floor-2.jpg",
+      "media_type": "image",
+      "caption": "Dumbbell racks and heavy strength zone",
+      "display_order": 2
+    },
+    {
+      "id": "3",
+      "folder": "gallery",
+      "filename": "cardio-zone.jpg",
+      "media_type": "image",
+      "caption": "Cardio theatre and metabolic conditioning machines",
+      "display_order": 3
+    },
+    {
+      "id": "4",
+      "folder": "transformations",
+      "filename": "transform-1.jpg",
+      "media_type": "image",
+      "caption": "Member transformation — 12-week recomposition (-14kg fat loss)",
+      "display_order": 4
+    },
+    {
+      "id": "5",
+      "folder": "transformations",
+      "filename": "transform-2.jpg",
+      "media_type": "image",
+      "caption": "Member transformation — 6-month lean muscle building blueprint",
+      "display_order": 5
+    },
+    {
+      "id": "6",
+      "folder": "gallery",
+      "filename": "functional-zone.jpg",
+      "media_type": "image",
+      "caption": "Functional turf and kettlebell training bay",
+      "display_order": 6
+    }
+  ]
+}

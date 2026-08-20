@@ -1,13 +1,14 @@
-from typing import Any, Dict, List
+from typing import Dict, List
+
 import asyncpg
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
+
 from app.schemas.achievement import AchievementResponse
 from app.schemas.common import SuccessResponse
 from app.schemas.gallery import GalleryResponse
 from app.schemas.plan import MembershipPlanResponse
 from app.schemas.review import ReviewResponse
 from app.schemas.service import ServiceResponse
-from app.schemas.site_config import SiteConfigResponse
 from app.schemas.trainer import TrainerResponse
 from app.services.storage_service import get_public_asset_url
 from db.connection import get_pool
@@ -43,7 +44,11 @@ async def get_services(pool: asyncpg.Pool = Depends(get_pool)):
     results = []
     for r in records:
         d = dict(r)
-        d["icon_url"] = get_public_asset_url(f"assets/services/{d['icon_filename']}") if d.get("icon_filename") else None
+        d["icon_url"] = (
+            get_public_asset_url(f"assets/services/{d['icon_filename']}")
+            if d.get("icon_filename")
+            else None
+        )
         results.append(ServiceResponse.model_validate(d))
     return SuccessResponse(data=results)
 
@@ -60,7 +65,11 @@ async def get_trainers(pool: asyncpg.Pool = Depends(get_pool)):
     results = []
     for r in records:
         d = dict(r)
-        d["photo_url"] = get_public_asset_url(f"assets/trainers/{d['photo_filename']}") if d.get("photo_filename") else None
+        d["photo_url"] = (
+            get_public_asset_url(f"assets/trainers/{d['photo_filename']}")
+            if d.get("photo_filename")
+            else None
+        )
         results.append(TrainerResponse.model_validate(d))
     return SuccessResponse(data=results)
 

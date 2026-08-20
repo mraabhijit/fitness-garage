@@ -1,6 +1,7 @@
 from datetime import date
-from typing import List, Optional, Tuple
+from typing import Any, List, Optional, Tuple
 from uuid import UUID
+
 import asyncpg
 
 
@@ -11,7 +12,7 @@ async def get_members_paginated(
     status_filter: Optional[str] = None,
 ) -> Tuple[List[asyncpg.Record], int]:
     conditions = []
-    params: list = []
+    params: List[Any] = []
 
     if status_filter:
         params.append(status_filter)
@@ -43,8 +44,7 @@ async def get_members_paginated(
 
 
 async def get_all_members(pool: asyncpg.Pool) -> List[asyncpg.Record]:
-    return await pool.fetch(
-        """
+    return await pool.fetch("""
         SELECT m.id, m.supabase_user_id, m.full_name, m.phone_number, m.email_address,
                m.membership_plan_id, m.status, m.start_date, m.expiry_date,
                m.imported, m.notes, m.created_at, m.updated_at,
@@ -52,8 +52,7 @@ async def get_all_members(pool: asyncpg.Pool) -> List[asyncpg.Record]:
         FROM members m
         LEFT JOIN membership_plans p ON m.membership_plan_id = p.id
         ORDER BY m.created_at DESC
-        """
-    )
+        """)
 
 
 async def get_member_by_id(pool: asyncpg.Pool, member_id: UUID) -> Optional[asyncpg.Record]:
@@ -71,7 +70,9 @@ async def get_member_by_id(pool: asyncpg.Pool, member_id: UUID) -> Optional[asyn
     )
 
 
-async def get_member_by_supabase_id(pool: asyncpg.Pool, supabase_user_id: UUID) -> Optional[asyncpg.Record]:
+async def get_member_by_supabase_id(
+    pool: asyncpg.Pool, supabase_user_id: UUID
+) -> Optional[asyncpg.Record]:
     return await pool.fetchrow(
         """
         SELECT m.id, m.supabase_user_id, m.full_name, m.phone_number, m.email_address,
@@ -98,7 +99,7 @@ async def create_member(
     supabase_user_id: Optional[UUID] = None,
     imported: bool = False,
     notes: Optional[str] = None,
-) -> asyncpg.Record:
+) -> Optional[asyncpg.Record]:
     return await pool.fetchrow(
         """
         INSERT INTO members (

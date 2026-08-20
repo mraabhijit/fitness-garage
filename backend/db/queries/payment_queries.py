@@ -1,7 +1,8 @@
 from datetime import date
 from decimal import Decimal
-from typing import List, Optional, Tuple
+from typing import Any, List, Optional, Tuple
 from uuid import UUID
+
 import asyncpg
 
 
@@ -14,7 +15,7 @@ async def get_payments_paginated(
     offset: int = 0,
 ) -> Tuple[List[asyncpg.Record], int]:
     conditions = []
-    params: list = []
+    params: List[Any] = []
 
     if member_id:
         params.append(member_id)
@@ -82,7 +83,7 @@ async def create_payment(
     invoice_path: Optional[str] = None,
     notes: Optional[str] = None,
     recorded_by: Optional[UUID] = None,
-) -> asyncpg.Record:
+) -> Optional[asyncpg.Record]:
     return await pool.fetchrow(
         """
         INSERT INTO payments (

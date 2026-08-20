@@ -1,8 +1,10 @@
-from datetime import datetime, timezone
 import logging
+from datetime import datetime, timezone
 from typing import Any, Dict
+
 import asyncpg
 import httpx
+
 from app.core.config import settings
 from db.queries import review_queries, site_config_queries
 
@@ -13,7 +15,9 @@ async def sync_google_reviews(pool: asyncpg.Pool, force: bool = False) -> Dict[s
     """
     Syncs reviews from Google Places API if > 24 hours since last sync or if force=True.
     """
-    last_synced_rec = await site_config_queries.get_site_config_by_key(pool, "reviews_last_synced_at")
+    last_synced_rec = await site_config_queries.get_site_config_by_key(
+        pool, "reviews_last_synced_at"
+    )
     place_id_rec = await site_config_queries.get_site_config_by_key(pool, "gym_google_place_id")
 
     place_id = place_id_rec["config_value"] if place_id_rec else ""
@@ -26,14 +30,18 @@ async def sync_google_reviews(pool: asyncpg.Pool, force: bool = False) -> Dict[s
     # Check 24-hour threshold
     if not force and last_synced_rec:
         try:
-            last_synced_dt = datetime.fromisoformat(last_synced_rec["config_value"].replace("Z", "+00:00"))
-            hours_diff = (datetime.now(timezone.utc) - last_synced_dt).total_seconds() / 3600
-            if hours_diff < 24:
-                return {"synced": False, "message": f"Cache is fresh ({hours_diff:.1f}h ago)"}
+            last_synced_dt = datetime.fromisoformat(
+                last_synced_rec["config_value"].replace("Z", "+00:00")
+            )
+            if (datetime.now(timezone.utc) - last_synced_dt).total_seconds() < 86400:
+                return {"synced": False, "message": "Cache is fresh (<24h ago)"}
         except Exception:
             pass
 
-    url = f"https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields=reviews,rating,user_ratings_total&key={api_key}"
+    url = (
+        "https://maps.googleapis.com/maps/api/place/details/json"
+        f"?place_id={place_id}&fields=reviews,rating,user_ratings_total&key={api_key}"
+    )
 
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
@@ -45,7 +53,6 @@ async def sync_google_reviews(pool: asyncpg.Pool, force: bool = False) -> Dict[s
             return {"synced": False, "error": data.get("error_message", data.get("status"))}
 
         reviews = data.get("result", {}).get("reviews", [])
-        synced_count = 0
 
         for r in reviews:
             review_id = f"google_{r.get('author_name')}_{r.get('time')}"
@@ -59,7 +66,8 @@ async def sync_google_reviews(pool: asyncpg.Pool, force: bool = False) -> Dict[s
                 rating=int(r.get("rating", 5)),
                 review_date=review_date,
             )
-            synced_count += 1
+
+        synced_count = len(reviews)
 
         # Update last synced timestamp
         await site_config_queries.upsert_site_config(

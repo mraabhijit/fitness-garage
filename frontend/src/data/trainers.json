@@ -1,0 +1,59 @@
+{
+  "trainers": [
+    {
+      "id": "1",
+      "name": "John Doe",
+      "slug": "john-doe-1",
+      "specialization": "Head Strength Coach & Powerlifting",
+      "experience_years": 8,
+      "certifications": ["CSCS Certified", "IPF Level 2 Coach", "First Aid & CPR"],
+      "bio": "Specializes in barbell biomechanics, powerlifting periodization, and building raw strength from the ground up.",
+      "photo_filename": "john-doe-1.jpg",
+      "display_order": 1
+    },
+    {
+      "id": "2",
+      "name": "John Doe",
+      "slug": "john-doe-2",
+      "specialization": "Hypertrophy & Body Recomposition",
+      "experience_years": 6,
+      "certifications": ["ACE Certified Personal Trainer", "ISSA Nutrition Specialist"],
+      "bio": "Passionate about body transformations, hypertrophy training, and empowering athletes with sustainable nutrition.",
+      "photo_filename": "john-doe-2.jpg",
+      "display_order": 2
+    },
+    {
+      "id": "3",
+      "name": "John Doe",
+      "slug": "john-doe-3",
+      "specialization": "Functional Mobility & Athletic Conditioning",
+      "experience_years": 5,
+      "certifications": ["NASM-CPT", "FMS Certified", "Kettlebell Athletics L2"],
+      "bio": "Focuses on explosive athletic conditioning, injury resilience, and functional movement patterns.",
+      "photo_filename": "john-doe-3.jpg",
+      "display_order": 3
+    },
+    {
+      "id": "4",
+      "name": "John Doe",
+      "slug": "john-doe-4",
+      "specialization": "HIIT, Calisthenics & Endurance",
+      "experience_years": 4,
+      "certifications": ["CrossFit Level 1", "REPs Certified Trainer"],
+      "bio": "Dynamic coach focusing on high-energy conditioning circuits, metabolic stamina, and calisthenic body control.",
+      "photo_filename": "john-doe-4.jpg",
+      "display_order": 4
+    },
+    {
+      "id": "5",
+      "name": "John Doe",
+      "slug": "john-doe-5",
+      "specialization": "Weight Loss & Lifestyle Transformation",
+      "experience_years": 7,
+      "certifications": ["ACSM Certified", "Precision Nutrition L1"],
+      "bio": "Dedicated to lifestyle transformations, behavioral habit coaching, and sustainable fat-loss regimens.",
+      "photo_filename": "john-doe-5.jpg",
+      "display_order": 5
+    }
+  ]
+}

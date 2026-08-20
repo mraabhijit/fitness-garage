@@ -1,24 +1,27 @@
 from typing import List, Optional, Tuple
 from uuid import UUID
+
 import asyncpg
+
 from app.core.security import decrypt_pii, encrypt_pii
 from app.schemas.member import MemberCreate, MemberResponse, MemberUpdate
+from app.schemas.plan import MembershipPlanResponse
 from db.queries import member_queries
 
 
 def record_to_member_response(rec: asyncpg.Record) -> MemberResponse:
-    plan_dict = None
+    plan_obj = None
     if rec.get("membership_plan_id") and rec.get("plan_tier"):
-        plan_dict = {
-            "id": rec["membership_plan_id"],
-            "tier": rec["plan_tier"],
-            "duration": rec["plan_duration"],
-            "price": rec["plan_price"],
-            "description": None,
-            "is_active": True,
-            "created_at": rec["created_at"],
-            "updated_at": rec["updated_at"],
-        }
+        plan_obj = MembershipPlanResponse(
+            id=rec["membership_plan_id"],
+            tier=rec["plan_tier"],
+            duration=rec["plan_duration"],
+            price=rec["plan_price"],
+            description=None,
+            is_active=True,
+            created_at=rec["created_at"],
+            updated_at=rec["updated_at"],
+        )
 
     return MemberResponse(
         id=rec["id"],
@@ -27,7 +30,7 @@ def record_to_member_response(rec: asyncpg.Record) -> MemberResponse:
         phone_number=decrypt_pii(rec.get("phone_number")),
         email_address=decrypt_pii(rec.get("email_address")),
         membership_plan_id=rec.get("membership_plan_id"),
-        plan=plan_dict,
+        plan=plan_obj,
         status=rec["status"],
         start_date=rec["start_date"],
         expiry_date=rec["expiry_date"],
@@ -74,7 +77,9 @@ async def get_member(pool: asyncpg.Pool, member_id: UUID) -> Optional[MemberResp
     return record_to_member_response(rec) if rec else None
 
 
-async def get_member_by_auth(pool: asyncpg.Pool, supabase_user_id: UUID) -> Optional[MemberResponse]:
+async def get_member_by_auth(
+    pool: asyncpg.Pool, supabase_user_id: UUID
+) -> Optional[MemberResponse]:
     rec = await member_queries.get_member_by_supabase_id(pool, supabase_user_id)
     return record_to_member_response(rec) if rec else None
 
@@ -97,6 +102,8 @@ async def create_new_member(pool: asyncpg.Pool, data: MemberCreate) -> MemberRes
         imported=data.imported,
         notes=data.notes,
     )
+    if not rec:
+        raise RuntimeError("Failed to create member")
     return record_to_member_response(rec)
 
 

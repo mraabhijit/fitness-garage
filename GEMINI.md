@@ -1,59 +1,78 @@
 # Fitness Garage — Project Context & Developer Guidelines
 
-> **Single Source of Truth** for AI Agents and Developers working on the **Fitness Garage** full-stack gym platform.
-> Compiled from official requirements in [`docs/`](file:///home/arch/projects/fitness-garage/docs).
+> **Single Source of Truth** for AI Agents and Developers working on the **Fitness Garage** gym web platform.
+> Compiled from official requirements and specifications in [`docs/`](file:///home/arch/projects/fitness-garage/docs).
 
 ---
 
 ## 0. Official Documentation Index
 
+### 0.1 Active Specifications — Phase 1 (Static Web Application)
+
 | # | Document | Purpose |
 |---|---|---|
-| 1 | [`01_PRD_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/01_PRD_Fitness_Garage.md) | Product requirements, problem statement, features, and user personas |
-| 2 | [`02_Technical_Architecture_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/02_Technical_Architecture_Fitness_Garage.md) | System topology, component interactions, cloud topology, and stack |
-| 3 | [`03_Database_Schema_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/03_Database_Schema_Fitness_Garage.md) | PostgreSQL schema, raw parameterized SQL with asyncpg, migrations, RLS |
-| 4 | [`04_API_Specification_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/04_API_Specification_Fitness_Garage.md) | Complete REST API reference (35 endpoints), schemas, error envelopes |
-| 5 | [`05_Frontend_Component_Architecture_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/05_Frontend_Component_Architecture_Fitness_Garage.md) | React 18+ component tree, Tailwind tokens, Zustand stores, router |
-| 6 | [`06_Admin_Dashboard_Specification_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/06_Admin_Dashboard_Specification_Fitness_Garage.md) | 11 admin modules, wireframes, CRUD workflows, bulk import |
-| 7 | [`07_Member_Portal_Specification_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/07_Member_Portal_Specification_Fitness_Garage.md) | Member portal, 3-way auth, status badges, payment history, invoices |
-| 8 | [`08_SEO_Strategy_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/08_SEO_Strategy_Fitness_Garage.md) | Local SEO, 5 JSON-LD schemas, Core Web Vitals, Open Graph, sitemap |
-| 9 | [`09_Project_Milestones_Deliverables_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/09_Project_Milestones_Deliverables_Fitness_Garage.md) | 6 project phases, timeline, deliverables register, risk mitigations |
-| 10 | [`10_Dev_Handover_README_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/10_Dev_Handover_README_Fitness_Garage.md) | Developer setup, operational guides, storage conventions, checklists |
-| 11 | [`11_Dev_Methodology_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/11_Dev_Methodology_Fitness_Garage.md) | Branching, 11-step workflow, Ponytail review, Definition of Done |
+| 1 | [`01_PRD_Fitness_Garage_v2.md`](file:///home/arch/projects/fitness-garage/docs/01_PRD_Fitness_Garage_v2.md) | Product requirements, scope, target audience, brand identity, and static feature requirements |
+| 2 | [`02_Technical_Architecture_Fitness_Garage_v2.md`](file:///home/arch/projects/fitness-garage/docs/02_Technical_Architecture_Fitness_Garage_v2.md) | Static frontend topology, Vercel CDN hosting, browser-side Google Reviews, and Replaceable Service Layer architecture |
+| 5 | [`05_Frontend_Component_Architecture_Fitness_Garage_v2.md`](file:///home/arch/projects/fitness-garage/docs/05_Frontend_Component_Architecture_Fitness_Garage_v2.md) | React 18+ component tree, Tailwind tokens, `src/data/*.json` schemas, hooks, and public pages |
+| 8 | [`08_SEO_Strategy_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/08_SEO_Strategy_Fitness_Garage.md) | Local SEO strategy, 5 JSON-LD schemas, Core Web Vitals, Open Graph, robots.txt, and sitemap |
+| 9 | [`09_Project_Milestones_Deliverables_Fitness_Garage_v2.md`](file:///home/arch/projects/fitness-garage/docs/09_Project_Milestones_Deliverables_Fitness_Garage_v2.md) | 3-phase static delivery roadmap, task breakdowns, acceptance criteria, and risk mitigations |
+| 10 | [`10_Dev_Handover_README_Fitness_Garage_v2.md`](file:///home/arch/projects/fitness-garage/docs/10_Dev_Handover_README_Fitness_Garage_v2.md) | Developer setup, content update workflows, asset management, and Phase 2 swap checklist |
+| 11 | [`11_Dev_Methodology_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/11_Dev_Methodology_Fitness_Garage.md) | Git branching, conventional commits, pre-commit enforcement, Ponytail reviews, and Definition of Done |
+
+### 0.2 Root Configuration & Automation Tooling
+
+| File | Purpose |
+|---|---|
+| [`Makefile`](file:///home/arch/projects/fitness-garage/Makefile) | Streamlined development automation targets for frontend dev, data validation, placeholder audit, and pre-PR checks |
+| [`.github/workflows/ci.yml`](file:///home/arch/projects/fitness-garage/.github/workflows/ci.yml) | GitHub Actions CI workflow (formatting, linting, type-checking, Vite build, JSON data validation, Lighthouse CI) |
+| [`docker-compose.yml`](file:///home/arch/projects/fitness-garage/docker-compose.yml) | Local frontend development container with hot-reload volume mounts, with Phase 2 services documented |
+| [`.gitignore`](file:///home/arch/projects/fitness-garage/.gitignore) | Root `.gitignore` covering environment secrets, Node.js, Vite build artifacts, and Phase 2 Python rules |
+| [`.pre-commit-config.yaml`](file:///home/arch/projects/fitness-garage/.pre-commit-config.yaml) | Pre-commit configuration with Yelp secret detection, Prettier, ESLint, tsc, JSON data validator, and markdownlint |
+
+### 0.3 Archived Specifications — Phase 2 (Future Backend & Portal Integration)
+
+These specifications and backend implementations are preserved and maintained for seamless Phase 2 wiring:
+
+| # | Document | Purpose |
+|---|---|---|
+| 1-v1 | [`01_PRD_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/01_PRD_Fitness_Garage.md) | Original full-stack PRD with member portal & admin dashboard specs |
+| 2-v1 | [`02_Technical_Architecture_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/02_Technical_Architecture_Fitness_Garage.md) | Full-stack cloud topology (FastAPI + Supabase Postgres/Auth/Storage + Render) |
+| 3 | [`03_Database_Schema_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/03_Database_Schema_Fitness_Garage.md) | PostgreSQL schema (9 tables), asyncpg raw SQL parameterized queries, RLS policies, migrations |
+| 4 | [`04_API_Specification_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/04_API_Specification_Fitness_Garage.md) | 35 REST API endpoints, Pydantic v2 schemas, standard error envelopes |
+| 5-v1 | [`05_Frontend_Component_Architecture_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/05_Frontend_Component_Architecture_Fitness_Garage.md) | Full-stack frontend component tree with Zustand stores, Axios interceptors, and admin/member portals |
+| 6 | [`06_Admin_Dashboard_Specification_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/06_Admin_Dashboard_Specification_Fitness_Garage.md) | 11 admin modules, CRUD workflows, bulk Excel/CSV member import, payment recording |
+| 7 | [`07_Member_Portal_Specification_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/07_Member_Portal_Specification_Fitness_Garage.md) | 3-way member auth, status badges, payment history, signed PDF invoice downloads |
+| 9-v1 | [`09_Project_Milestones_Deliverables_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/09_Project_Milestones_Deliverables_Fitness_Garage.md) | Original 6-phase full-stack roadmap & deliverables register |
+| 10-v1 | [`10_Dev_Handover_README_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/10_Dev_Handover_README_Fitness_Garage.md) | Original full-stack developer setup and operational guide |
 
 ---
 
-## 1. Project Overview & Identity
+## 1. Project Overview & Dual-Phase Strategy
 
 ### 1.1 Purpose & Problem Statement
-Fitness Garage is a greenfield full-stack gym website serving as both:
-1. **Public Marketing & Portfolio Site:** Showcase gym amenities, services, membership plans, trainer profiles, transformations, gallery media, achievements, and live Google Reviews to prospective members.
-2. **Member & Admin Portal:** Lightweight member self-service portal (view membership status, expiry date, download invoices) and a centralized administrative control plane (member CRUD, bulk CSV/Excel import, payment recording with automated PDF invoice generation, content & site configuration management).
+Fitness Garage is a premium gym brand requiring a high-performance digital presence to convert visitors into walk-ins and memberships. 
 
-### 1.2 Stakeholders & Roles
-| Role | Description | Access Level |
-|---|---|---|
-| **Website Visitor** | Prospective members browsing public information | Public routes only |
-| **Member** | Authenticated gym member | Member Portal (`/member/**`) |
-| **Admin / Staff** | Gym owner & staff managing operations (single unified admin role) | Admin Dashboard (`/admin/**`) + Member Portal |
-| **Developer** | Maintenance and debugging role | All routes + Dev endpoints |
+To achieve the fastest time-to-market with zero server hosting costs and maximum reliability, the project is structured in two distinct phases:
+1. **Phase 1 (Current Scope — Static Web Application):** A blazing-fast, pure static React + TypeScript frontend hosted on Vercel's global edge CDN. All marketing content is driven by local JSON data files (`src/data/*.json`) and static media assets (`public/assets/`). Live Google Reviews are fetched directly in the browser via the Google Places API with `sessionStorage` caching, and contact inquiries are captured via Google Forms embeds.
+2. **Phase 2 (Future Scope — Backend & Portals Integration):** Seamless activation of a FastAPI backend on Render, Supabase PostgreSQL with RLS, ReportLab automated invoice generation, Member Portal (`/member/**`), and Admin Dashboard (`/admin/**`).
 
-### 1.3 Launch Scale & Constraints
-- **Members at launch:** 200+ existing members (bulk imported from Excel/CSV).
-- **Admin/Staff users:** 6 users.
-- **Growth:** ~10 new members/month.
-- **Concurrency:** Peak ~20 concurrent users (read-heavy).
-- **Budget:** Shoestring — zero-cost operational tier across all providers.
+### 1.2 The Core Architectural Tenet: The Replaceable Service Layer
+The frontend is strictly architected so that transitioning from Phase 1 (Static) to Phase 2 (Full-Stack Backend) requires **modifying only one file**:
+```
+Phase 1 (Static):       Component ──► publicService.ts ──► src/data/*.json
+Phase 2 (Backend Wired): Component ──► publicService.ts ──► Axios API Client ──► FastAPI / Postgres
+```
+**Zero public pages, zero UI components, zero layout wrappers, and zero hooks change when wiring the backend.**
 
-### 1.4 Governing Architectural Principles
-* **DRY (Don't Repeat Yourself):** Reusable base components, single API service abstractions, shared SQL trigger functions, unified modal/table patterns.
-* **SOLID:** Single-responsibility routers, dedicated query modules per resource, dependency injection via FastAPI.
-* **KISS (Keep It Simple, Stupid):** Flat data models, raw parameterized SQL with `asyncpg`, Zustand stores instead of Redux, no premature message queues or caching layers.
-* **YAGNI (You Aren't Gonna Need It):** Build strictly what is required for v1.0. No speculative features (no online payments, no class booking, no analytics charts).
-* **Extensible:** Decoupled service layers allow new integrations (SMS notifications, payment gateways) without touching core business logic.
-* **Replaceable:** Infrastructure behind abstraction boundaries (swappable to AWS without code rewrites).
+### 1.3 Governing Architectural Principles
+* **DRY (Don't Repeat Yourself):** Reusable base UI primitives, centralized asset URL helpers (`buildAssetUrl`), single point of data consumption.
+* **SOLID:** Single-responsibility components; UI components consume data exclusively from `publicService.ts` — never importing from `data/` directly.
+* **KISS (Keep It Simple, Stupid):** `useState` and props for UI state; no global state library (no Zustand/Redux) in Phase 1; native `fetch` for Google Places API.
+* **YAGNI (You Aren't Gonna Need It):** Build strictly what is required for the static marketing site now. Backend code and specs are preserved in the repository for Phase 2 without cluttering the Phase 1 runtime.
+* **Extensible:** New sections or pages plug in seamlessly without altering existing layout or routing contracts.
+* **Replaceable:** `publicService.ts` and `buildAssetUrl.ts` encapsulate all data sourcing behind stable asynchronous interfaces.
 
-### 1.5 Brand & Design Tokens
+### 1.4 Brand & Design Tokens
 * **Gym Name:** Fitness Garage
 * **UI Aesthetic:** Bold, energetic, premium dark industrial gym aesthetic.
 * **Color Palette:**
@@ -64,7 +83,7 @@ Fitness Garage is a greenfield full-stack gym website serving as both:
   * `garage-chrome-dim` (`#A88A1C`): Hover state for accent
   * `garage-white` (`#F0F0F0`): Primary body text
   * `garage-muted` (`#9A9A9A`): Secondary captions and labels
-  * **Semantic Status:**
+  * **Semantic Status (Phase 2):**
     * `status-active` (`#22C55E`): Active membership
     * `status-expired` (`#EF4444`): Expired membership
     * `status-pending` (`#F59E0B`): Pending membership / warning
@@ -77,6 +96,34 @@ Fitness Garage is a greenfield full-stack gym website serving as both:
 ---
 
 ## 2. Technical Stack & Infrastructure Architecture
+
+### 2.1 Phase 1 Topology (Active — Static Web Application)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     VISITOR BROWSER                             │
+│                                                                 │
+│   React 18+ TypeScript SPA (Vite — Hosted on Vercel CDN Edge)  │
+│                                                                 │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │  src/data/*.json                                         │  │
+│   │  Static content: services, plans, trainers, gallery      │  │
+│   │  Loaded asynchronously via publicService.ts              │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │  Google Places API (Browser-side fetch)                  │  │
+│   │  Live reviews + sessionStorage cache + JSON fallback     │  │
+│   └──────────────────────────────────────────────────────────┘  │
+│                                                                 │
+│   ┌──────────────────────────────────────────────────────────┐  │
+│   │  Google Maps embed (iframe)                              │  │
+│   │  Google Forms embed (iframe for contact enquiries)       │  │
+│   └──────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 2.2 Phase 2 Topology (Future — Backend & Portals Wired)
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -98,495 +145,358 @@ Fitness Garage is a greenfield full-stack gym website serving as both:
 └─────────────────────┘     └────────────────────────────────┘
 ```
 
-### 2.1 Technology Stack Summary
-| Area | Technology | Choice & Version | Details |
-|---|---|---|---|
-| **Frontend** | React 18+, TypeScript, Vite | Latest stable | Hosted on Vercel |
-| **Styling** | Tailwind CSS | Latest stable | Custom tokens (`garage-*`), mobile-first |
-| **State Management**| Zustand | Latest stable | Lightweight, in-memory auth & filter state |
-| **Forms & Validation**| React Hook Form + Zod | Latest stable | Type-safe schema validation |
-| **Icons** | Lucide React | Latest stable | Clean, tree-shakeable icons |
-| **Backend Framework**| FastAPI | Python >= 3.14 | Async REST API, Pydantic v2 schemas |
-| **Package Manager** | `uv` | Latest | High-performance Python packaging |
-| **Database Driver** | `asyncpg` | Latest | Raw parameterized SQL (No ORM, No Alembic) |
-| **Database Engine** | PostgreSQL 15+ | Supabase Free Tier | RLS enabled for member tables |
-| **Authentication** | Supabase Auth | Free Tier | Email/Password, Magic Link (SSO), Phone OTP |
-| **Storage (Media)** | Supabase Storage | 1 GB Free | Buckets for assets and private invoices |
-| **PII Encryption** | `cryptography` (Fernet) | AES-256 | App-level encryption for name/phone/email |
-| **PDF Generation** | `reportlab` | Latest | Server-side invoice generation |
-| **Bulk Import** | `pandas` + `openpyxl` | Latest | CSV & Excel parser |
-| **Reviews Sync** | Google Places API | v1 | Cached in DB; refreshed every 24 hours |
-| **Keep-Alive** | cron-job.org | Free | Pings `GET /health` every 10 min to keep Render warm |
+### 2.3 Technology Stack Matrix
+
+| Area | Phase 1 (Static Site) | Phase 2 (Backend & Portals) | Hosting / Provider | Cost |
+|---|---|---|---|---|
+| **Frontend Framework** | React 18+, TypeScript 5+, Vite | React 18+, TypeScript 5+, Vite | Vercel Edge CDN | Free |
+| **Styling** | Tailwind CSS (`garage-*` tokens) | Tailwind CSS (`garage-*` tokens) | Vercel | Free |
+| **Data Storage** | Local JSON (`src/data/*.json`) | PostgreSQL 15+ (asyncpg raw SQL) | Supabase Free Tier | Free |
+| **Media Assets** | `/public/assets/<section>/` | Supabase Storage (`assets` & `invoices`) | Vercel CDN / Supabase | Free |
+| **State Management** | React `useState` & props | Zustand (`authStore`, `adminStore`) | Browser Memory | Free |
+| **HTTP Client** | Native `fetch` (Google Places only) | Axios (JWT interceptors & error handlers) | Browser | Free |
+| **Reviews Sync** | Browser fetch + `sessionStorage` | Google Places API backend sync (24h cache) | Google Cloud Console | Free Credit |
+| **Contact Form** | Google Forms `<iframe>` embed | Custom form or Google Form | Google Forms | Free |
+| **Backend API** | *None (deferred)* | FastAPI (Python >= 3.14, Pydantic v2) | Render Free Web Service | Free |
+| **Authentication** | *None (deferred)* | Supabase Auth (Email, Magic Link, OTP) | Supabase Free Tier | Free |
+| **PII Encryption** | *None (no PII in Phase 1)* | Fernet AES-256 (`cryptography`) | FastAPI Service Layer | Free |
+| **Invoices** | *None (deferred)* | ReportLab PDF generator | FastAPI Service Layer | Free |
+| **Keep-Alive** | *None (static CDN)* | cron-job.org (pings `GET /health` q10m) | cron-job.org | Free |
 
 ---
 
-## 3. Security & Data Protection Architecture
+## 3. Data Layer & Content Architecture
 
-### 3.1 Application-Level PII Encryption (AES-256)
-To ensure compliance and privacy, all Personally Identifiable Information (PII) is encrypted before writing to PostgreSQL and decrypted only upon API response generation.
-- **Encrypted Fields in `members` table:**
-  1. `full_name`
-  2. `phone_number`
-  3. `email_address`
-- **Mechanism:** Fernet symmetric encryption (`AES-256-CBC` with `HMAC-SHA256`) via Python's `cryptography` package.
-- **Key Storage:** `AES_ENCRYPTION_KEY` stored in environment variables (never committed).
-- **Execution Boundary:** Handled **strictly** in the FastAPI router/service layer — never in raw query modules, and never exposed to the frontend.
+### 3.1 Phase 1: Static JSON Data Schemas (`src/data/`)
 
-### 3.2 Row Level Security (RLS)
-Postgres Row Level Security provides defense-in-depth:
-- `members`: Members can only `SELECT` their own row where `auth.uid() = supabase_user_id`.
-- `payments`: Members can only `SELECT` payments linked to their `member_id`.
-- `admin` and `dev` roles bypass RLS policies using the Supabase Service Role Key at the backend layer.
+All marketing and configuration content is stored in version-controlled JSON files under `frontend/src/data/`:
 
-### 3.3 JWT & Token Management
-- Supabase Auth issues JWTs containing the user role (`member`, `admin`, `dev`) in user metadata.
-- **Client Storage:** JWT is held strictly **in-memory** in Zustand (`authStore.ts`) — **never in `localStorage` or `sessionStorage`** to prevent XSS leakage.
-- **Transport:** Axios request interceptor injects `Authorization: Bearer <token>`. 401 errors clear auth state and redirect to `/login`.
-
----
-
-## 4. Database Architecture & Schema (`asyncpg`)
-
-> **Architectural Decision (v1.1):** No ORM (SQLAlchemy) and no Alembic. Database operations use raw parameterized SQL via `asyncpg` with `$1, $2, ...` placeholders. Migrations are ordered `.sql` files executed via `db/migrate.py` tracked in a `_migrations` table.
-
-### 4.1 ER Diagram
-```
-auth.users (Supabase Auth)
-    │
-    │ supabase_user_id (UUID)
-    ▼
-members (PII Encrypted: full_name, phone_number, email_address)
-    │
-    ├── member_id ──► payments (amount, payment_date, method, invoice_path)
-    │
-    └── membership_plan_id ──► membership_plans (tier, duration, price)
-
-trainers (slug, specialization, photo_filename, display_order)
-services (slug, description, icon_filename, display_order)
-gallery (folder_path, file_name, media_type, display_order)
-reviews (google_review_id, reviewer_name, review_text, rating, is_visible)
-site_config (config_key, config_value, description)
-achievements (label, value, display_order, is_active)
-```
-
-### 4.2 Core Tables Summary
-
-#### 1. `members`
-- `id` (UUID PK), `supabase_user_id` (UUID, nullable, unique), `full_name` (TEXT encrypted), `phone_number` (TEXT encrypted), `email_address` (TEXT encrypted), `membership_plan_id` (UUID FK -> `membership_plans`), `status` (TEXT: `active`, `expired`, `pending`, `suspended`), `start_date` (DATE), `expiry_date` (DATE), `imported` (BOOLEAN), `notes` (TEXT admin-only), `created_at`, `updated_at`.
-
-#### 2. `membership_plans`
-- `id` (UUID PK), `tier` (TEXT: `basic`, `pt`), `duration` (TEXT: `monthly`, `quarterly`, `half_yearly`, `annual`), `price` (NUMERIC(10,2)), `description` (TEXT), `is_active` (BOOLEAN), `created_at`, `updated_at`.
-- Unique constraint on `(tier, duration)`. 8 pre-seeded fixed combinations.
-
-#### 3. `payments`
-- `id` (UUID PK), `member_id` (UUID FK -> `members`), `membership_plan_id` (UUID FK -> `membership_plans`), `amount` (NUMERIC(10,2)), `payment_date` (DATE), `payment_method` (TEXT: `cash`, `card`, `upi`, `bank_transfer`, `other`), `invoice_path` (TEXT), `notes` (TEXT), `recorded_by` (UUID), `created_at`, `updated_at`.
-
-#### 4. `trainers`
-- `id` (UUID PK), `name` (TEXT), `slug` (TEXT unique), `specialization` (TEXT), `experience_years` (INTEGER), `certifications` (TEXT[]), `bio` (TEXT), `photo_filename` (TEXT), `display_order` (INTEGER), `is_active` (BOOLEAN), `created_at`, `updated_at`.
-
-#### 5. `services`
-- `id` (UUID PK), `name` (TEXT), `slug` (TEXT unique), `description` (TEXT), `icon_filename` (TEXT), `display_order` (INTEGER), `is_active` (BOOLEAN), `created_at`, `updated_at`.
-
-#### 6. `gallery`
-- `id` (UUID PK), `folder_path` (TEXT: `assets/gallery`, `assets/transformations`), `file_name` (TEXT), `media_type` (TEXT: `image`, `video`), `caption` (TEXT), `display_order` (INTEGER), `is_active` (BOOLEAN), `uploaded_by` (UUID), `created_at`, `updated_at`. Unique `(folder_path, file_name)`.
-
-#### 7. `reviews`
-- `id` (UUID PK), `google_review_id` (TEXT unique), `reviewer_name` (TEXT), `review_text` (TEXT), `rating` (INTEGER 1-5), `review_date` (DATE), `last_synced_at` (TIMESTAMPTZ), `is_visible` (BOOLEAN default true), `created_at`, `updated_at`.
-
-#### 8. `site_config`
-- `id` (UUID PK), `config_key` (TEXT unique), `config_value` (TEXT), `description` (TEXT), `updated_at`.
-- Keys: `stat_members_count`, `stat_years_in_business`, `stat_trainers_count`, `stat_transformations`, `achievement_*`, `gym_name`, `gym_address`, `gym_phone`, `gym_email`, `gym_maps_embed_url`, `gym_google_form_url`, `gym_google_place_id`, `reviews_last_synced_at`, `hero_slideshow_interval_ms`, `about_tagline`, `about_story`.
-
-#### 9. `achievements`
-- `id` (UUID PK), `label` (TEXT), `value` (TEXT), `display_order` (INTEGER), `is_active` (BOOLEAN), `created_at`, `updated_at`.
-
-### 4.3 Supabase Storage Conventions
-* Public Bucket (`assets`):
-  * `assets/hero/` — Slideshow images/videos
-  * `assets/about/` — About section photos
-  * `assets/services/` — Service icons (`.svg` / `.png`)
-  * `assets/trainers/` — Trainer photos (`<slug>.jpg`)
-  * `assets/gallery/` — General gym photos & videos
-  * `assets/transformations/` — Member transformation photos
-  * `assets/plans/` — Plan graphics
-* Private Bucket (`invoices`):
-  * `invoices/<member_id>/<payment_id>.pdf` — Signed URL access only (60 min expiry).
-
----
-
-## 5. API Specification & Endpoints Reference
-
-**Base URL:** `/api/v1`
-
-### 5.1 Envelopes
-* **Success Single:** `{ "data": { ... }, "message": "Operation successful" }`
-* **Success List:** `{ "data": [ ... ], "total": 42, "next_cursor": "uuid", "message": "Operation successful" }`
-* **Error:** `{ "error": "ERROR_CODE", "message": "Detailed description", "status": 400 }`
-
-### 5.2 Endpoint Catalog (35 Total Endpoints)
-| Method | Route | Auth Role | Description |
-|---|---|---|---|
-| `GET` | `/health` | Open | Health check & keep-alive ping |
-| `GET` | `/public/site-config` | Open | Site configuration key-values |
-| `GET` | `/public/assets/hero` | Open | List hero slideshow media files |
-| `GET` | `/public/assets/about` | Open | List about section media files |
-| `GET` | `/public/achievements` | Open | Active home page achievements |
-| `GET` | `/public/services` | Open | Active services list with icon URLs |
-| `GET` | `/public/plans` | Open | Active membership plans matrix |
-| `GET` | `/public/trainers` | Open | Active trainer profiles with photo URLs |
-| `GET` | `/public/gallery` | Open | Gallery & transformation media items |
-| `GET` | `/public/reviews` | Open | Cached Google Reviews (24h background sync) |
-| `GET` | `/member/me` | Member/Admin | Current authenticated member details |
-| `GET` | `/member/payments` | Member/Admin | Paginated payment history for self |
-| `GET` | `/member/payments/{id}/invoice` | Member/Admin | Signed temporary download URL for invoice PDF |
-| `GET` | `/admin/members` | Admin/Dev | Paginated & searchable member list |
-| `GET` | `/admin/members/{id}` | Admin/Dev | Full member detail view |
-| `POST` | `/admin/members` | Admin/Dev | Create new member (encrypts PII) |
-| `PUT` | `/admin/members/{id}` | Admin/Dev | Partial/full member update |
-| `DELETE` | `/admin/members/{id}` | Admin/Dev | Soft-delete member (sets `status='suspended'`) |
-| `POST` | `/admin/members/import` | Admin/Dev | Bulk CSV/Excel member import |
-| `GET` | `/admin/payments` | Admin/Dev | Paginated payment list with date/member filters |
-| `POST` | `/admin/payments` | Admin/Dev | Record payment & generate invoice PDF |
-| `GET` | `/admin/payments/{id}/invoice` | Admin/Dev | Signed temporary download URL for invoice |
-| `GET` | `/admin/plans` | Admin/Dev | All plans (including inactive) |
-| `PUT` | `/admin/plans/{id}` | Admin/Dev | Update plan pricing, description, active state |
-| `GET` | `/admin/services` | Admin/Dev | All services |
-| `POST` | `/admin/services` | Admin/Dev | Create service |
-| `PUT` | `/admin/services/{id}` | Admin/Dev | Update service |
-| `DELETE` | `/admin/services/{id}` | Admin/Dev | Soft-delete service |
-| `GET` | `/admin/trainers` | Admin/Dev | All trainer profiles |
-| `POST` | `/admin/trainers` | Admin/Dev | Create trainer profile |
-| `PUT` | `/admin/trainers/{id}` | Admin/Dev | Update trainer profile |
-| `DELETE` | `/admin/trainers/{id}` | Admin/Dev | Soft-delete trainer profile |
-| `GET` | `/admin/gallery` | Admin/Dev | All gallery items |
-| `POST` | `/admin/gallery` | Admin/Dev | Register uploaded storage asset |
-| `PUT` | `/admin/gallery/{id}` | Admin/Dev | Update caption, order, visibility |
-| `DELETE` | `/admin/gallery/{id}` | Admin/Dev | Delete gallery DB record and storage file |
-| `GET` | `/admin/site-config` | Admin/Dev | All site config keys with descriptions |
-| `PUT` | `/admin/site-config` | Admin/Dev | Bulk update site config keys |
-| `GET` | `/admin/achievements` | Admin/Dev | All achievements |
-| `POST` | `/admin/achievements` | Admin/Dev | Create achievement |
-| `PUT` | `/admin/achievements/{id}` | Admin/Dev | Update achievement |
-| `DELETE` | `/admin/achievements/{id}` | Admin/Dev | Soft-delete achievement |
-| `GET` | `/admin/reviews` | Admin/Dev | All reviews (including hidden) |
-| `PUT` | `/admin/reviews/{id}` | Admin/Dev | Toggle review visibility (`is_visible`) |
-| `POST` | `/admin/reviews/sync` | Admin/Dev | Force manual sync from Google Places API |
-
----
-
-## 6. Frontend Architecture & Page Directory
-
-### 6.1 Directory Map
-```
-frontend/src/
-├── assets/                     # Static assets (logo.svg)
-├── components/
-│   ├── common/                 # Button, Badge, Card, Modal, Spinner, Divider,
-│   │                           # SectionHeading, StatBlock, EmptyState, ErrorMessage
-│   ├── layout/                 # Navbar, Footer, PageWrapper, SectionWrapper, AdminSidebar
-│   └── forms/                  # FormField, SelectField, TextareaField, FileUpload
-├── pages/
-│   ├── public/                 # HomePage, AboutPage, ServicesPage, PlansPage,
-│   │                           # TrainersPage, GalleryPage, TestimonialsPage, ContactPage
-│   ├── auth/                   # MemberLoginPage, AdminLoginPage
-│   ├── member/                 # MemberDashboardPage, MembershipStatusPage, PaymentHistoryPage
-│   └── admin/                  # AdminDashboardPage, MembersPage, MemberDetailPage,
-│                               # MemberImportPage, PaymentsPage, PlansAdminPage,
-│                               # ServicesAdminPage, TrainersAdminPage, GalleryAdminPage,
-│                               # StatsAdminPage, SettingsPage
-├── features/                   # Scoped modules (hero slideshow, member table, payment forms)
-├── hooks/                      # useScrollReveal, useMediaQuery, useDebounce
-├── services/                   # api.ts (Axios), publicService.ts, memberService.ts, adminService.ts
-├── store/                      # authStore.ts (in-memory JWT), siteConfigStore.ts, adminStore.ts
-├── types/                      # TypeScript interfaces (auth, member, payment, plan, trainer, etc.)
-├── utils/                      # formatDate, formatCurrency, getMembershipStatus, buildStorageUrl
-├── constants/                  # routes.ts, queryKeys.ts
-└── router/                     # index.tsx, PublicRoute.tsx, ProtectedMemberRoute, ProtectedAdminRoute
-```
-
-### 6.2 Frontend Routes Matrix (`constants/routes.ts`)
-| Route Constant | Path | Protection |
+| File | Primary Keys / Contents | Description |
 |---|---|---|
-| `ROUTES.HOME` | `/` | Public |
-| `ROUTES.ABOUT` | `/about` | Public |
-| `ROUTES.SERVICES` | `/services` | Public |
-| `ROUTES.PLANS` | `/plans` | Public |
-| `ROUTES.TRAINERS` | `/trainers` | Public |
-| `ROUTES.GALLERY` | `/gallery` | Public |
-| `ROUTES.TESTIMONIALS` | `/testimonials` | Public |
-| `ROUTES.CONTACT` | `/contact` | Public |
-| `ROUTES.MEMBER_LOGIN` | `/login` | Public (Redirects if logged in) |
-| `ROUTES.ADMIN_LOGIN` | `/admin/login` | Public (Redirects if logged in) |
-| `ROUTES.MEMBER_DASHBOARD` | `/member/dashboard` | `ProtectedMemberRoute` (`member`, `admin`, `dev`) |
-| `ROUTES.MEMBER_MEMBERSHIP` | `/member/membership` | `ProtectedMemberRoute` |
-| `ROUTES.MEMBER_PAYMENTS` | `/member/payments` | `ProtectedMemberRoute` |
-| `ROUTES.ADMIN_DASHBOARD` | `/admin/dashboard` | `ProtectedAdminRoute` (`admin`, `dev`) |
-| `ROUTES.ADMIN_MEMBERS` | `/admin/members` | `ProtectedAdminRoute` |
-| `ROUTES.ADMIN_MEMBER_NEW` | `/admin/members/new` | `ProtectedAdminRoute` |
-| `ROUTES.ADMIN_MEMBER_DETAIL` | `/admin/members/:id` | `ProtectedAdminRoute` |
-| `ROUTES.ADMIN_MEMBER_IMPORT` | `/admin/members/import` | `ProtectedAdminRoute` |
-| `ROUTES.ADMIN_PAYMENTS` | `/admin/payments` | `ProtectedAdminRoute` |
-| `ROUTES.ADMIN_PLANS` | `/admin/plans` | `ProtectedAdminRoute` |
-| `ROUTES.ADMIN_SERVICES` | `/admin/services` | `ProtectedAdminRoute` |
-| `ROUTES.ADMIN_TRAINERS` | `/admin/trainers` | `ProtectedAdminRoute` |
-| `ROUTES.ADMIN_GALLERY` | `/admin/gallery` | `ProtectedAdminRoute` |
-| `ROUTES.ADMIN_STATS` | `/admin/stats` | `ProtectedAdminRoute` |
-| `ROUTES.ADMIN_SETTINGS` | `/admin/settings` | `ProtectedAdminRoute` |
+| `site.json` | `gym_name`, `tagline`, `about_story`, `address`, `phone`, `email`, `google_maps_embed_url`, `google_form_url`, `google_place_id`, `opening_hours` | Core gym metadata, NAP consistency, and iframe embed URLs |
+| `hero.json` | `slideshow_interval_ms`, `slides[]`, `headline_before`, `headline_after`, `cta_buttons[]`, `stats[]` | Hero slideshow media, heading text, CTA links, and key stats |
+| `services.json` | `services[]` (`id`, `name`, `slug`, `description`, `icon_filename`) | 8 gym training services and icon mappings |
+| `plans.json` | `plans[]` (`id`, `tier`, `duration`, `price`, `description`) | 8 membership combinations (`basic`/`pt` × `monthly`/`quarterly`/`half_yearly`/`annual`) |
+| `trainers.json` | `trainers[]` (`id`, `name`, `slug`, `specialization`, `experience_years`, `certifications[]`, `bio`, `photo_filename`, `display_order`) | Trainer profiles, credentials, and photos |
+| `gallery.json` | `items[]` (`id`, `folder`, `filename`, `media_type`, `caption`, `display_order`) | Media gallery items across `gallery` and `transformations` |
+| `achievements.json` | `achievements[]` (`id`, `label`, `value`, `display_order`) | Awards, stats milestones, and badges |
+| `reviews.json` | `reviews[]` (`id`, `reviewer_name`, `review_text`, `rating`, `review_date`) | Static fallback reviews displayed if Google Places API fails |
+
+### 3.2 Asset Management Conventions (`public/assets/`)
+Static images and videos follow a section-named folder convention:
+```
+frontend/public/assets/
+├── hero/              → Slideshow images and videos (e.g. slide-1.jpg, slide-2.mp4)
+├── about/             → About section images (e.g. about-gym.jpg)
+├── services/          → Service SVG/PNG icons (filename = <slug>.svg)
+├── trainers/          → Trainer headshots (filename = <slug>.jpg)
+├── gallery/           → General gym and equipment photos/videos
+└── transformations/   → Before/after member transformation photos
+```
+* **URL Construction:** Handled exclusively via `buildAssetUrl(folder, filename)` in `src/utils/buildAssetUrl.ts`.
+
+### 3.3 Phase 2: PostgreSQL Schema (`asyncpg` & Supabase)
+When backend is activated, the 9 PostgreSQL tables defined in `docs/03_Database_Schema_Fitness_Garage.md` take over:
+1. `members` (PII encrypted: `full_name`, `phone_number`, `email_address`, RLS enabled)
+2. `membership_plans` (8 combinations, unique `(tier, duration)`)
+3. `payments` (`amount`, `payment_date`, `payment_method`, `invoice_path`)
+4. `trainers` (`slug`, `specialization`, `certifications`, `photo_filename`)
+5. `services` (`slug`, `description`, `icon_filename`)
+6. `gallery` (`folder_path`, `file_name`, `media_type`)
+7. `reviews` (`google_review_id`, `rating`, `is_visible`, 24h sync)
+8. `site_config` (`config_key`, `config_value`, `description`)
+9. `achievements` (`label`, `value`, `display_order`)
 
 ---
 
-## 7. Backend Structure & Code Organization (`backend/`)
+## 4. The Replaceable Service Layer & Future Backend Wiring
+
+### 4.1 Interface Contract (`src/services/publicService.ts`)
+All components consume data exclusively through `publicService`, which returns standard Promises:
+
+```typescript
+// Phase 1 (Static — Active)
+import siteData from '../data/site.json'
+import heroData from '../data/hero.json'
+import servicesData from '../data/services.json'
+import plansData from '../data/plans.json'
+import trainersData from '../data/trainers.json'
+import galleryData from '../data/gallery.json'
+import achievementsData from '../data/achievements.json'
+import fallbackReviews from '../data/reviews.json'
+
+export const publicService = {
+  getSiteConfig: async () => siteData,
+  getHeroData: async () => heroData,
+  getServices: async () => servicesData.services,
+  getPlans: async () => plansData.plans,
+  getTrainers: async () => trainersData.trainers,
+  getGallery: async (folder?: string) =>
+    folder ? galleryData.items.filter(i => i.folder === folder) : galleryData.items,
+  getAchievements: async () => achievementsData.achievements,
+  getFallbackReviews: async () => fallbackReviews.reviews,
+}
+```
+
+### 4.2 Phase 2 Backend Swap
+When ready to wire the backend:
+```typescript
+// Phase 2 (Backend Wired — Future)
+import { api } from './api'
+
+export const publicService = {
+  getSiteConfig: () => api.get('/public/site-config').then(r => r.data.data),
+  getHeroData: () => api.get('/public/assets/hero').then(r => r.data.data),
+  getServices: () => api.get('/public/services').then(r => r.data.data),
+  getPlans: () => api.get('/public/plans').then(r => r.data.data),
+  getTrainers: () => api.get('/public/trainers').then(r => r.data.data),
+  getGallery: (folder?: string) => api.get('/public/gallery', { params: { folder } }).then(r => r.data.data),
+  getAchievements: () => api.get('/public/achievements').then(r => r.data.data),
+  getReviews: () => api.get('/public/reviews').then(r => r.data.data),
+}
+```
+
+### 4.3 Phase 2 Swap Checklist
+- [ ] Add `axios`, `@supabase/supabase-js`, `zustand`, `react-hook-form`, `zod` to `frontend/package.json`
+- [ ] Update `src/services/publicService.ts` to call `/api/v1/public/**` via Axios
+- [ ] Update `src/utils/buildAssetUrl.ts` to prefix Supabase Storage URL
+- [ ] Activate `src/store/authStore.ts` and auth interceptors in `src/services/api.ts`
+- [ ] Mount `ProtectedMemberRoute` and `ProtectedAdminRoute` in `src/router/index.tsx`
+- [ ] Set `VITE_API_BASE_URL`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` in environment variables
+
+---
+
+## 5. Frontend Architecture & Page Directory
+
+### 5.1 Directory Map
+```
+frontend/
+├── public/
+│   ├── favicon.ico
+│   ├── robots.txt
+│   ├── sitemap.xml
+│   ├── og-default.jpg
+│   └── assets/                    # Static section media assets
+│       ├── hero/
+│       ├── about/
+│       ├── services/
+│       ├── trainers/
+│       ├── gallery/
+│       └── transformations/
+│
+├── src/
+│   ├── data/                      # ALL STATIC CONTENT JSON FILES
+│   │   ├── site.json
+│   │   ├── hero.json
+│   │   ├── services.json
+│   │   ├── plans.json
+│   │   ├── trainers.json
+│   │   ├── gallery.json
+│   │   ├── achievements.json
+│   │   └── reviews.json
+│   │
+│   ├── components/
+│   │   ├── common/                # Button, Badge, Card, Modal, Spinner, SectionHeading, StatBlock, ErrorMessage
+│   │   ├── layout/                # Navbar, Footer, PageWrapper, SectionWrapper, HeroPageBanner, AdminSidebar*
+│   │   └── forms/                 # FormField*, SelectField*, FileUpload* (*Phase 2)
+│   │
+│   ├── pages/
+│   │   ├── public/                # HomePage, AboutPage, ServicesPage, PlansPage, TrainersPage,
+│   │   │                          # GalleryPage, TestimonialsPage, ContactPage, NotFoundPage
+│   │   ├── auth/                  # MemberLoginPage*, AdminLoginPage* (*Phase 2)
+│   │   ├── member/                # MemberDashboardPage*, MembershipStatusPage*, PaymentHistoryPage* (*Phase 2)
+│   │   └── admin/                 # AdminDashboardPage*, MembersPage*, PaymentsPage*, etc. (*Phase 2)
+│   │
+│   ├── features/                  # Scoped feature components
+│   │   ├── hero/                  # HeroSlideshow, HeroStats
+│   │   ├── services/              # ServiceCard
+│   │   ├── plans/                 # PlanCard
+│   │   ├── trainers/              # TrainerCard
+│   │   ├── gallery/               # GalleryGrid, GalleryLightbox
+│   │   └── reviews/               # ReviewCard, GoogleReviews
+│   │
+│   ├── hooks/                     # useScrollReveal, useMediaQuery, useGoogleReviews, useDebounce
+│   ├── services/                  # publicService.ts (Single Swap Point), api.ts*, memberService*, adminService*
+│   ├── types/                     # site.ts, service.ts, plan.ts, trainer.ts, gallery.ts, review.ts, achievement.ts
+│   ├── utils/                     # buildAssetUrl.ts, formatDate.ts, formatCurrency.ts
+│   ├── constants/                 # routes.ts
+│   ├── router/                    # index.tsx (Public routes code-split via React.lazy)
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── index.css
+```
+
+### 5.2 Public Routes Matrix (`constants/routes.ts`)
+
+| Route Constant | Path | Page Component | Data Source |
+|---|---|---|---|
+| `ROUTES.HOME` | `/` | `HomePage` | Parallel `Promise.all` across site, hero, services, plans, trainers, achievements |
+| `ROUTES.ABOUT` | `/about` | `AboutPage` | `site.json` (story, mission), `hero.json` (stats), `trainers.json` |
+| `ROUTES.SERVICES` | `/services` | `ServicesPage` | `services.json` (all 8 services with SVG icons) |
+| `ROUTES.PLANS` | `/plans` | `PlansPage` | `plans.json` (8 plan cards, ₹0 displayed as "Contact for pricing") |
+| `ROUTES.TRAINERS` | `/trainers` | `TrainersPage` | `trainers.json` (profiles, certifications, bios, photos) |
+| `ROUTES.GALLERY` | `/gallery` | `GalleryPage` | `gallery.json` (tabs: All, Gym, Transformations, Videos + Lightbox) |
+| `ROUTES.TESTIMONIALS` | `/testimonials` | `TestimonialsPage` | `useGoogleReviews` (Google Places API + sessionStorage + fallback) |
+| `ROUTES.CONTACT` | `/contact` | `ContactPage` | `site.json` (NAP info, Google Maps iframe, Google Form iframe) |
+| `ROUTES.NOT_FOUND` | `*` | `NotFoundPage` | Static 404 with Chrome Slash and return CTA |
+
+---
+
+## 6. Google Reviews Integration & Browser Caching
+
+### 6.1 Integration Flow
+1. Component mounts and invokes `useGoogleReviews(placeId, apiKey)`.
+2. Hook checks `sessionStorage.getItem('fg_reviews_cache')`.
+   - **Cache Hit:** Parses and returns cached reviews instantly (zero layout shift, zero API consumption).
+   - **Cache Miss:** Issues `fetch` call to Google Places API (`maps.googleapis.com/maps/api/place/details/json`).
+3. On API success: Maps review data, writes to `sessionStorage`, renders `ReviewCard` components with "Powered by Google" attribution.
+4. On API error or missing credentials: Catches error and falls back to static curated reviews from `src/data/reviews.json`.
+
+### 6.2 Environment Variables
+```env
+# frontend/.env.local (gitignored)
+VITE_GOOGLE_PLACES_API_KEY=<restricted-to-domain>
+VITE_GOOGLE_PLACE_ID=<gym-place-id>
+```
+* **Security Requirement:** The Google Places API key must be restricted in Google Cloud Console to authorized HTTP referrers (e.g. `https://fitnessgarage.vercel.app/*` and production custom domains).
+
+---
+
+## 7. Backend Structure & Repository Organization (`backend/`)
+
+The full backend architecture is preserved in `backend/` ready for Phase 2 deployment:
 
 ```
 backend/
 ├── app/
-│   ├── main.py                  # FastAPI instantiation + Lifespan connection pool
+│   ├── main.py                  # FastAPI app with CORS, health routes, lifespan connection pool
 │   ├── core/
 │   │   ├── config.py            # Environment settings (Pydantic BaseSettings)
-│   │   ├── security.py          # Fernet AES-256 encrypt/decrypt helper functions
-│   │   └── auth.py              # Supabase JWT decoding, verify dependencies
-│   ├── schemas/                 # Pydantic v2 schemas for request/response validation
-│   │   ├── member.py
-│   │   ├── payment.py
-│   │   ├── plan.py
-│   │   ├── trainer.py
-│   │   ├── service.py
-│   │   ├── gallery.py
-│   │   ├── review.py
-│   │   └── site_config.py
-│   ├── services/                # Business logic & integrations
-│   │   ├── member_service.py
-│   │   ├── payment_service.py
-│   │   ├── invoice_service.py   # ReportLab PDF invoice generator
-│   │   ├── import_service.py    # pandas/openpyxl bulk member importer
-│   │   ├── reviews_service.py   # Google Places API client
-│   │   └── storage_service.py   # Supabase Storage helper (signed URLs)
+│   │   ├── security.py          # Fernet AES-256 encrypt/decrypt helpers
+│   │   └── auth.py              # Supabase JWT decoding and role dependencies
+│   ├── schemas/                 # Pydantic v2 schemas for all 9 domain entities
+│   ├── services/                # Business logic: member_service, payment_service, invoice_service,
+│   │                            # import_service, reviews_service, storage_service
 │   └── routers/
-│       ├── public/              # services, trainers, gallery, plans, reviews, site_config
-│       ├── member/              # me, payments, invoice
-│       └── admin/               # members, payments, plans, services, trainers, gallery, stats, settings
+│       ├── public/              # /api/v1/public/** endpoints
+│       ├── member/              # /api/v1/member/** endpoints
+│       └── admin/               # /api/v1/admin/** endpoints
 └── db/
-    ├── connection.py            # asyncpg connection pool init and dependency injection
-    ├── migrate.py               # SQL migrations runner against _migrations table
-    ├── migrations/              # Plain .sql migration scripts (000_init.sql ... 013_seed_site_config.sql)
-    └── queries/                 # Parameterized SQL query modules per resource
-        ├── member_queries.py
-        ├── payment_queries.py
-        ├── plan_queries.py
-        ├── trainer_queries.py
-        ├── service_queries.py
-        ├── gallery_queries.py
-        ├── review_queries.py
-        ├── site_config_queries.py
-        └── achievement_queries.py
+    ├── connection.py            # asyncpg connection pool
+    ├── migrate.py               # Plain SQL migration runner against _migrations table
+    ├── migrations/              # 14 SQL migration scripts (000_init.sql ... 013_seed_site_config.sql)
+    └── queries/                 # Parameterized SQL query modules per entity
 ```
 
 ---
 
-## 8. Development & Operational Commands
+## 8. Security & Data Protection Architecture
 
-### 8.1 Backend (Python + uv)
-```bash
-# Install dependencies
-uv sync
+### 8.1 Phase 1 Security Controls
+- **API Key Scoping:** `VITE_GOOGLE_PLACES_API_KEY` restricted to HTTP domain referrers in Google Cloud Console.
+- **Secret Detection:** Yelp `detect-secrets` configured in pre-commit to prevent accidental credential commits.
+- **No Backend Secrets:** Zero database credentials or private keys in the frontend bundle.
 
-# Run database migrations
-uv run python -m db.migrate
-
-# Start local backend dev server
-uv run uvicorn app.main:app --reload --port 8000
-
-# Run backend test suite
-uv run pytest
-```
-
-### 8.2 Frontend (React + Vite)
-```bash
-# Install dependencies
-npm install
-
-# Start local frontend dev server
-npm run dev
-
-# Build for production
-npm run build
-
-# Run linting
-npm run lint
-```
+### 8.2 Phase 2 Security Controls (Preserved in Backend)
+- **PII Encryption (AES-256):** Fernet symmetric encryption applied to `full_name`, `phone_number`, `email_address` before database writes.
+- **Postgres Row Level Security (RLS):** Members restricted to `auth.uid() = supabase_user_id`; Admin/Dev role bypasses via Service Role Key.
+- **In-Memory JWT:** Supabase JWT stored strictly in memory (`authStore.ts`), never in `localStorage` or `sessionStorage`.
+- **Private Invoices:** Invoice PDFs stored in private bucket `invoices/<member_id>/<payment_id>.pdf` accessed strictly via temporary signed URLs (60-min expiry).
 
 ---
 
-## 9. Explicit Boundaries: In-Scope vs Out-of-Scope
-
-### 9.1 In-Scope for Launch (v1.0)
-* Full responsive public marketing site (Home, About, Services, Plans, Trainers, Gallery, Testimonials, Contact).
-* Admin Dashboard for member CRUD, bulk import, manual payment entry, invoice generation, and full site content configuration.
-* Member Portal for viewing membership status, expiry alerts, and downloading invoices.
-* Google Reviews auto-sync with 24-hour cache.
-* AES-256 PII field encryption & Supabase RLS policies.
-* 100% free-tier zero-cost architecture with keep-alive cron ping.
-
-### 9.2 Explicitly Out of Scope (Phase 2+ / Deferred)
-* ❌ Online payment gateways (Razorpay/Stripe) — payments recorded manually by admin.
-* ❌ SMS / WhatsApp automated notifications (deferred to Phase 2).
-* ❌ Class booking / timetable scheduling system.
-* ❌ Member workout/fitness tracking logs.
-* ❌ Multi-branch / multiple gym location support.
-* ❌ Native iOS/Android mobile apps.
-
----
-
-## 10. SEO Strategy & Technical Implementation
+## 9. SEO Strategy & Technical Implementation
 
 > Extracted from [`docs/08_SEO_Strategy_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/08_SEO_Strategy_Fitness_Garage.md).
 
-### 10.1 SEO Objectives & NAP Consistency
-* **Objective:** Local search visibility for "[City] gym", "personal trainer [City]", "fitness classes [City]" and brand dominance for "Fitness Garage".
-* **NAP (Name, Address, Phone):** Must be identical across website footer, Contact page, Google Business Profile, and schema markup.
-* **Single Source of Truth:** All contact information and map embeds are pulled dynamically from `site_config` (`gym_name`, `gym_address`, `gym_phone`, `gym_email`, `gym_maps_embed_url`). No hardcoded addresses in JSX.
+### 9.1 NAP Consistency & Metadata
+- **Single Source of Truth:** Gym name, address, phone, email, and Google Maps embed are bound from `site.json` / `publicService.getSiteConfig()`.
+- **PageWrapper Component:** Injects canonical URLs, unique titles (≤ 60 chars), meta descriptions (≤ 155 chars), Open Graph tags, and Twitter Cards on every page.
 
-### 10.2 Structured Data (JSON-LD Schemas)
-1. **`GymOrSportsClub` (Home / `index.html`):** Static/dynamic injection with `PostalAddress`, `GeoCoordinates`, `openingHoursSpecification`, `amenityFeature`, and `sameAs` Google Place CID.
-2. **`BreadcrumbList` (`PageWrapper.tsx`):** Injected dynamically on inner pages via `breadcrumbs` prop.
-3. **`ItemList` (Services Page):** Dynamically generated list of `Service` items populated from `GET /public/services`.
-4. **`Person` (Trainers Page):** Dynamic `ItemList` of `Person` schemas generated from `GET /public/trainers`.
-5. **`AggregateRating` & `Review` (Testimonials Page):** Aggregated rating and individual reviews generated from `GET /public/reviews`.
+### 9.2 Structured Data (5 JSON-LD Schemas)
+1. **`GymOrSportsClub` (`index.html`):** Base business identity with address, geo-coordinates, opening hours, and Google Place CID.
+2. **`BreadcrumbList` (`PageWrapper.tsx`):** Injected dynamically for all inner pages.
+3. **`ItemList` (`ServicesPage.tsx`):** Structured list of all 8 fitness services.
+4. **`Person` (`TrainersPage.tsx`):** Structured trainer profiles with job titles and credentials.
+5. **`AggregateRating` & `Review` (`TestimonialsPage.tsx`):** Structured review rating data.
 
-### 10.3 Technical SEO & Metadata Pattern (`PageWrapper`)
-* Every public page is wrapped in `<PageWrapper>` which injects:
-  - Canonical URL `<link rel="canonical" href="..." />`
-  - Unique `<title>` (Pattern: `[Page Topic] — Fitness Garage, [City]` ≤ 60 chars)
-  - Unique `<meta name="description">` (≤ 155 chars)
-  - Open Graph tags (`og:title`, `og:description`, `og:image`, `og:url`, `og:type`)
-  - Twitter Card tags (`twitter:card="summary_large_image"`, etc.)
-* **Robots & Indexing:**
-  - `public/robots.txt` allows all public pages and explicitly disallows `/member/`, `/admin/`, `/login`, `/api/`.
-  - `public/sitemap.xml` lists all 8 public routes with priority and change frequencies.
-  - Protected routes (`ProtectedMemberRoute`, `ProtectedAdminRoute`) inject `<meta name="robots" content="noindex, nofollow" />`.
-
-### 10.4 Core Web Vitals Optimization
-* **LCP (< 2.5s):** Preload first hero slide with `<link rel="preload" as="image" href="..." />`. Supabase Storage CDN delivery.
-* **CLS (< 0.1):** Explicit `width` and `height` on all `<img>` tags. Skeleton loading states during data fetch.
-* **FID / INP (< 200ms):** Vite manual chunk splitting (`vendor`, `auth`, `forms`), lazy loading routes with `React.lazy()`.
-* **Font Loading:** Google Fonts preconnected with `display=swap`.
+### 9.3 Core Web Vitals Optimization
+- **LCP (< 2.5s):** First hero slide preloaded via `<link rel="preload">` in `index.html`.
+- **CLS (< 0.1):** Explicit `width` and `height` on all media elements; zero layout shifts from review hydration.
+- **Vite Chunk Splitting:** Vendor chunk separation (`react`, `react-dom`, `react-router-dom`).
+- **Font Optimization:** Google Fonts preconnected with `display=swap`.
 
 ---
 
-## 11. Project Milestones, Phases & Deliverables
+## 10. Development, Tooling & Operational Workflow
 
-> Extracted from [`docs/09_Project_Milestones_Deliverables_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/09_Project_Milestones_Deliverables_Fitness_Garage.md).
-
-### 11.1 6-Phase Roadmap Overview
+### 10.1 Development Automation (`Makefile`)
+```bash
+make help               # Display all available targets
+make setup              # First-time setup: npm ci, pre-commit install, .env.local copy
+make dev                # Start Vite dev server at http://localhost:5173
+make lint               # Run ESLint and tsc type check
+make format             # Run Prettier code formatter
+make test               # Run type check, production build, and JSON data validation
+make validate-data      # Validate syntax and required keys across all src/data/*.json files
+make placeholder-check  # Audit remaining TBD / placeholder values in data files
+make pre-commit-run     # Run all pre-commit hooks against all files
+make ready              # Pre-PR check (format-check + lint + test + validate-data + pre-commit)
+make docker-up          # Start frontend in Docker container
 ```
-Phase 0 │ Project Setup & Infrastructure         (Week 1)
-Phase 1 │ Database & Backend Foundation          (Week 2)
-Phase 2 │ Public Website Frontend                (Weeks 3–4)
-Phase 3 │ Admin Dashboard                        (Weeks 5–6)
-Phase 4 │ Member Portal                          (Week 7)
-Phase 5 │ Integrations & SEO                     (Week 8, First Half)
-Phase 6 │ QA, Hardening & Deployment             (Week 8, Second Half)
-```
 
-### 11.2 Milestone Acceptance Highlights
-* **Phase 0:** Monorepo setup, Vite + React frontend, FastAPI backend, Supabase project, Vercel/Render CI/CD, AES key generation, keep-alive ping.
-* **Phase 1:** 14 SQL migrations (000–013), `db/migrate.py`, connection pool, AES-256 encrypt/decrypt helper, Supabase JWT auth guards, 9 query modules, 4 service layers, 35 endpoints, pytest suite.
-* **Phase 2:** 8 public marketing pages, Tailwind design tokens, Zustand stores, custom hooks, component primitives, responsive layouts (375px, 768px, 1280px).
-* **Phase 3:** 11 admin modules, `AdminSidebar`, CRUD for all entities, bulk Excel/CSV importer, invoice PDF generator, toast alerts, confirmation modals.
-* **Phase 4:** 3-way member auth (Email/Password, Magic Link, Phone OTP), auto-linking for imported members, expiry countdowns with 14-day amber / red alerts, signed invoice downloads, mobile payment cards.
-* **Phase 5:** Google Places API sync (24h cache), 5 JSON-LD schemas, robots.txt, sitemap.xml, Core Web Vitals optimization (Lighthouse ≥ 85).
-* **Phase 6:** End-to-end user testing, security penetration tests (PII ciphertext verification, RLS bypass checks), 200+ member import, 6 admin accounts setup, `v1.0.0` release.
+### 10.2 CI Pipeline (`.github/workflows/ci.yml`)
+- **`frontend-ci`:** Runs Prettier check, ESLint (`--max-warnings=0`), `tsc --noEmit`, and `vite build`.
+- **`data-validate`:** Validates JSON syntax and required schema keys for `site.json`, `hero.json`, and 8-plan constraint in `plans.json`.
+- **`lighthouse`:** Runs Lighthouse CI on PRs to `main` to enforce Core Web Vitals thresholds (Performance ≥ 90, CLS < 0.1, LCP < 2.5s).
+- **`ci-gate`:** Required PR status check ensuring all jobs pass.
+
+### 10.3 Pre-Commit Enforcement (`.pre-commit-config.yaml`)
+- General checks: trailing whitespace, end-of-file newline, YAML/TOML/JSON syntax, large files (≤ 5MB), private keys, case conflicts.
+- Branch protection: blocks direct commits to `main`.
+- Secrets detection: Yelp `detect-secrets` with baseline.
+- Code quality: Prettier, ESLint, TypeScript `tsc --noEmit`, JSON data validator, markdownlint.
 
 ---
 
-## 12. Development Methodology & Workflow Protocol
+## 11. Project Milestones & Deliverables Roadmap
 
-> Extracted from [`docs/11_Dev_Methodology_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/11_Dev_Methodology_Fitness_Garage.md).
+### 11.1 Static Web Application Roadmap (v2.0)
+```
+Phase 0 │ Setup & Infrastructure            Week 1 (Days 1–2)   🟢 COMPLETED
+Phase 1 │ Component Library & Public Pages  Week 1–2 (Days 3–10) 🟢 COMPLETED
+Phase 2 │ Integrations, SEO & Launch        Week 3 (Days 11–15)  🟢 COMPLETED / READY FOR ASSETS
+```
+
+### 11.2 Phase 2 Future Backend Roadmap (Documented & Ready)
+When client requests Member Portal, Admin Dashboard, and backend database:
+1. Wire `publicService.ts` to FastAPI endpoints.
+2. Deploy FastAPI on Render with `cron-job.org` keep-alive ping.
+3. Provision Supabase Postgres instance and run 14 SQL migrations via `python -m db.migrate`.
+4. Deploy Supabase Auth and configure Twilio for Phone OTP (if desired).
+5. Activate Admin Dashboard (11 modules) and Member Portal (3 pages) in frontend.
+
+---
+
+## 12. Development Methodology & AI Agent Guidelines
 
 ### 12.1 Git Branching & Commit Conventions
-* **Branch Structure:**
-  - `main`: Production-only code. Deploys automatically to Vercel and Render.
-  - `develop`: Integration branch. All features merge here first.
-  - `feature/<scope>/<description>`: Feature branches created from `develop`.
-  - `fix/<scope>/<description>`: Bug fixes created from `develop`.
-  - `chore/<scope>/<description>`: Config, deps, docs.
-* **Scopes:** `frontend`, `backend`, `db`, `infra`, `docs`.
-* **Commit Message Format:** `<type>(<scope>): <description>` (e.g. `feat(backend): add bulk member import endpoint`).
-* **Release Tagging:** Semantic versioning (`v1.0.0` at launch).
+- **Branches:** `main` (production), `develop` (integration), `feature/frontend/<desc>`, `chore/content/<desc>`, `fix/frontend/<desc>`.
+- **Commit Format:** `<type>(<scope>): <description>` (e.g. `feat(frontend): add hero slideshow with crossfade`, `content(plans): update quarterly pricing`).
 
-### 12.2 11-Step Feature Lifecycle
-```
-Step 1: Create feature branch from develop (git checkout -b feature/<scope>/<desc>)
-Step 2: Build feature using specialized domain skills (FastAPI, React, asyncpg, Tailwind)
-Step 3: Review using Ponytail Skill (ponytail-review for DRY, SOLID, KISS, YAGNI, PII, SQL)
-Step 4: Implement review changes (resolve all FAILs and document WARNs)
-Step 5: Test feature (pytest unit tests, Swagger manual verification, responsive viewport checks)
-Step 6: Run regression suite (full pytest suite + frontend npm run build && npm run lint)
-Step 7: Pre-commit checks (black, isort, flake8, mypy, bandit, eslint, prettier)
-Step 8: Commit changes with conventional commit syntax
-Step 9: Push branch and create PR to develop with standard PR template
-Step 10: PR review and squash-merge into develop
-Step 11: Delete feature branch immediately
-```
+### 12.2 Ponytail Review & Complexity Elimination Gate
+- **After every feature development or code change**, the AI agent **MUST** execute a `ponytail` / `ponytail-review` pass to eliminate dead code, over-engineering, and speculative abstractions.
+- **Review Output Persistence:** The full review output **MUST** be saved to `review-docs/<feature-name>.md`.
+- **Progression Gate:** No progress is permitted until all comments in `review-docs/` are addressed in code or explicitly rationalized.
 
 ### 12.3 Definition of Done (10 Binary Gates)
 1. Code matches the specification exactly — no scope creep, no omissions.
-2. Ponytail review completed — all `FAIL` items resolved.
-3. Feature tests passing.
-4. Full regression suite passing.
-5. Pre-commit hooks passing.
+2. Ponytail review output saved to `review-docs/<feature-name>.md` with 100% of comments resolved.
+3. Feature tests and data file validations passing (`make test`).
+4. Full regression suite passing (0 ESLint warnings, 0 TypeScript errors).
+5. Pre-commit hooks passing (`make pre-commit-run`).
 6. PR description completed with all checklist items verified.
-7. CI pipeline green.
+7. CI pipeline green on GitHub Actions.
 8. PR squash-merged to `develop`.
 9. Feature branch deleted.
-10. Zero `TODO`, `FIXME`, `console.log`, `print()`, or leftover debug code.
-
----
-
-## 13. Operational Handbook & Common Development Tasks
-
-> Extracted from [`docs/10_Dev_Handover_README_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/10_Dev_Handover_README_Fitness_Garage.md).
-
-### 13.1 Supabase Storage & Section-Named Folders
-* Assets are stored in section-named folders. Admin drops media into the respective folder in Supabase Storage — no custom file manager UI needed.
-* Use `buildStorageUrl(folder, filename)` to construct public URLs.
-* Invoices are stored in the private bucket `invoices/<member_id>/<payment_id>.pdf` and accessed **strictly** via temporary signed URLs (60-min expiry).
-
-### 13.2 Common Developer Tasks Guide
-* **Add a Public Endpoint:**
-  1. Add SQL function in `db/queries/<resource>_queries.py`.
-  2. Add Pydantic schema in `schemas/<resource>.py`.
-  3. Add router endpoint in `routers/public/<resource>.py`.
-  4. Add API call in `frontend/src/services/publicService.ts`.
-  5. Add test in `backend/tests/test_<resource>.py`.
-* **Add an Admin Module:**
-  1. Add query in `db/queries/`, schema in `schemas/`, router in `routers/admin/` with `require_admin`.
-  2. Register router in `main.py`.
-  3. Add nav item to `AdminSidebar.tsx`.
-  4. Create page in `pages/admin/<Page>Page.tsx` and register in `router/index.tsx` inside `ProtectedAdminRoute`.
-  5. Add route constant in `constants/routes.ts` and service in `adminService.ts`.
-* **Key Rotation (AES-256):** Must be executed via transactional migration script (read all rows, decrypt with old key, re-encrypt with new key, commit, update `AES_ENCRYPTION_KEY` on Render). Never update key without migrating data.
-
-### 13.3 Known Constraints & Gotchas
-* **Render Free Tier Spin-Down:** Mitigated via cron-job.org keep-alive pinging `GET /health` every 10 min. First request after deployment takes ~30s.
-* **Phone OTP / Twilio:** Supabase Phone OTP requires Twilio credentials in Supabase Dashboard. If Twilio is not configured, the Phone OTP tab must be hidden.
-* **PII Search Filter:** Member search (`?search=<term>`) decrypts member records in memory on the backend. For 200+ members this is instant (<10ms).
-* **Invoice Number Sequence:** `invoice_last_sequence` in `site_config` must be incremented using a PostgreSQL `SELECT ... FOR UPDATE` row lock during payment creation.
-* **`asyncpg.Record` Immutability:** `asyncpg` returns read-only records. Convert to dict before mutation: `row = dict(record)`.
-
----
-
-## 14. AI Agent Workflow & Specialized Skill Guidelines
-
-### 14.1 Mandatory Post-Feature Ponytail Review
-* **After every feature development or code change**, the AI agent **MUST** perform a `ponytail` / `ponytail-review` pass to review diffs for unnecessary complexity, over-engineering, unused flexibility, and dead code.
-* The codebase must remain minimal, lean, and strictly YAGNI-compliant (`net: -<N> lines possible` or `Lean already. Ship.`).
-
-### 14.2 Proactive Domain Skill Utilization
-The agent **MUST** proactively leverage the best specialized skills available at its disposal across all phases of the project:
-* **Database & SQL:** `sql-pro` for schema audits, migrations, parameterized query design, indexing, and PostgreSQL performance.
-* **Backend API:** `fastapi-developer` / `backend-developer` / `python-pro` for async REST endpoints, Pydantic schemas, dependency injection, and security.
-* **Frontend Web:** `react-specialist` / `frontend-developer` / `typescript-pro` for React 18 component architecture, Zustand state management, Tailwind tokens, and form validation.
-* **Design & UX:** `ui-designer` / `accessibility-tester` for visual hierarchy, dark industrial aesthetics, responsive layout, and WCAG compliance.
-* **Security & Quality:** `security-auditor` / `code-reviewer` for Fernet AES-256 encryption, Supabase RLS verification, and token handling.
-* **Complexity & Debt Management:** `ponytail` / `ponytail-review` / `ponytail-debt` / `ponytail-gain` to ruthlessly eliminate bloat.
+10. Zero `TODO`, `FIXME`, `console.log`, or leftover debug code.

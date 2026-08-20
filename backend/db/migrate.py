@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os
 from pathlib import Path
+
 import asyncpg
 from dotenv import load_dotenv
 
@@ -16,7 +17,7 @@ async def run_migrations() -> None:
         logger.error("DATABASE_URL environment variable is not set.")
         return
 
-    logger.info(f"Connecting to database to execute migrations...")
+    logger.info("Connecting to database to execute migrations...")
     try:
         conn = await asyncpg.connect(db_url)
     except Exception as e:

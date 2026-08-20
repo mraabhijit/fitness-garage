@@ -1,0 +1,81 @@
+{
+  "services": [
+    {
+      "id": "1",
+      "name": "Personal Training",
+      "slug": "personal-training",
+      "description": "One-on-one tailored coaching sessions focused on your individual body mechanics, strength goals, and nutrition.",
+      "icon_filename": "personal-training.svg"
+    },
+    {
+      "id": "2",
+      "name": "Strength & Conditioning",
+      "slug": "strength-conditioning",
+      "description": "Periodized powerlifting, barbell mechanics, and athletic conditioning programs designed to build functional raw strength.",
+      "icon_filename": "strength-conditioning.svg"
+    },
+    {
+      "id": "3",
+      "name": "Bodybuilding & Hypertrophy",
+      "slug": "bodybuilding-hypertrophy",
+      "description": "Targeted muscle hypertrophy protocols with precision isolation machines and contest prep guidance.",
+      "icon_filename": "bodybuilding-hypertrophy.svg"
+    },
+    {
+      "id": "4",
+      "name": "HIIT & Cardio Circuit",
+      "slug": "hiit-cardio",
+      "description": "High-intensity metabolic conditioning designed to torch calories, boost VO2 max, and elevate athletic endurance.",
+      "icon_filename": "hiit-cardio.svg"
+    },
+    {
+      "id": "5",
+      "name": "Functional Fitness",
+      "slug": "functional-fitness",
+      "description": "Kettlebell training, plyometrics, agility work, and core stabilization routines for total body mobility.",
+      "icon_filename": "functional-fitness.svg"
+    },
+    {
+      "id": "6",
+      "name": "Nutrition & Diet Consultation",
+      "slug": "nutrition-consultation",
+      "description": "Custom macronutrient breakdowns, meal plans, and supplementation guidance aligned with your training cycles.",
+      "icon_filename": "nutrition-consultation.svg"
+    },
+    {
+      "id": "7",
+      "name": "Weight Loss & Transformation",
+      "slug": "weight-loss-transformation",
+      "description": "Structured transformation roadmaps with regular biometric assessments and lifestyle accountability.",
+      "icon_filename": "weight-loss-transformation.svg"
+    },
+    {
+      "id": "8",
+      "name": "Recovery & Mobility",
+      "slug": "recovery-mobility",
+      "description": "Myofascial release, guided mobility routines, and dynamic stretching sessions to prevent injuries and accelerate recovery.",
+      "icon_filename": "recovery-mobility.svg"
+    },
+    {
+      "id": "9",
+      "name": "Zumba",
+      "slug": "zumba",
+      "description": "High-energy dance fitness workouts combining Latin rhythms, cardio conditioning, and full-body movement for an exhilarating calorie burn.",
+      "icon_filename": "zumba.svg"
+    },
+    {
+      "id": "10",
+      "name": "Kids Dancing",
+      "slug": "kids-dancing",
+      "description": "Energetic and engaging dance sessions designed for kids to build rhythm, motor skills, coordination, and confidence in a fun environment.",
+      "icon_filename": "kids-dancing.svg"
+    },
+    {
+      "id": "11",
+      "name": "Sports Mobility",
+      "slug": "sports-mobility",
+      "description": "Dynamic range-of-motion drills, joint articulation, and athletic movement prep engineered to maximize sports performance and agility.",
+      "icon_filename": "sports-mobility.svg"
+    }
+  ]
+}

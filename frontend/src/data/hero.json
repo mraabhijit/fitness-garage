@@ -1,0 +1,57 @@
+{
+  "slideshow_interval_ms": 5000,
+  "slides": [
+    {
+      "filename": "slide-1.jpg",
+      "media_type": "image",
+      "alt": "Fitness Garage main strength training floor"
+    },
+    {
+      "filename": "slide-2.jpg",
+      "media_type": "image",
+      "alt": "Fitness Garage free weights and power racks"
+    },
+    {
+      "filename": "slide-3.jpg",
+      "media_type": "image",
+      "alt": "Fitness Garage functional training zone"
+    }
+  ],
+  "headline_before": "PUSH",
+  "headline_after": "BEYOND YOUR LIMITS",
+  "cta_buttons": [
+    {
+      "label": "View Plans",
+      "href": "/plans",
+      "variant": "primary"
+    },
+    {
+      "label": "Join Now",
+      "href": "/contact",
+      "variant": "secondary"
+    },
+    {
+      "label": "Contact Us",
+      "href": "/contact",
+      "variant": "ghost"
+    }
+  ],
+  "stats": [
+    {
+      "value": "500+",
+      "label": "Members"
+    },
+    {
+      "value": "8+",
+      "label": "Years"
+    },
+    {
+      "value": "6+",
+      "label": "Trainers"
+    },
+    {
+      "value": "250+",
+      "label": "Transformations"
+    }
+  ]
+}

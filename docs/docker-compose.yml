@@ -1,0 +1,98 @@
+# docker-compose.yml
+# Fitness Garage — Local Development (v2 — Static Frontend Only)
+#
+# Phase 1: Frontend only — no backend, no database.
+# Backend services (postgres, pgadmin, FastAPI) are documented
+# in docs/ARCHIVED/ for Phase 2 wiring.
+#
+# Services:
+#   frontend  — Vite React dev server with hot reload
+#
+# Usage:
+#   Start:          docker compose up
+#   Start background: docker compose up -d
+#   Stop:           docker compose down
+#   Rebuild:        docker compose up --build
+#   Logs:           docker compose logs -f frontend
+#   Shell:          docker compose exec frontend sh
+#
+# Note:
+#   For most development, running the frontend natively is faster:
+#     cd frontend && npm install && npm run dev
+#   Use Docker when you need environment parity or are on a shared
+#   machine without Node.js installed.
+
+name: fitness-garage
+
+networks:
+  fitness-garage-net:
+    driver: bridge
+
+services:
+
+  # ───────────────────────────────────────────────────────────
+  # FRONTEND — Vite React dev server
+  # Hot reload enabled via volume mount
+  # ───────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: fitness-garage-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./frontend/.env.local
+    volumes:
+      # Hot reload — mount source, exclude node_modules
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/index.html:/app/index.html
+      - ./frontend/tailwind.config.ts:/app/tailwind.config.ts
+      - ./frontend/vite.config.ts:/app/vite.config.ts
+      - ./frontend/tsconfig.json:/app/tsconfig.json
+      # Prevent host node_modules from overriding container node_modules
+      - /app/node_modules
+    networks:
+      - fitness-garage-net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # ───────────────────────────────────────────────────────────
+  # PHASE 2 SERVICES (not active — documented for future use)
+  # Uncomment when backend is ready to wire:
+  #
+  # postgres:
+  #   image: postgres:15-alpine
+  #   environment:
+  #     POSTGRES_DB: fitness_garage
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #   ports: ["5432:5432"]
+  #   volumes: [postgres-data:/var/lib/postgresql/data]
+  #
+  # backend:
+  #   build: { context: ./backend, dockerfile: Dockerfile }
+  #   ports: ["8000:8000"]
+  #   env_file: [./backend/.env]
+  #   environment:
+  #     DATABASE_URL: postgresql://postgres:postgres@postgres:5432/fitness_garage
+  #     CORS_ORIGINS: http://localhost:5173
+  #   depends_on: { postgres: { condition: service_healthy } }
+  #   command: >
+  #     sh -c "python -m app.db.migrate &&
+  #            uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+  #
+  # pgadmin:
+  #   image: dpage/pgadmin4:latest
+  #   ports: ["5050:80"]
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@fitnessgarage.local
+  #     PGADMIN_DEFAULT_PASSWORD: admin
+  #   profiles: [tools]
+  # ───────────────────────────────────────────────────────────

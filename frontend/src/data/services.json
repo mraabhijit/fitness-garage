@@ -55,6 +55,27 @@
       "slug": "recovery-mobility",
       "description": "Myofascial release, guided mobility routines, and dynamic stretching sessions to prevent injuries and accelerate recovery.",
       "icon_filename": "recovery-mobility.svg"
+    },
+    {
+      "id": "9",
+      "name": "Zumba",
+      "slug": "zumba",
+      "description": "High-energy dance fitness workouts combining Latin rhythms, cardio conditioning, and full-body movement for an exhilarating calorie burn.",
+      "icon_filename": "zumba.svg"
+    },
+    {
+      "id": "10",
+      "name": "Kids Dancing",
+      "slug": "kids-dancing",
+      "description": "Energetic and engaging dance sessions designed for kids to build rhythm, motor skills, coordination, and confidence in a fun environment.",
+      "icon_filename": "kids-dancing.svg"
+    },
+    {
+      "id": "11",
+      "name": "Sports Mobility",
+      "slug": "sports-mobility",
+      "description": "Dynamic range-of-motion drills, joint articulation, and athletic movement prep engineered to maximize sports performance and agility.",
+      "icon_filename": "sports-mobility.svg"
     }
   ]
 }

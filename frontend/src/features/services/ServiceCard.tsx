@@ -7,8 +7,11 @@ import {
   Dumbbell,
   Flame,
   HeartPulse,
+  Move,
+  Music,
   Scale,
   Shield,
+  Smile,
   Sparkles,
   Zap,
   type LucideIcon,
@@ -28,6 +31,10 @@ const SERVICE_ICON_MAP: Record<string, LucideIcon> = {
   'nutrition-consultation': Scale,
   'weight-loss-transformation': Sparkles,
   'recovery-mobility': HeartPulse,
+  zumba: Music,
+  'kids-dancing': Smile,
+  'kids-dance': Smile,
+  'sports-mobility': Move,
 }
 
 const DEFAULT_ICONS: LucideIcon[] = [
@@ -43,13 +50,10 @@ const DEFAULT_ICONS: LucideIcon[] = [
 
 export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index = 0 }) => {
   const [imageError, setImageError] = useState(false)
-  const FallbackIcon =
-    SERVICE_ICON_MAP[service.slug] || DEFAULT_ICONS[index % DEFAULT_ICONS.length]
+  const FallbackIcon = SERVICE_ICON_MAP[service.slug] || DEFAULT_ICONS[index % DEFAULT_ICONS.length]
 
   const iconUrl =
-    !imageError && service.icon_filename
-      ? buildAssetUrl('services', service.icon_filename)
-      : null
+    !imageError && service.icon_filename ? buildAssetUrl('services', service.icon_filename) : null
 
   return (
     <Card hoverEffect className="p-8 flex flex-col justify-between group">
@@ -69,9 +73,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index = 0 }) 
         <h3 className="text-2xl font-display uppercase tracking-wider text-garage-white mb-3">
           {service.name}
         </h3>
-        <p className="text-garage-muted text-sm leading-relaxed font-body">
-          {service.description}
-        </p>
+        <p className="text-garage-muted text-sm leading-relaxed font-body">{service.description}</p>
       </div>
     </Card>
   )

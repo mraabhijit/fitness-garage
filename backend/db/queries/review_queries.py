@@ -1,28 +1,25 @@
 from datetime import date
 from typing import List, Optional
 from uuid import UUID
+
 import asyncpg
 
 
 async def get_all_reviews(pool: asyncpg.Pool, visible_only: bool = False) -> List[asyncpg.Record]:
     if visible_only:
-        return await pool.fetch(
-            """
+        return await pool.fetch("""
             SELECT id, google_review_id, reviewer_name, review_text, rating,
                    review_date, last_synced_at, is_visible, created_at, updated_at
             FROM reviews
             WHERE is_visible = TRUE
             ORDER BY rating DESC, review_date DESC
-            """
-        )
-    return await pool.fetch(
-        """
+            """)
+    return await pool.fetch("""
         SELECT id, google_review_id, reviewer_name, review_text, rating,
                review_date, last_synced_at, is_visible, created_at, updated_at
         FROM reviews
         ORDER BY review_date DESC
-        """
-    )
+        """)
 
 
 async def get_review_by_id(pool: asyncpg.Pool, review_id: UUID) -> Optional[asyncpg.Record]:
@@ -44,7 +41,7 @@ async def upsert_google_review(
     review_text: Optional[str],
     rating: int,
     review_date: date,
-) -> asyncpg.Record:
+) -> Optional[asyncpg.Record]:
     return await pool.fetchrow(
         """
         INSERT INTO reviews (

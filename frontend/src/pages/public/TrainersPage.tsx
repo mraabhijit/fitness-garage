@@ -1,39 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { SectionHeading } from '../../components/common/SectionHeading';
-import { Card } from '../../components/common/Card';
-import { Spinner } from '../../components/common/Spinner';
-import { publicService } from '../../services/publicService';
-import { Trainer } from '../../types';
-import { Award, User } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { SectionHeading } from '../../components/common/SectionHeading'
+import { Card } from '../../components/common/Card'
+import { Spinner } from '../../components/common/Spinner'
+import { publicService } from '../../services/publicService'
+import type { Trainer } from '../../types'
+import { Award, User } from 'lucide-react'
 
 export const TrainersPage: React.FC = () => {
-  const [trainers, setTrainers] = useState<Trainer[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [trainers, setTrainers] = useState<Trainer[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    publicService.getTrainers()
+    publicService
+      .getTrainers()
       .then(setTrainers)
       .catch(console.error)
-      .finally(() => setIsLoading(false));
-  }, []);
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [])
 
-  const trainersSchema = trainers.length > 0 ? {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'Fitness Garage Trainers',
-    itemListElement: trainers.map((trainer, idx) => ({
-      '@type': 'ListItem',
-      position: idx + 1,
-      item: {
-        '@type': 'Person',
-        name: trainer.name,
-        jobTitle: 'Personal Trainer',
-        worksFor: { '@type': 'GymOrSportsClub', name: 'Fitness Garage' },
-        knowsAbout: [trainer.specialization],
-        image: trainer.photo_url || undefined,
-      },
-    })),
-  } : null;
+  const trainersSchema =
+    trainers.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'Fitness Garage Trainers',
+          itemListElement: trainers.map((trainer, idx) => ({
+            '@type': 'ListItem',
+            position: idx + 1,
+            item: {
+              '@type': 'Person',
+              name: trainer.name,
+              jobTitle: 'Personal Trainer',
+              worksFor: { '@type': 'GymOrSportsClub', name: 'Fitness Garage' },
+              knowsAbout: [trainer.specialization],
+              image: trainer.photo_url || undefined,
+            },
+          })),
+        }
+      : null
 
   return (
     <div className="py-12 md:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,7 +61,11 @@ export const TrainersPage: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
           {trainers.map((trainer) => (
-            <Card key={trainer.id} hoverEffect className="overflow-hidden flex flex-col justify-between p-0">
+            <Card
+              key={trainer.id}
+              hoverEffect
+              className="overflow-hidden flex flex-col justify-between p-0"
+            >
               <div className="relative aspect-[4/5] bg-garage-dark overflow-hidden flex items-center justify-center">
                 {trainer.photo_url ? (
                   <img
@@ -67,7 +77,9 @@ export const TrainersPage: React.FC = () => {
                 ) : (
                   <div className="flex flex-col items-center justify-center text-garage-mid">
                     <User className="w-20 h-20 mb-2 stroke-[1.5]" />
-                    <span className="text-xs uppercase tracking-widest font-mono">Photo Pending</span>
+                    <span className="text-xs uppercase tracking-widest font-mono">
+                      Photo Pending
+                    </span>
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-garage-black via-garage-black/20 to-transparent" />
@@ -86,7 +98,8 @@ export const TrainersPage: React.FC = () => {
 
               <div className="p-6 space-y-4">
                 <p className="text-garage-muted text-sm leading-relaxed font-body">
-                  {trainer.bio || 'Dedicated to helping athletes unlock peak functional performance and strength.'}
+                  {trainer.bio ||
+                    'Dedicated to helping athletes unlock peak functional performance and strength.'}
                 </p>
 
                 {trainer.certifications && trainer.certifications.length > 0 && (
@@ -113,5 +126,5 @@ export const TrainersPage: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { AdminSidebar } from '../../components/layout/AdminSidebar';
-import { Card } from '../../components/common/Card';
-import { Badge } from '../../components/common/Badge';
-import { Button } from '../../components/common/Button';
-import { Spinner } from '../../components/common/Spinner';
-import { Modal } from '../../components/common/Modal';
-import { FormField } from '../../components/forms/FormField';
-import { SelectField } from '../../components/forms/SelectField';
-import { adminService } from '../../services/adminService';
-import { Member, MembershipPlan, MembershipStatus } from '../../types';
-import { formatDate } from '../../utils/formatters';
-import { UserPlus, Search, Edit2, Trash2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { AdminSidebar } from '../../components/layout/AdminSidebar'
+import { Card } from '../../components/common/Card'
+import { Badge } from '../../components/common/Badge'
+import { Button } from '../../components/common/Button'
+import { Spinner } from '../../components/common/Spinner'
+import { Modal } from '../../components/common/Modal'
+import { FormField } from '../../components/forms/FormField'
+import { SelectField } from '../../components/forms/SelectField'
+import { adminService } from '../../services/adminService'
+import type { Member, MembershipPlan, MembershipStatus } from '../../types'
+import { formatDate } from '../../utils/formatters'
+import { Edit2, Search, Trash2, UserPlus } from 'lucide-react'
 
 export const MembersPage: React.FC = () => {
-  const [members, setMembers] = useState<Member[]>([]);
-  const [plans, setPlans] = useState<MembershipPlan[]>([]);
-  const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [members, setMembers] = useState<Member[]>([])
+  const [plans, setPlans] = useState<MembershipPlan[]>([])
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [search, setSearch] = useState('')
+  const [statusFilter, setStatusFilter] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(true)
 
   // Modal State
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingMember, setEditingMember] = useState<Member | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingMember, setEditingMember] = useState<Member | null>(null)
   const [formData, setFormData] = useState({
     full_name: '',
     phone_number: '',
@@ -33,38 +33,38 @@ export const MembersPage: React.FC = () => {
     start_date: new Date().toISOString().split('T')[0],
     expiry_date: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
     notes: '',
-  });
+  })
 
   const loadMembers = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       const [membersRes, plansRes] = await Promise.all([
         adminService.getMembers(page, 15, search || undefined, statusFilter || undefined),
         adminService.getPlans().catch(() => []),
-      ]);
-      setMembers(membersRes.data || []);
-      setTotal(membersRes.total || 0);
-      setPlans(plansRes);
+      ])
+      setMembers(membersRes.data || [])
+      setTotal(membersRes.total || 0)
+      setPlans(plansRes)
     } catch (e) {
-      console.error('Error fetching members', e);
+      console.error('Error fetching members', e)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    loadMembers();
+    loadMembers()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, statusFilter]);
+  }, [page, statusFilter])
 
   const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setPage(1);
-    loadMembers();
-  };
+    e.preventDefault()
+    setPage(1)
+    loadMembers()
+  }
 
   const handleOpenCreate = () => {
-    setEditingMember(null);
+    setEditingMember(null)
     setFormData({
       full_name: '',
       phone_number: '',
@@ -74,12 +74,12 @@ export const MembersPage: React.FC = () => {
       start_date: new Date().toISOString().split('T')[0],
       expiry_date: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
       notes: '',
-    });
-    setIsModalOpen(true);
-  };
+    })
+    setIsModalOpen(true)
+  }
 
   const handleOpenEdit = (m: Member) => {
-    setEditingMember(m);
+    setEditingMember(m)
     setFormData({
       full_name: m.full_name,
       phone_number: m.phone_number || '',
@@ -89,38 +89,40 @@ export const MembersPage: React.FC = () => {
       start_date: m.start_date,
       expiry_date: m.expiry_date,
       notes: m.notes || '',
-    });
-    setIsModalOpen(true);
-  };
+    })
+    setIsModalOpen(true)
+  }
 
   const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
       const payload = {
         ...formData,
         status: formData.status as MembershipStatus,
-      };
-      if (editingMember) {
-        await adminService.updateMember(editingMember.id, payload);
-      } else {
-        await adminService.createMember(payload);
       }
-      setIsModalOpen(false);
-      loadMembers();
-    } catch (err: any) {
-      alert(err.message || 'Operation failed');
+      if (editingMember) {
+        await adminService.updateMember(editingMember.id, payload)
+      } else {
+        await adminService.createMember(payload)
+      }
+      setIsModalOpen(false)
+      loadMembers()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Operation failed'
+      alert(message)
     }
-  };
+  }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to suspend this member?')) return;
+    if (!confirm('Are you sure you want to suspend this member?')) return
     try {
-      await adminService.deleteMember(id);
-      loadMembers();
-    } catch (err: any) {
-      alert(err.message || 'Suspension failed');
+      await adminService.deleteMember(id)
+      loadMembers()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Suspension failed'
+      alert(message)
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen bg-garage-black">
@@ -137,7 +139,12 @@ export const MembersPage: React.FC = () => {
             </p>
           </div>
 
-          <Button variant="primary" size="sm" onClick={handleOpenCreate} leftIcon={<UserPlus className="w-4 h-4" />}>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={handleOpenCreate}
+            leftIcon={<UserPlus className="w-4 h-4" />}
+          >
             New Member
           </Button>
         </div>
@@ -149,7 +156,9 @@ export const MembersPage: React.FC = () => {
               label=""
               placeholder="Search by name, phone, or email..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value)
+              }}
               className="py-2"
             />
             <Button type="submit" variant="secondary" size="sm">
@@ -161,7 +170,9 @@ export const MembersPage: React.FC = () => {
             <SelectField
               label=""
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => {
+                setStatusFilter(e.target.value)
+              }}
               options={[
                 { value: '', label: 'All Statuses' },
                 { value: 'active', label: 'Active Only' },
@@ -198,7 +209,9 @@ export const MembersPage: React.FC = () => {
                     <tr key={m.id} className="hover:bg-garage-mid/20 transition-colors">
                       <td className="py-3.5">
                         <div className="font-bold text-garage-white">{m.full_name}</div>
-                        <div className="text-[11px] text-garage-muted font-mono">{m.id.slice(0, 8)}</div>
+                        <div className="text-[11px] text-garage-muted font-mono">
+                          {m.id.slice(0, 8)}
+                        </div>
                       </td>
                       <td className="py-3.5 text-xs text-garage-muted">
                         <div>{m.phone_number || 'No phone'}</div>
@@ -212,7 +225,9 @@ export const MembersPage: React.FC = () => {
                       </td>
                       <td className="py-3.5 text-right space-x-1">
                         <button
-                          onClick={() => handleOpenEdit(m)}
+                          onClick={() => {
+                            handleOpenEdit(m)
+                          }}
                           className="p-1.5 rounded text-garage-muted hover:text-garage-chrome hover:bg-garage-mid transition-colors"
                           title="Edit"
                         >
@@ -237,7 +252,9 @@ export const MembersPage: React.FC = () => {
         {/* Member Edit / Create Modal */}
         <Modal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false)
+          }}
           title={editingMember ? 'Update Member Profile' : 'Register New Member'}
         >
           <form onSubmit={handleSave} className="space-y-4">
@@ -245,26 +262,34 @@ export const MembersPage: React.FC = () => {
               label="Full Name"
               required
               value={formData.full_name}
-              onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, full_name: e.target.value })
+              }}
             />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 label="Phone Number"
                 value={formData.phone_number}
-                onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, phone_number: e.target.value })
+                }}
               />
               <FormField
                 label="Email Address"
                 type="email"
                 value={formData.email_address}
-                onChange={(e) => setFormData({ ...formData, email_address: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, email_address: e.target.value })
+                }}
               />
             </div>
 
             <SelectField
               label="Membership Plan"
               value={formData.membership_plan_id}
-              onChange={(e) => setFormData({ ...formData, membership_plan_id: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, membership_plan_id: e.target.value })
+              }}
               options={[
                 { value: '', label: 'Select a plan...' },
                 ...plans.map((p) => ({
@@ -278,7 +303,9 @@ export const MembersPage: React.FC = () => {
               <SelectField
                 label="Status"
                 value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, status: e.target.value })
+                }}
                 options={[
                   { value: 'active', label: 'Active' },
                   { value: 'expired', label: 'Expired' },
@@ -291,25 +318,38 @@ export const MembersPage: React.FC = () => {
                 type="date"
                 required
                 value={formData.start_date}
-                onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, start_date: e.target.value })
+                }}
               />
               <FormField
                 label="Expiry Date"
                 type="date"
                 required
                 value={formData.expiry_date}
-                onChange={(e) => setFormData({ ...formData, expiry_date: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, expiry_date: e.target.value })
+                }}
               />
             </div>
 
             <FormField
               label="Staff Notes"
               value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, notes: e.target.value })
+              }}
             />
 
             <div className="pt-4 flex justify-end gap-3 border-t border-garage-mid">
-              <Button type="button" variant="ghost" size="sm" onClick={() => setIsModalOpen(false)}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setIsModalOpen(false)
+                }}
+              >
                 Cancel
               </Button>
               <Button type="submit" variant="primary" size="sm">
@@ -320,5 +360,5 @@ export const MembersPage: React.FC = () => {
         </Modal>
       </main>
     </div>
-  );
-};
+  )
+}

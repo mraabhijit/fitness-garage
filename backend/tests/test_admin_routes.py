@@ -1,10 +1,12 @@
 from unittest.mock import AsyncMock, patch
 from uuid import uuid4
+
 import pytest
 from httpx import AsyncClient
+
+from app.core.auth import AuthenticatedUser, get_current_user
 from app.main import app
 from db.connection import get_pool
-from app.core.auth import get_current_user, AuthenticatedUser
 
 
 @pytest.fixture

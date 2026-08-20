@@ -1,67 +1,67 @@
-import React, { useEffect, useState } from 'react';
-import { AdminSidebar } from '../../components/layout/AdminSidebar';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { Spinner } from '../../components/common/Spinner';
-import { Modal } from '../../components/common/Modal';
-import { FormField } from '../../components/forms/FormField';
-import { adminService } from '../../services/adminService';
-import { Achievement } from '../../types';
-import { Plus, Edit2, Trash2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { AdminSidebar } from '../../components/layout/AdminSidebar'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { Spinner } from '../../components/common/Spinner'
+import { Modal } from '../../components/common/Modal'
+import { FormField } from '../../components/forms/FormField'
+import { adminService } from '../../services/adminService'
+import type { Achievement } from '../../types'
+import { Edit2, Plus, Trash2 } from 'lucide-react'
 
 export const StatsAdminPage: React.FC = () => {
-  const [achievements, setAchievements] = useState<Achievement[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [achievements, setAchievements] = useState<Achievement[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingAch, setEditingAch] = useState<Achievement | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingAch, setEditingAch] = useState<Achievement | null>(null)
   const [formData, setFormData] = useState({
     label: '',
     value: '',
     display_order: 0,
     is_active: true,
-  });
+  })
 
   const loadAchievements = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const data = await adminService.getAchievements();
-      setAchievements(data);
+      const data = await adminService.getAchievements()
+      setAchievements(data)
     } catch (e) {
-      console.error(e);
+      console.error(e)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    loadAchievements();
-  }, []);
+    loadAchievements()
+  }, [])
 
   const handleOpenCreate = () => {
-    setEditingAch(null);
+    setEditingAch(null)
     setFormData({
       label: '',
       value: '',
       display_order: achievements.length + 1,
       is_active: true,
-    });
-    setIsModalOpen(true);
-  };
+    })
+    setIsModalOpen(true)
+  }
 
   const handleOpenEdit = (ach: Achievement) => {
-    setEditingAch(ach);
+    setEditingAch(ach)
     setFormData({
       label: ach.label,
       value: ach.value || '',
       display_order: ach.display_order,
       is_active: ach.is_active,
-    });
-    setIsModalOpen(true);
-  };
+    })
+    setIsModalOpen(true)
+  }
 
   const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
       if (editingAch) {
         await adminService.updateAchievement(editingAch.id, {
@@ -69,31 +69,33 @@ export const StatsAdminPage: React.FC = () => {
           value: formData.value,
           display_order: Number(formData.display_order),
           is_active: formData.is_active,
-        });
+        })
       } else {
         await adminService.createAchievement({
           label: formData.label,
           value: formData.value,
           display_order: Number(formData.display_order),
           is_active: formData.is_active,
-        });
+        })
       }
-      setIsModalOpen(false);
-      loadAchievements();
-    } catch (err: any) {
-      alert(err.message || 'Operation failed');
+      setIsModalOpen(false)
+      loadAchievements()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Operation failed'
+      alert(message)
     }
-  };
+  }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Deactivate achievement?')) return;
+    if (!confirm('Deactivate achievement?')) return
     try {
-      await adminService.deleteAchievement(id);
-      loadAchievements();
-    } catch (err: any) {
-      alert(err.message || 'Deactivation failed');
+      await adminService.deleteAchievement(id)
+      loadAchievements()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Deactivation failed'
+      alert(message)
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen bg-garage-black">
@@ -156,7 +158,9 @@ export const StatsAdminPage: React.FC = () => {
                       </td>
                       <td className="py-3.5 text-right space-x-2">
                         <button
-                          onClick={() => handleOpenEdit(ach)}
+                          onClick={() => {
+                            handleOpenEdit(ach)
+                          }}
                           className="p-1.5 text-garage-muted hover:text-garage-chrome transition-colors"
                         >
                           <Edit2 className="w-4 h-4" />
@@ -179,7 +183,9 @@ export const StatsAdminPage: React.FC = () => {
         {/* Modal */}
         <Modal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false)
+          }}
           title={editingAch ? 'Edit Stat Item' : 'New Stat Item'}
         >
           <form onSubmit={handleSave} className="space-y-4">
@@ -188,7 +194,9 @@ export const StatsAdminPage: React.FC = () => {
               required
               placeholder="e.g. 500+ or 12+"
               value={formData.value}
-              onChange={(e) => setFormData({ ...formData, value: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, value: e.target.value })
+              }}
             />
 
             <FormField
@@ -196,14 +204,18 @@ export const StatsAdminPage: React.FC = () => {
               required
               placeholder="e.g. Active Athletes"
               value={formData.label}
-              onChange={(e) => setFormData({ ...formData, label: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, label: e.target.value })
+              }}
             />
 
             <FormField
               label="Display Order"
               type="number"
               value={formData.display_order}
-              onChange={(e) => setFormData({ ...formData, display_order: Number(e.target.value) })}
+              onChange={(e) => {
+                setFormData({ ...formData, display_order: Number(e.target.value) })
+              }}
             />
 
             <div className="flex items-center gap-2 pt-2">
@@ -211,7 +223,9 @@ export const StatsAdminPage: React.FC = () => {
                 type="checkbox"
                 id="is_active_ach"
                 checked={formData.is_active}
-                onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                onChange={(e) => {
+                  setFormData({ ...formData, is_active: e.target.checked })
+                }}
                 className="rounded border-garage-mid text-garage-chrome focus:ring-garage-chrome"
               />
               <label htmlFor="is_active_ach" className="text-xs font-semibold text-garage-white">
@@ -220,7 +234,14 @@ export const StatsAdminPage: React.FC = () => {
             </div>
 
             <div className="pt-4 flex justify-end gap-3 border-t border-garage-mid">
-              <Button type="button" variant="ghost" size="sm" onClick={() => setIsModalOpen(false)}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setIsModalOpen(false)
+                }}
+              >
                 Cancel
               </Button>
               <Button type="submit" variant="primary" size="sm">
@@ -231,5 +252,5 @@ export const StatsAdminPage: React.FC = () => {
         </Modal>
       </main>
     </div>
-  );
-};
+  )
+}

@@ -1,5 +1,6 @@
 from typing import List, Optional
 from uuid import UUID
+
 import asyncpg
 
 
@@ -54,7 +55,7 @@ async def create_trainer(
     photo_filename: Optional[str] = None,
     display_order: int = 0,
     is_active: bool = True,
-) -> asyncpg.Record:
+) -> Optional[asyncpg.Record]:
     return await pool.fetchrow(
         """
         INSERT INTO trainers (

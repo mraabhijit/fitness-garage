@@ -1,9 +1,12 @@
 from typing import List, Optional
 from uuid import UUID
+
 import asyncpg
 
 
-async def get_all_achievements(pool: asyncpg.Pool, active_only: bool = False) -> List[asyncpg.Record]:
+async def get_all_achievements(
+    pool: asyncpg.Pool, active_only: bool = False
+) -> List[asyncpg.Record]:
     return await pool.fetch(
         """
         SELECT id, label, value, display_order, is_active, created_at, updated_at
@@ -15,7 +18,9 @@ async def get_all_achievements(pool: asyncpg.Pool, active_only: bool = False) ->
     )
 
 
-async def get_achievement_by_id(pool: asyncpg.Pool, achievement_id: UUID) -> Optional[asyncpg.Record]:
+async def get_achievement_by_id(
+    pool: asyncpg.Pool, achievement_id: UUID
+) -> Optional[asyncpg.Record]:
     return await pool.fetchrow(
         """
         SELECT id, label, value, display_order, is_active, created_at, updated_at
@@ -32,7 +37,7 @@ async def create_achievement(
     value: Optional[str] = None,
     display_order: int = 0,
     is_active: bool = True,
-) -> asyncpg.Record:
+) -> Optional[asyncpg.Record]:
     return await pool.fetchrow(
         """
         INSERT INTO achievements (label, value, display_order, is_active)
@@ -72,7 +77,9 @@ async def update_achievement(
     )
 
 
-async def soft_delete_achievement(pool: asyncpg.Pool, achievement_id: UUID) -> Optional[asyncpg.Record]:
+async def soft_delete_achievement(
+    pool: asyncpg.Pool, achievement_id: UUID
+) -> Optional[asyncpg.Record]:
     return await pool.fetchrow(
         """
         UPDATE achievements

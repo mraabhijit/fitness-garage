@@ -1,66 +1,67 @@
-import React, { useEffect, useState } from 'react';
-import { AdminSidebar } from '../../components/layout/AdminSidebar';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { Spinner } from '../../components/common/Spinner';
-import { Modal } from '../../components/common/Modal';
-import { FormField } from '../../components/forms/FormField';
-import { adminService } from '../../services/adminService';
-import { MembershipPlan } from '../../types';
-import { formatCurrency } from '../../utils/formatters';
-import { Edit2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { AdminSidebar } from '../../components/layout/AdminSidebar'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { Spinner } from '../../components/common/Spinner'
+import { Modal } from '../../components/common/Modal'
+import { FormField } from '../../components/forms/FormField'
+import { adminService } from '../../services/adminService'
+import type { MembershipPlan } from '../../types'
+import { formatCurrency } from '../../utils/formatters'
+import { Edit2 } from 'lucide-react'
 
 export const PlansAdminPage: React.FC = () => {
-  const [plans, setPlans] = useState<MembershipPlan[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [plans, setPlans] = useState<MembershipPlan[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const [editingPlan, setEditingPlan] = useState<MembershipPlan | null>(null);
+  const [editingPlan, setEditingPlan] = useState<MembershipPlan | null>(null)
   const [formData, setFormData] = useState({
     price: 0,
     description: '',
     is_active: true,
-  });
+  })
 
   const loadPlans = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const data = await adminService.getPlans();
-      setPlans(data);
+      const data = await adminService.getPlans()
+      setPlans(data)
     } catch (e) {
-      console.error(e);
+      console.error(e)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    loadPlans();
-  }, []);
+    loadPlans()
+  }, [])
 
   const handleOpenEdit = (plan: MembershipPlan) => {
-    setEditingPlan(plan);
+    setEditingPlan(plan)
     setFormData({
       price: Number(plan.price),
       description: plan.description || '',
       is_active: plan.is_active,
-    });
-  };
+    })
+  }
 
   const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editingPlan) return;
+    e.preventDefault()
+    if (!editingPlan) return
     try {
       await adminService.updatePlan(editingPlan.id, {
         price: Number(formData.price),
         description: formData.description,
         is_active: formData.is_active,
-      });
-      setEditingPlan(null);
-      loadPlans();
-    } catch (err: any) {
-      alert(err.message || 'Update failed');
+      })
+      setEditingPlan(null)
+      loadPlans()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Update failed'
+      alert(message)
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen bg-garage-black">
@@ -95,8 +96,12 @@ export const PlansAdminPage: React.FC = () => {
                   {plans.map((p) => (
                     <tr key={p.id} className="hover:bg-garage-mid/20 transition-colors">
                       <td className="py-3.5 font-bold uppercase text-garage-white">{p.tier}</td>
-                      <td className="py-3.5 capitalize text-garage-muted">{p.duration.replace('_', ' ')}</td>
-                      <td className="py-3.5 font-bold text-garage-chrome">{formatCurrency(p.price)}</td>
+                      <td className="py-3.5 capitalize text-garage-muted">
+                        {p.duration.replace('_', ' ')}
+                      </td>
+                      <td className="py-3.5 font-bold text-garage-chrome">
+                        {formatCurrency(p.price)}
+                      </td>
                       <td className="py-3.5">
                         <span
                           className={`text-xs px-2.5 py-0.5 rounded-full font-bold uppercase ${
@@ -112,7 +117,9 @@ export const PlansAdminPage: React.FC = () => {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleOpenEdit(p)}
+                          onClick={() => {
+                            handleOpenEdit(p)
+                          }}
                           leftIcon={<Edit2 className="w-3.5 h-3.5" />}
                         >
                           Edit
@@ -129,7 +136,9 @@ export const PlansAdminPage: React.FC = () => {
         {/* Edit Plan Modal */}
         <Modal
           isOpen={!!editingPlan}
-          onClose={() => setEditingPlan(null)}
+          onClose={() => {
+            setEditingPlan(null)
+          }}
           title={`Edit Plan: ${editingPlan?.tier.toUpperCase()} (${editingPlan?.duration})`}
         >
           <form onSubmit={handleSave} className="space-y-4">
@@ -138,13 +147,17 @@ export const PlansAdminPage: React.FC = () => {
               type="number"
               required
               value={formData.price}
-              onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
+              onChange={(e) => {
+                setFormData({ ...formData, price: Number(e.target.value) })
+              }}
             />
 
             <FormField
               label="Description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, description: e.target.value })
+              }}
             />
 
             <div className="flex items-center gap-2 pt-2">
@@ -152,7 +165,9 @@ export const PlansAdminPage: React.FC = () => {
                 type="checkbox"
                 id="is_active_plan"
                 checked={formData.is_active}
-                onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                onChange={(e) => {
+                  setFormData({ ...formData, is_active: e.target.checked })
+                }}
                 className="rounded border-garage-mid text-garage-chrome focus:ring-garage-chrome"
               />
               <label htmlFor="is_active_plan" className="text-xs font-semibold text-garage-white">
@@ -161,7 +176,14 @@ export const PlansAdminPage: React.FC = () => {
             </div>
 
             <div className="pt-4 flex justify-end gap-3 border-t border-garage-mid">
-              <Button type="button" variant="ghost" size="sm" onClick={() => setEditingPlan(null)}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setEditingPlan(null)
+                }}
+              >
                 Cancel
               </Button>
               <Button type="submit" variant="primary" size="sm">
@@ -172,5 +194,5 @@ export const PlansAdminPage: React.FC = () => {
         </Modal>
       </main>
     </div>
-  );
-};
+  )
+}

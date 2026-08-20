@@ -1,20 +1,20 @@
-import React from 'react';
-import { Link, useLocation, Outlet } from 'react-router-dom';
-import { LogOut, User, LayoutDashboard, CreditCard, ShieldCheck } from 'lucide-react';
-import { ROUTES } from '../../constants/routes';
-import { useAuthStore } from '../../store/authStore';
+import React from 'react'
+import { Link, Outlet, useLocation } from 'react-router-dom'
+import { CreditCard, LayoutDashboard, LogOut, ShieldCheck, User } from 'lucide-react'
+import { ROUTES } from '../../constants/routes'
+import { useAuthStore } from '../../store/authStore'
 
 export const MemberLayout: React.FC = () => {
-  const location = useLocation();
-  const { user, logout } = useAuthStore();
+  const location = useLocation()
+  const { user, logout } = useAuthStore()
 
   const tabs = [
     { label: 'Dashboard', path: ROUTES.MEMBER_DASHBOARD, icon: LayoutDashboard },
     { label: 'Membership', path: ROUTES.MEMBER_MEMBERSHIP, icon: ShieldCheck },
     { label: 'Payments & Invoices', path: ROUTES.MEMBER_PAYMENTS, icon: CreditCard },
-  ];
+  ]
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === path
 
   return (
     <div className="flex flex-col min-h-screen bg-garage-black text-garage-white">
@@ -55,8 +55,8 @@ export const MemberLayout: React.FC = () => {
         <div className="border-t border-garage-mid/40 bg-garage-black/50">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 flex space-x-1 sm:space-x-4 overflow-x-auto">
             {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const active = isActive(tab.path);
+              const Icon = tab.icon
+              const active = isActive(tab.path)
               return (
                 <Link
                   key={tab.path}
@@ -70,7 +70,7 @@ export const MemberLayout: React.FC = () => {
                   <Icon className="w-4 h-4" />
                   <span>{tab.label}</span>
                 </Link>
-              );
+              )
             })}
           </div>
         </div>
@@ -83,8 +83,11 @@ export const MemberLayout: React.FC = () => {
 
       {/* Minimal Footer */}
       <footer className="border-t border-garage-mid/40 py-6 text-center text-xs text-garage-muted font-body">
-        <p>© {new Date().getFullYear()} Fitness Garage. Need assistance? Contact reception at +91 98765 43210</p>
+        <p>
+          © {new Date().getFullYear()} Fitness Garage. Need assistance? Contact reception at +91
+          98765 43210
+        </p>
       </footer>
     </div>
-  );
-};
+  )
+}

@@ -1,60 +1,61 @@
-import React, { useEffect, useState } from 'react';
-import { AdminSidebar } from '../../components/layout/AdminSidebar';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { Spinner } from '../../components/common/Spinner';
-import { FormField } from '../../components/forms/FormField';
-import { adminService } from '../../services/adminService';
-import { Save, RefreshCw, CheckCircle2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { AdminSidebar } from '../../components/layout/AdminSidebar'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { Spinner } from '../../components/common/Spinner'
+import { FormField } from '../../components/forms/FormField'
+import { adminService } from '../../services/adminService'
+import { CheckCircle2, RefreshCw, Save } from 'lucide-react'
 
 export const SettingsPage: React.FC = () => {
-  const [formData, setFormData] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [isSyncing, setIsSyncing] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
+  const [formData, setFormData] = useState<Record<string, string>>({})
+  const [isLoading, setIsLoading] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
+  const [isSyncing, setIsSyncing] = useState(false)
+  const [message, setMessage] = useState<string | null>(null)
 
   const loadConfigs = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const data = await adminService.getSiteConfigs();
-      setFormData(Object.fromEntries(data.map((c) => [c.config_key, c.config_value])));
+      const data = await adminService.getSiteConfigs()
+      setFormData(Object.fromEntries(data.map((c) => [c.config_key, c.config_value])))
     } catch (e) {
-      console.error(e);
+      console.error(e)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    loadConfigs();
-  }, []);
+    loadConfigs()
+  }, [])
 
   const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSaving(true);
-    setMessage(null);
+    e.preventDefault()
+    setIsSaving(true)
+    setMessage(null)
     try {
-      await adminService.updateSiteConfigs(formData);
-      setMessage('Site configuration successfully saved!');
-    } catch (err: any) {
-      alert(err.message || 'Saving failed');
+      await adminService.updateSiteConfigs(formData)
+      setMessage('Site configuration successfully saved!')
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Saving failed'
+      alert(message)
     } finally {
-      setIsSaving(false);
+      setIsSaving(false)
     }
-  };
+  }
 
   const handleSyncReviews = async () => {
-    setIsSyncing(true);
+    setIsSyncing(true)
     try {
-      const res = await adminService.syncReviews();
-      alert(`Google Reviews sync complete! Synced: ${res.synced_count ?? 0} reviews.`);
+      const res = await adminService.syncReviews()
+      alert(`Google Reviews sync complete! Synced: ${res.synced_count ?? 0} reviews.`)
     } catch {
-      alert('Review sync failed');
+      alert('Review sync failed')
     } finally {
-      setIsSyncing(false);
+      setIsSyncing(false)
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen bg-garage-black">
@@ -98,12 +99,16 @@ export const SettingsPage: React.FC = () => {
                 <FormField
                   label="Gym Brand Name"
                   value={formData['gym_name'] || ''}
-                  onChange={(e) => setFormData({ ...formData, gym_name: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, gym_name: e.target.value })
+                  }}
                 />
                 <FormField
                   label="Contact Phone"
                   value={formData['gym_phone'] || ''}
-                  onChange={(e) => setFormData({ ...formData, gym_phone: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, gym_phone: e.target.value })
+                  }}
                 />
               </div>
 
@@ -112,12 +117,16 @@ export const SettingsPage: React.FC = () => {
                   label="Contact Email"
                   type="email"
                   value={formData['gym_email'] || ''}
-                  onChange={(e) => setFormData({ ...formData, gym_email: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, gym_email: e.target.value })
+                  }}
                 />
                 <FormField
                   label="Physical Address"
                   value={formData['gym_address'] || ''}
-                  onChange={(e) => setFormData({ ...formData, gym_address: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, gym_address: e.target.value })
+                  }}
                 />
               </div>
 
@@ -125,15 +134,17 @@ export const SettingsPage: React.FC = () => {
                 <FormField
                   label="Google Place ID"
                   value={formData['gym_google_place_id'] || ''}
-                  onChange={(e) => setFormData({ ...formData, gym_google_place_id: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, gym_google_place_id: e.target.value })
+                  }}
                 />
                 <FormField
                   label="Hero Slideshow Interval (ms)"
                   type="number"
                   value={formData['hero_slideshow_interval_ms'] || '5000'}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setFormData({ ...formData, hero_slideshow_interval_ms: e.target.value })
-                  }
+                  }}
                 />
               </div>
 
@@ -153,5 +164,5 @@ export const SettingsPage: React.FC = () => {
         </Card>
       </main>
     </div>
-  );
-};
+  )
+}

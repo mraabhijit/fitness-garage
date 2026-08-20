@@ -1,9 +1,10 @@
 from datetime import date
-from decimal import Decimal
 from typing import Any, Dict, List, Optional
 from uuid import UUID
+
 import asyncpg
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+
 from app.core.auth import AuthenticatedUser, require_admin_or_dev
 from app.schemas.achievement import AchievementCreate, AchievementResponse, AchievementUpdate
 from app.schemas.common import PaginatedResponse, SuccessResponse
@@ -30,7 +31,9 @@ from db.queries import (
     trainer_queries,
 )
 
-router = APIRouter(prefix="/admin", tags=["Admin Portal"], dependencies=[Depends(require_admin_or_dev)])
+router = APIRouter(
+    prefix="/admin", tags=["Admin Portal"], dependencies=[Depends(require_admin_or_dev)]
+)
 
 
 # --- MEMBERS ---
@@ -77,7 +80,9 @@ async def delete_admin_member(member_id: UUID, pool: asyncpg.Pool = Depends(get_
     rec = await member_queries.soft_delete_member(pool, member_id)
     if not rec:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Member not found")
-    return SuccessResponse(data={"id": member_id, "status": "suspended"}, message="Member suspended")
+    return SuccessResponse(
+        data={"id": member_id, "status": "suspended"}, message="Member suspended"
+    )
 
 
 @router.post("/members/import", response_model=SuccessResponse[Dict[str, Any]])
@@ -86,7 +91,9 @@ async def import_admin_members(
     pool: asyncpg.Pool = Depends(get_pool),
 ):
     file_bytes = await file.read()
-    res = await import_service.import_members_from_file(pool, file_bytes, file.filename or "import.csv")
+    res = await import_service.import_members_from_file(
+        pool, file_bytes, file.filename or "import.csv"
+    )
     return SuccessResponse(data=res, message=f"Import completed: {res['imported_count']} succeeded")
 
 
@@ -101,7 +108,12 @@ async def get_admin_payments(
     pool: asyncpg.Pool = Depends(get_pool),
 ):
     payments, total = await payment_service.list_payments(
-        pool=pool, member_id=member_id, start_date=start_date, end_date=end_date, page=page, page_size=page_size
+        pool=pool,
+        member_id=member_id,
+        start_date=start_date,
+        end_date=end_date,
+        page=page,
+        page_size=page_size,
     )
     return PaginatedResponse(data=payments, total=total, page=page, page_size=page_size)
 
@@ -145,7 +157,9 @@ async def update_admin_plan(
     )
     if not rec:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Plan not found")
-    return SuccessResponse(data=MembershipPlanResponse.model_validate(dict(rec)), message="Plan updated")
+    return SuccessResponse(
+        data=MembershipPlanResponse.model_validate(dict(rec)), message="Plan updated"
+    )
 
 
 # --- SERVICES ---
@@ -166,7 +180,13 @@ async def create_admin_service(data: ServiceCreate, pool: asyncpg.Pool = Depends
         display_order=data.display_order,
         is_active=data.is_active,
     )
-    return SuccessResponse(data=ServiceResponse.model_validate(dict(rec)), message="Service created")
+    if not rec:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to create service"
+        )
+    return SuccessResponse(
+        data=ServiceResponse.model_validate(dict(rec)), message="Service created"
+    )
 
 
 @router.put("/services/{service_id}", response_model=SuccessResponse[ServiceResponse])
@@ -185,7 +205,9 @@ async def update_admin_service(
     )
     if not rec:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Service not found")
-    return SuccessResponse(data=ServiceResponse.model_validate(dict(rec)), message="Service updated")
+    return SuccessResponse(
+        data=ServiceResponse.model_validate(dict(rec)), message="Service updated"
+    )
 
 
 @router.delete("/services/{service_id}", response_model=SuccessResponse[Dict[str, Any]])
@@ -193,7 +215,9 @@ async def delete_admin_service(service_id: UUID, pool: asyncpg.Pool = Depends(ge
     rec = await service_queries.soft_delete_service(pool, service_id)
     if not rec:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Service not found")
-    return SuccessResponse(data={"id": service_id, "is_active": False}, message="Service deactivated")
+    return SuccessResponse(
+        data={"id": service_id, "is_active": False}, message="Service deactivated"
+    )
 
 
 # --- TRAINERS ---
@@ -217,7 +241,13 @@ async def create_admin_trainer(data: TrainerCreate, pool: asyncpg.Pool = Depends
         display_order=data.display_order,
         is_active=data.is_active,
     )
-    return SuccessResponse(data=TrainerResponse.model_validate(dict(rec)), message="Trainer created")
+    if not rec:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to create trainer"
+        )
+    return SuccessResponse(
+        data=TrainerResponse.model_validate(dict(rec)), message="Trainer created"
+    )
 
 
 @router.put("/trainers/{trainer_id}", response_model=SuccessResponse[TrainerResponse])
@@ -239,7 +269,9 @@ async def update_admin_trainer(
     )
     if not rec:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trainer not found")
-    return SuccessResponse(data=TrainerResponse.model_validate(dict(rec)), message="Trainer updated")
+    return SuccessResponse(
+        data=TrainerResponse.model_validate(dict(rec)), message="Trainer updated"
+    )
 
 
 @router.delete("/trainers/{trainer_id}", response_model=SuccessResponse[Dict[str, Any]])
@@ -247,7 +279,9 @@ async def delete_admin_trainer(trainer_id: UUID, pool: asyncpg.Pool = Depends(ge
     rec = await trainer_queries.soft_delete_trainer(pool, trainer_id)
     if not rec:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Trainer not found")
-    return SuccessResponse(data={"id": trainer_id, "is_active": False}, message="Trainer deactivated")
+    return SuccessResponse(
+        data={"id": trainer_id, "is_active": False}, message="Trainer deactivated"
+    )
 
 
 # --- GALLERY ---
@@ -278,6 +312,10 @@ async def create_admin_gallery_item(
         is_active=data.is_active,
         uploaded_by=current_user.id,
     )
+    if not rec:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to register asset"
+        )
     d = dict(rec)
     d["url"] = get_public_asset_url(f"{d['folder_path']}/{d['file_name']}")
     return SuccessResponse(data=GalleryResponse.model_validate(d), message="Asset registered")
@@ -317,7 +355,9 @@ async def get_admin_site_configs(pool: asyncpg.Pool = Depends(get_pool)):
 
 
 @router.put("/site-config", response_model=SuccessResponse[List[SiteConfigResponse]])
-async def update_admin_site_configs(data: SiteConfigBulkUpdate, pool: asyncpg.Pool = Depends(get_pool)):
+async def update_admin_site_configs(
+    data: SiteConfigBulkUpdate, pool: asyncpg.Pool = Depends(get_pool)
+):
     records = await site_config_queries.bulk_update_site_configs(pool, data.configs)
     return SuccessResponse(
         data=[SiteConfigResponse.model_validate(dict(r)) for r in records],
@@ -341,7 +381,13 @@ async def create_admin_achievement(data: AchievementCreate, pool: asyncpg.Pool =
         display_order=data.display_order,
         is_active=data.is_active,
     )
-    return SuccessResponse(data=AchievementResponse.model_validate(dict(rec)), message="Achievement created")
+    if not rec:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to create achievement"
+        )
+    return SuccessResponse(
+        data=AchievementResponse.model_validate(dict(rec)), message="Achievement created"
+    )
 
 
 @router.put("/achievements/{achievement_id}", response_model=SuccessResponse[AchievementResponse])
@@ -358,7 +404,9 @@ async def update_admin_achievement(
     )
     if not rec:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Achievement not found")
-    return SuccessResponse(data=AchievementResponse.model_validate(dict(rec)), message="Achievement updated")
+    return SuccessResponse(
+        data=AchievementResponse.model_validate(dict(rec)), message="Achievement updated"
+    )
 
 
 @router.delete("/achievements/{achievement_id}", response_model=SuccessResponse[Dict[str, Any]])
@@ -366,7 +414,9 @@ async def delete_admin_achievement(achievement_id: UUID, pool: asyncpg.Pool = De
     rec = await achievement_queries.soft_delete_achievement(pool, achievement_id)
     if not rec:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Achievement not found")
-    return SuccessResponse(data={"id": achievement_id, "is_active": False}, message="Achievement deactivated")
+    return SuccessResponse(
+        data={"id": achievement_id, "is_active": False}, message="Achievement deactivated"
+    )
 
 
 # --- REVIEWS ---
@@ -383,7 +433,9 @@ async def toggle_admin_review_visibility(
     rec = await review_queries.update_review_visibility(pool, review_id, data.is_visible)
     if not rec:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Review not found")
-    return SuccessResponse(data=ReviewResponse.model_validate(dict(rec)), message="Review visibility updated")
+    return SuccessResponse(
+        data=ReviewResponse.model_validate(dict(rec)), message="Review visibility updated"
+    )
 
 
 @router.post("/reviews/sync", response_model=SuccessResponse[Dict[str, Any]])

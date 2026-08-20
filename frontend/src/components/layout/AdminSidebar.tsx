@@ -1,25 +1,25 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import {
-  LayoutDashboard,
-  Users,
-  CreditCard,
-  Layers,
-  Dumbbell,
-  UserCheck,
-  Image,
-  Sliders,
   Award,
-  Star,
-  LogOut,
   ChevronLeft,
-} from 'lucide-react';
-import { ROUTES } from '../../constants/routes';
-import { useAuthStore } from '../../store/authStore';
+  CreditCard,
+  Dumbbell,
+  Image,
+  Layers,
+  LayoutDashboard,
+  LogOut,
+  Sliders,
+  Star,
+  UserCheck,
+  Users,
+} from 'lucide-react'
+import { ROUTES } from '../../constants/routes'
+import { useAuthStore } from '../../store/authStore'
 
 export const AdminSidebar: React.FC = () => {
-  const location = useLocation();
-  const logout = useAuthStore((s) => s.logout);
+  const location = useLocation()
+  const logout = useAuthStore((s) => s.logout)
 
   const menuItems = [
     { label: 'Dashboard', path: ROUTES.ADMIN_DASHBOARD, icon: LayoutDashboard },
@@ -32,9 +32,9 @@ export const AdminSidebar: React.FC = () => {
     { label: 'Achievements', path: ROUTES.ADMIN_STATS, icon: Award },
     { label: 'Reviews', path: ROUTES.TESTIMONIALS, icon: Star },
     { label: 'Site Settings', path: ROUTES.ADMIN_SETTINGS, icon: Sliders },
-  ];
+  ]
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === path
 
   return (
     <aside className="w-64 bg-garage-dark border-r border-garage-mid min-h-screen flex flex-col justify-between shrink-0">
@@ -59,8 +59,8 @@ export const AdminSidebar: React.FC = () => {
         {/* Nav list */}
         <nav className="p-4 space-y-1.5">
           {menuItems.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.path);
+            const Icon = item.icon
+            const active = isActive(item.path)
             return (
               <Link
                 key={item.path}
@@ -71,10 +71,12 @@ export const AdminSidebar: React.FC = () => {
                     : 'text-garage-muted hover:text-garage-white hover:bg-garage-mid/40'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${active ? 'text-garage-black' : 'text-garage-chrome'}`} />
+                <Icon
+                  className={`w-4 h-4 ${active ? 'text-garage-black' : 'text-garage-chrome'}`}
+                />
                 {item.label}
               </Link>
-            );
+            )
           })}
         </nav>
       </div>
@@ -97,5 +99,5 @@ export const AdminSidebar: React.FC = () => {
         </button>
       </div>
     </aside>
-  );
-};
+  )
+}

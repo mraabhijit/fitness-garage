@@ -1,40 +1,40 @@
-import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
-import { ROUTES } from '../constants/routes';
-import { PageWrapper } from '../components/layout/PageWrapper';
-import { MemberLayout } from '../components/layout/MemberLayout';
-import { ProtectedMemberRoute } from './ProtectedMemberRoute';
-import { ProtectedAdminRoute } from './ProtectedAdminRoute';
+import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom'
+import { ROUTES } from '../constants/routes'
+import { PageWrapper } from '../components/layout/PageWrapper'
+import { MemberLayout } from '../components/layout/MemberLayout'
+import { ProtectedMemberRoute } from './ProtectedMemberRoute'
+import { ProtectedAdminRoute } from './ProtectedAdminRoute'
 
 // Public Pages
-import { HomePage } from '../pages/public/HomePage';
-import { AboutPage } from '../pages/public/AboutPage';
-import { ServicesPage } from '../pages/public/ServicesPage';
-import { PlansPage } from '../pages/public/PlansPage';
-import { TrainersPage } from '../pages/public/TrainersPage';
-import { GalleryPage } from '../pages/public/GalleryPage';
-import { TestimonialsPage } from '../pages/public/TestimonialsPage';
-import { ContactPage } from '../pages/public/ContactPage';
+import { HomePage } from '../pages/public/HomePage'
+import { AboutPage } from '../pages/public/AboutPage'
+import { ServicesPage } from '../pages/public/ServicesPage'
+import { PlansPage } from '../pages/public/PlansPage'
+import { TrainersPage } from '../pages/public/TrainersPage'
+import { GalleryPage } from '../pages/public/GalleryPage'
+import { TestimonialsPage } from '../pages/public/TestimonialsPage'
+import { ContactPage } from '../pages/public/ContactPage'
 
 // Auth Pages
-import { MemberLoginPage } from '../pages/auth/MemberLoginPage';
-import { AdminLoginPage } from '../pages/auth/AdminLoginPage';
+import { MemberLoginPage } from '../pages/auth/MemberLoginPage'
+import { AdminLoginPage } from '../pages/auth/AdminLoginPage'
 
 // Member Portal Pages
-import { MemberDashboardPage } from '../pages/member/MemberDashboardPage';
-import { MembershipStatusPage } from '../pages/member/MembershipStatusPage';
-import { PaymentHistoryPage } from '../pages/member/PaymentHistoryPage';
+import { MemberDashboardPage } from '../pages/member/MemberDashboardPage'
+import { MembershipStatusPage } from '../pages/member/MembershipStatusPage'
+import { PaymentHistoryPage } from '../pages/member/PaymentHistoryPage'
 
 // Admin Dashboard Pages
-import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage';
-import { MembersPage } from '../pages/admin/MembersPage';
-import { MemberImportPage } from '../pages/admin/MemberImportPage';
-import { PaymentsPage } from '../pages/admin/PaymentsPage';
-import { PlansAdminPage } from '../pages/admin/PlansAdminPage';
-import { ServicesAdminPage } from '../pages/admin/ServicesAdminPage';
-import { TrainersAdminPage } from '../pages/admin/TrainersAdminPage';
-import { GalleryAdminPage } from '../pages/admin/GalleryAdminPage';
-import { StatsAdminPage } from '../pages/admin/StatsAdminPage';
-import { SettingsPage } from '../pages/admin/SettingsPage';
+import { AdminDashboardPage } from '../pages/admin/AdminDashboardPage'
+import { MembersPage } from '../pages/admin/MembersPage'
+import { MemberImportPage } from '../pages/admin/MemberImportPage'
+import { PaymentsPage } from '../pages/admin/PaymentsPage'
+import { PlansAdminPage } from '../pages/admin/PlansAdminPage'
+import { ServicesAdminPage } from '../pages/admin/ServicesAdminPage'
+import { TrainersAdminPage } from '../pages/admin/TrainersAdminPage'
+import { GalleryAdminPage } from '../pages/admin/GalleryAdminPage'
+import { StatsAdminPage } from '../pages/admin/StatsAdminPage'
+import { SettingsPage } from '../pages/admin/SettingsPage'
 
 export const router = createBrowserRouter([
   // Public Routes (wrapped in PageWrapper with Navbar and Footer)
@@ -95,4 +95,4 @@ export const router = createBrowserRouter([
     path: '*',
     element: <Navigate to={ROUTES.HOME} replace />,
   },
-]);
+])

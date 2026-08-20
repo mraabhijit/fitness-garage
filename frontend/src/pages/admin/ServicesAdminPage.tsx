@@ -1,93 +1,95 @@
-import React, { useEffect, useState } from 'react';
-import { AdminSidebar } from '../../components/layout/AdminSidebar';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { Spinner } from '../../components/common/Spinner';
-import { Modal } from '../../components/common/Modal';
-import { FormField } from '../../components/forms/FormField';
-import { TextareaField } from '../../components/forms/TextareaField';
-import { adminService } from '../../services/adminService';
-import { Service } from '../../types';
-import { Plus, Edit2, Trash2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { AdminSidebar } from '../../components/layout/AdminSidebar'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { Spinner } from '../../components/common/Spinner'
+import { Modal } from '../../components/common/Modal'
+import { FormField } from '../../components/forms/FormField'
+import { TextareaField } from '../../components/forms/TextareaField'
+import { adminService } from '../../services/adminService'
+import type { Service } from '../../types'
+import { Edit2, Plus, Trash2 } from 'lucide-react'
 
 export const ServicesAdminPage: React.FC = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [services, setServices] = useState<Service[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingService, setEditingService] = useState<Service | null>(null)
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
     description: '',
     display_order: 0,
     is_active: true,
-  });
+  })
 
   const loadServices = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const data = await adminService.getServices();
-      setServices(data);
+      const data = await adminService.getServices()
+      setServices(data)
     } catch (e) {
-      console.error(e);
+      console.error(e)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    loadServices();
-  }, []);
+    loadServices()
+  }, [])
 
   const handleOpenCreate = () => {
-    setEditingService(null);
+    setEditingService(null)
     setFormData({
       name: '',
       slug: '',
       description: '',
       display_order: services.length + 1,
       is_active: true,
-    });
-    setIsModalOpen(true);
-  };
+    })
+    setIsModalOpen(true)
+  }
 
   const handleOpenEdit = (svc: Service) => {
-    setEditingService(svc);
+    setEditingService(svc)
     setFormData({
       name: svc.name,
       slug: svc.slug,
       description: svc.description || '',
       display_order: svc.display_order,
       is_active: svc.is_active,
-    });
-    setIsModalOpen(true);
-  };
+    })
+    setIsModalOpen(true)
+  }
 
   const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
       if (editingService) {
-        await adminService.updateService(editingService.id, formData);
+        await adminService.updateService(editingService.id, formData)
       } else {
-        await adminService.createService(formData);
+        await adminService.createService(formData)
       }
-      setIsModalOpen(false);
-      loadServices();
-    } catch (err: any) {
-      alert(err.message || 'Operation failed');
+      setIsModalOpen(false)
+      loadServices()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Operation failed'
+      alert(message)
     }
-  };
+  }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to deactivate this service?')) return;
+    if (!confirm('Are you sure you want to deactivate this service?')) return
     try {
-      await adminService.deleteService(id);
-      loadServices();
-    } catch (err: any) {
-      alert(err.message || 'Deactivation failed');
+      await adminService.deleteService(id)
+      loadServices()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Deactivation failed'
+      alert(message)
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen bg-garage-black">
@@ -148,7 +150,9 @@ export const ServicesAdminPage: React.FC = () => {
                       </td>
                       <td className="py-3.5 text-right space-x-2">
                         <button
-                          onClick={() => handleOpenEdit(s)}
+                          onClick={() => {
+                            handleOpenEdit(s)
+                          }}
                           className="p-1.5 text-garage-muted hover:text-garage-chrome transition-colors"
                         >
                           <Edit2 className="w-4 h-4" />
@@ -171,7 +175,9 @@ export const ServicesAdminPage: React.FC = () => {
         {/* Modal */}
         <Modal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false)
+          }}
           title={editingService ? 'Edit Service' : 'Add New Service'}
         >
           <form onSubmit={handleSave} className="space-y-4">
@@ -180,12 +186,14 @@ export const ServicesAdminPage: React.FC = () => {
               required
               value={formData.name}
               onChange={(e) => {
-                const name = e.target.value;
+                const name = e.target.value
                 setFormData({
                   ...formData,
                   name,
-                  slug: editingService ? formData.slug : name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                });
+                  slug: editingService
+                    ? formData.slug
+                    : name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                })
               }}
             />
 
@@ -193,14 +201,18 @@ export const ServicesAdminPage: React.FC = () => {
               label="Slug"
               required
               value={formData.slug}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, slug: e.target.value })
+              }}
             />
 
             <TextareaField
               label="Description"
               rows={3}
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, description: e.target.value })
+              }}
             />
 
             <div className="grid grid-cols-2 gap-4">
@@ -208,14 +220,18 @@ export const ServicesAdminPage: React.FC = () => {
                 label="Display Order"
                 type="number"
                 value={formData.display_order}
-                onChange={(e) => setFormData({ ...formData, display_order: Number(e.target.value) })}
+                onChange={(e) => {
+                  setFormData({ ...formData, display_order: Number(e.target.value) })
+                }}
               />
               <div className="flex items-center gap-2 pt-6">
                 <input
                   type="checkbox"
                   id="is_active_svc"
                   checked={formData.is_active}
-                  onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, is_active: e.target.checked })
+                  }}
                   className="rounded border-garage-mid text-garage-chrome focus:ring-garage-chrome"
                 />
                 <label htmlFor="is_active_svc" className="text-xs font-semibold text-garage-white">
@@ -225,7 +241,14 @@ export const ServicesAdminPage: React.FC = () => {
             </div>
 
             <div className="pt-4 flex justify-end gap-3 border-t border-garage-mid">
-              <Button type="button" variant="ghost" size="sm" onClick={() => setIsModalOpen(false)}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setIsModalOpen(false)
+                }}
+              >
                 Cancel
               </Button>
               <Button type="submit" variant="primary" size="sm">
@@ -236,5 +259,5 @@ export const ServicesAdminPage: React.FC = () => {
         </Modal>
       </main>
     </div>
-  );
-};
+  )
+}

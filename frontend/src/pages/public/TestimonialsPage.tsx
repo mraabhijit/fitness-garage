@@ -1,46 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import { SectionHeading } from '../../components/common/SectionHeading';
-import { Card } from '../../components/common/Card';
-import { Spinner } from '../../components/common/Spinner';
-import { publicService } from '../../services/publicService';
-import { Review } from '../../types';
-import { formatDate } from '../../utils/formatters';
-import { Star, MessageSquare } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { SectionHeading } from '../../components/common/SectionHeading'
+import { Card } from '../../components/common/Card'
+import { Spinner } from '../../components/common/Spinner'
+import { publicService } from '../../services/publicService'
+import type { Review } from '../../types'
+import { formatDate } from '../../utils/formatters'
+import { MessageSquare, Star } from 'lucide-react'
 
 export const TestimonialsPage: React.FC = () => {
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    publicService.getReviews()
+    publicService
+      .getReviews()
       .then(setReviews)
       .catch(console.error)
-      .finally(() => setIsLoading(false));
-  }, []);
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [])
 
-  const reviewsSchema = reviews.length > 0 ? {
-    '@context': 'https://schema.org',
-    '@type': 'GymOrSportsClub',
-    name: 'Fitness Garage',
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1),
-      reviewCount: reviews.length.toString(),
-      bestRating: '5',
-      worstRating: '1',
-    },
-    review: reviews.map((r) => ({
-      '@type': 'Review',
-      author: { '@type': 'Person', name: r.reviewer_name },
-      reviewBody: r.review_text,
-      reviewRating: {
-        '@type': 'Rating',
-        ratingValue: r.rating.toString(),
-        bestRating: '5',
-      },
-      datePublished: r.review_date,
-    })),
-  } : null;
+  const reviewsSchema =
+    reviews.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'GymOrSportsClub',
+          name: 'Fitness Garage',
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(
+              1,
+            ),
+            reviewCount: reviews.length.toString(),
+            bestRating: '5',
+            worstRating: '1',
+          },
+          review: reviews.map((r) => ({
+            '@type': 'Review',
+            author: { '@type': 'Person', name: r.reviewer_name },
+            reviewBody: r.review_text,
+            reviewRating: {
+              '@type': 'Rating',
+              ratingValue: r.rating.toString(),
+              bestRating: '5',
+            },
+            datePublished: r.review_date,
+          })),
+        }
+      : null
 
   return (
     <div className="py-16 md:py-24 px-4 max-w-7xl mx-auto">
@@ -98,5 +106,5 @@ export const TestimonialsPage: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

@@ -1,0 +1,205 @@
+# .github/workflows/ci.yml
+# Fitness Garage — CI Pipeline
+#
+# Triggers:
+#   - Push to: feature/**, fix/**, chore/**, develop
+#   - Pull Request to: develop, main
+#
+# Jobs:
+#   backend-ci  → lint, type check, security scan, tests
+#   frontend-ci → lint, type check, build
+#   integration → confirms both jobs passed (PR gate)
+
+name: CI
+
+on:
+  push:
+    branches:
+      - develop
+      - "feature/**"
+      - "fix/**"
+      - "chore/**"
+  pull_request:
+    branches:
+      - develop
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# ─────────────────────────────────────────────────────────────
+# BACKEND CI
+# ─────────────────────────────────────────────────────────────
+jobs:
+  backend-ci:
+    name: Backend CI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: fitness_garage_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/fitness_garage_test
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      AES_ENCRYPTION_KEY: ${{ secrets.AES_ENCRYPTION_KEY }}
+      GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+      CORS_ORIGINS: http://localhost:5173
+      ENVIRONMENT: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv (Official Astral Action)
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          version: "latest"
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: black — code formatting check
+        run: uv run black --check app/ db/ tests/
+
+      - name: isort — import order check
+        run: uv run isort --check-only --profile black app/ db/ tests/
+
+      - name: flake8 — lint
+        run: |
+          uv run flake8 app/ db/ \
+            --max-line-length=100 \
+            --extend-ignore=E203,W503 \
+            --exclude=db/migrations/
+
+      - name: mypy — type checking
+        run: |
+          uv run mypy app/ db/ \
+            --ignore-missing-imports \
+            --strict \
+            --exclude=tests/
+
+      - name: bandit — security scan
+        run: |
+          uv run bandit -r app/ db/ \
+            --severity-level=medium \
+            --confidence-level=medium \
+            --exclude=db/migrations/
+
+      - name: Run database migrations
+        run: uv run python -m db.migrate
+
+      - name: pytest — full test suite
+        run: |
+          uv run pytest tests/ \
+            --verbose \
+            --tb=short \
+            --strict-markers \
+            --cov=app \
+            --cov-report=term-missing \
+            --cov-fail-under=70
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: backend-coverage
+          path: backend/htmlcov/
+
+  # ─────────────────────────────────────────────────────────────
+  # FRONTEND CI
+  # ─────────────────────────────────────────────────────────────
+  frontend-ci:
+    name: Frontend CI
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create .env for CI build
+        run: |
+          cat > .env.local << EOF
+          VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_STORAGE_URL=${{ secrets.VITE_SUPABASE_STORAGE_URL }}
+          VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL }}
+          EOF
+
+      - name: prettier — formatting check
+        run: npx prettier --check "src/**/*.{ts,tsx,css}"
+
+      - name: eslint — lint
+        run: npx eslint src/ --max-warnings=0
+
+      - name: tsc — type check
+        run: npx tsc --noEmit
+
+      - name: vite build — production build
+        run: npm run build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist/
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────────────────
+  # INTEGRATION GATE
+  # Required check for PRs to develop and main
+  # Both backend-ci and frontend-ci must pass
+  # ─────────────────────────────────────────────────────────────
+  integration:
+    name: CI Gate — All checks passed
+    runs-on: ubuntu-latest
+    needs: [backend-ci, frontend-ci]
+    if: always()
+    steps:
+      - name: Check all jobs passed
+        run: |
+          if [[ "${{ needs.backend-ci.result }}" != "success" ]]; then
+            echo "❌ Backend CI failed"
+            exit 1
+          fi
+          if [[ "${{ needs.frontend-ci.result }}" != "success" ]]; then
+            echo "❌ Frontend CI failed"
+            exit 1
+          fi
+          echo "✅ All CI checks passed — PR is mergeable"

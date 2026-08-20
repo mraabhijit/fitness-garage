@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
 export interface SectionWrapperProps {
-  children: React.ReactNode;
-  id?: string;
-  className?: string;
-  containerClassName?: string;
-  dark?: boolean;
+  children: React.ReactNode
+  id?: string
+  className?: string
+  containerClassName?: string
+  dark?: boolean
 }
 
 export const SectionWrapper: React.FC<SectionWrapperProps> = ({
@@ -15,7 +15,7 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({
   containerClassName = '',
   dark = false,
 }) => {
-  const bg = dark ? 'bg-garage-black' : 'bg-[#1e1e1e]';
+  const bg = dark ? 'bg-garage-black' : 'bg-[#1e1e1e]'
 
   return (
     <section id={id} className={`py-16 md:py-24 ${bg} relative overflow-hidden ${className}`}>
@@ -23,5 +23,5 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({
         {children}
       </div>
     </section>
-  );
-};
+  )
+}

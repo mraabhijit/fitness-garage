@@ -1,0 +1,172 @@
+# docker-compose.yml
+# Fitness Garage — Local Development Services
+#
+# Services:
+#   postgres   — local PostgreSQL 15 (mirrors Supabase schema)
+#   backend    — FastAPI + uv application
+#   frontend   — Vite React dev server
+#   pgadmin    — PostgreSQL GUI for local DB inspection
+#
+# Usage:
+#   Start all services:      docker compose up
+#   Start in background:     docker compose up -d
+#   Stop all services:       docker compose down
+#   Stop and remove volumes: docker compose down -v
+#   Rebuild after changes:   docker compose up --build
+#   View logs:               docker compose logs -f <service>
+#   Run migrations only:     docker compose run --rm backend python -m db.migrate
+#   Run tests only:          docker compose run --rm backend pytest tests/ -v
+#
+# Note:
+#   This compose file is for LOCAL DEVELOPMENT ONLY.
+#   Supabase Auth (magic link, OTP) requires cloud connectivity — auth flows
+#   that depend on Supabase Auth will point to your cloud Supabase project.
+#   Production deployment uses Vercel + Render + Supabase (not Docker).
+
+name: fitness-garage
+
+# ─────────────────────────────────────────────────────────────
+# SHARED NETWORK
+# ─────────────────────────────────────────────────────────────
+networks:
+  fitness-garage-net:
+    driver: bridge
+
+# ─────────────────────────────────────────────────────────────
+# VOLUMES
+# ─────────────────────────────────────────────────────────────
+volumes:
+  postgres-data:
+    driver: local
+  pgadmin-data:
+    driver: local
+
+# ─────────────────────────────────────────────────────────────
+# SERVICES
+# ─────────────────────────────────────────────────────────────
+services:
+
+  # ───────────────────────────────────────
+  # POSTGRES — local database
+  # ───────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: fitness-garage-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fitness_garage
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - fitness-garage-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d fitness_garage"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ───────────────────────────────────────
+  # BACKEND — FastAPI application
+  # ───────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: fitness-garage-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./backend/.env
+    environment:
+      # Override DATABASE_URL to point to local postgres container
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/fitness_garage
+      # Override CORS to allow local frontend
+      CORS_ORIGINS: http://localhost:5173,http://localhost:4173
+      ENVIRONMENT: development
+    volumes:
+      # Hot reload — mount source code
+      - ./backend/app:/app/app
+      - ./backend/db:/app/db
+      - ./backend/tests:/app/tests
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - fitness-garage-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    command: >
+      sh -c "
+        python -m db.migrate &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+  # ───────────────────────────────────────
+  # FRONTEND — Vite React dev server
+  # ───────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: fitness-garage-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./frontend/.env.local
+    environment:
+      # Override API URL to point to local backend container
+      VITE_API_BASE_URL: http://localhost:8000/api/v1
+    volumes:
+      # Hot reload — mount source code, exclude node_modules
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/index.html:/app/index.html
+      - ./frontend/tailwind.config.ts:/app/tailwind.config.ts
+      - ./frontend/postcss.config.js:/app/postcss.config.js
+      - ./frontend/vite.config.ts:/app/vite.config.ts
+      - /app/node_modules
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - fitness-garage-net
+
+  # ───────────────────────────────────────
+  # PGADMIN — PostgreSQL GUI
+  # Access at: http://localhost:5050
+  # Login: admin@fitnessgarage.local / admin
+  # ───────────────────────────────────────
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: fitness-garage-pgadmin
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@fitnessgarage.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./pgadmin-servers.json:/pgadmin4/servers.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - fitness-garage-net
+    profiles:
+      # pgAdmin is opt-in — only starts when explicitly requested
+      # Usage: docker compose --profile tools up
+      - tools

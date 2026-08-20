@@ -1,39 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { SectionHeading } from '../../components/common/SectionHeading';
-import { Card } from '../../components/common/Card';
-import { Spinner } from '../../components/common/Spinner';
-import { publicService } from '../../services/publicService';
-import { Service } from '../../types';
-import { Dumbbell, Flame, HeartPulse, Activity, Zap, Shield, Sparkles, Scale } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { SectionHeading } from '../../components/common/SectionHeading'
+import { Card } from '../../components/common/Card'
+import { Spinner } from '../../components/common/Spinner'
+import { publicService } from '../../services/publicService'
+import type { Service } from '../../types'
+import { Activity, Dumbbell, Flame, HeartPulse, Scale, Shield, Sparkles, Zap } from 'lucide-react'
 
 export const ServicesPage: React.FC = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [services, setServices] = useState<Service[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    publicService.getServices()
+    publicService
+      .getServices()
       .then(setServices)
       .catch(console.error)
-      .finally(() => setIsLoading(false));
-  }, []);
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [])
 
-  const icons = [Dumbbell, Flame, HeartPulse, Activity, Zap, Shield, Sparkles, Scale];
+  const icons = [Dumbbell, Flame, HeartPulse, Activity, Zap, Shield, Sparkles, Scale]
 
-  const servicesSchema = services.length > 0 ? {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: 'Fitness Garage Services',
-    itemListElement: services.map((svc, idx) => ({
-      '@type': 'ListItem',
-      position: idx + 1,
-      item: {
-        '@type': 'Service',
-        name: svc.name,
-        description: svc.description || 'Specialized fitness programming at Fitness Garage.',
-        provider: { '@type': 'GymOrSportsClub', name: 'Fitness Garage' },
-      },
-    })),
-  } : null;
+  const servicesSchema =
+    services.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: 'Fitness Garage Services',
+          itemListElement: services.map((svc, idx) => ({
+            '@type': 'ListItem',
+            position: idx + 1,
+            item: {
+              '@type': 'Service',
+              name: svc.name,
+              description: svc.description || 'Specialized fitness programming at Fitness Garage.',
+              provider: { '@type': 'GymOrSportsClub', name: 'Fitness Garage' },
+            },
+          })),
+        }
+      : null
 
   return (
     <div className="py-12 md:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,7 +61,7 @@ export const ServicesPage: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
           {services.map((service, index) => {
-            const Icon = icons[index % icons.length];
+            const Icon = icons[index % icons.length]
             return (
               <Card key={service.id} hoverEffect className="p-8 flex flex-col justify-between">
                 <div>
@@ -74,10 +80,10 @@ export const ServicesPage: React.FC = () => {
                   <span className="text-garage-muted">FG-{String(index + 1).padStart(2, '0')}</span>
                 </div>
               </Card>
-            );
+            )
           })}
         </div>
       )}
     </div>
-  );
-};
+  )
+}

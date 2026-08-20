@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { AdminSidebar } from '../../components/layout/AdminSidebar';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { Spinner } from '../../components/common/Spinner';
-import { Modal } from '../../components/common/Modal';
-import { FormField } from '../../components/forms/FormField';
-import { TextareaField } from '../../components/forms/TextareaField';
-import { adminService } from '../../services/adminService';
-import { Trainer } from '../../types';
-import { Plus, Edit2, Trash2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { AdminSidebar } from '../../components/layout/AdminSidebar'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { Spinner } from '../../components/common/Spinner'
+import { Modal } from '../../components/common/Modal'
+import { FormField } from '../../components/forms/FormField'
+import { TextareaField } from '../../components/forms/TextareaField'
+import { adminService } from '../../services/adminService'
+import type { Trainer } from '../../types'
+import { Edit2, Plus, Trash2 } from 'lucide-react'
 
 export const TrainersAdminPage: React.FC = () => {
-  const [trainers, setTrainers] = useState<Trainer[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [trainers, setTrainers] = useState<Trainer[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingTrainer, setEditingTrainer] = useState<Trainer | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingTrainer, setEditingTrainer] = useState<Trainer | null>(null)
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
@@ -25,26 +25,26 @@ export const TrainersAdminPage: React.FC = () => {
     bio: '',
     display_order: 0,
     is_active: true,
-  });
+  })
 
   const loadTrainers = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const data = await adminService.getTrainers();
-      setTrainers(data);
+      const data = await adminService.getTrainers()
+      setTrainers(data)
     } catch (e) {
-      console.error(e);
+      console.error(e)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    loadTrainers();
-  }, []);
+    loadTrainers()
+  }, [])
 
   const handleOpenCreate = () => {
-    setEditingTrainer(null);
+    setEditingTrainer(null)
     setFormData({
       name: '',
       slug: '',
@@ -54,12 +54,12 @@ export const TrainersAdminPage: React.FC = () => {
       bio: '',
       display_order: trainers.length + 1,
       is_active: true,
-    });
-    setIsModalOpen(true);
-  };
+    })
+    setIsModalOpen(true)
+  }
 
   const handleOpenEdit = (t: Trainer) => {
-    setEditingTrainer(t);
+    setEditingTrainer(t)
     setFormData({
       name: t.name,
       slug: t.slug,
@@ -69,45 +69,50 @@ export const TrainersAdminPage: React.FC = () => {
       bio: t.bio || '',
       display_order: t.display_order,
       is_active: t.is_active,
-    });
-    setIsModalOpen(true);
-  };
+    })
+    setIsModalOpen(true)
+  }
 
   const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     const payload = {
       name: formData.name,
       slug: formData.slug,
       specialization: formData.specialization,
       experience_years: Number(formData.experience_years),
-      certifications: formData.certifications.split(',').map((c) => c.trim()).filter(Boolean),
+      certifications: formData.certifications
+        .split(',')
+        .map((c) => c.trim())
+        .filter(Boolean),
       bio: formData.bio,
       display_order: Number(formData.display_order),
       is_active: formData.is_active,
-    };
+    }
 
     try {
       if (editingTrainer) {
-        await adminService.updateTrainer(editingTrainer.id, payload);
+        await adminService.updateTrainer(editingTrainer.id, payload)
       } else {
-        await adminService.createTrainer(payload);
+        await adminService.createTrainer(payload)
       }
-      setIsModalOpen(false);
-      loadTrainers();
-    } catch (err: any) {
-      alert(err.message || 'Operation failed');
+      setIsModalOpen(false)
+      loadTrainers()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Operation failed'
+      alert(message)
     }
-  };
+  }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Deactivate trainer profile?')) return;
+    if (!confirm('Deactivate trainer profile?')) return
     try {
-      await adminService.deleteTrainer(id);
-      loadTrainers();
-    } catch (err: any) {
-      alert(err.message || 'Deactivation failed');
+      await adminService.deleteTrainer(id)
+      loadTrainers()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Deactivation failed'
+      alert(message)
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen bg-garage-black">
@@ -154,7 +159,9 @@ export const TrainersAdminPage: React.FC = () => {
                     <tr key={t.id} className="hover:bg-garage-mid/20 transition-colors">
                       <td className="py-3.5 font-bold text-garage-white">{t.name}</td>
                       <td className="py-3.5 text-xs text-garage-chrome">{t.specialization}</td>
-                      <td className="py-3.5 text-xs text-garage-muted">{t.experience_years} Years</td>
+                      <td className="py-3.5 text-xs text-garage-muted">
+                        {t.experience_years} Years
+                      </td>
                       <td className="py-3.5">
                         <span
                           className={`text-xs px-2 py-0.5 rounded font-bold uppercase ${
@@ -168,7 +175,9 @@ export const TrainersAdminPage: React.FC = () => {
                       </td>
                       <td className="py-3.5 text-right space-x-2">
                         <button
-                          onClick={() => handleOpenEdit(t)}
+                          onClick={() => {
+                            handleOpenEdit(t)
+                          }}
                           className="p-1.5 text-garage-muted hover:text-garage-chrome transition-colors"
                         >
                           <Edit2 className="w-4 h-4" />
@@ -191,7 +200,9 @@ export const TrainersAdminPage: React.FC = () => {
         {/* Modal */}
         <Modal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false)
+          }}
           title={editingTrainer ? 'Edit Coach Profile' : 'Add Coach'}
         >
           <form onSubmit={handleSave} className="space-y-4">
@@ -200,12 +211,14 @@ export const TrainersAdminPage: React.FC = () => {
               required
               value={formData.name}
               onChange={(e) => {
-                const name = e.target.value;
+                const name = e.target.value
                 setFormData({
                   ...formData,
                   name,
-                  slug: editingTrainer ? formData.slug : name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                });
+                  slug: editingTrainer
+                    ? formData.slug
+                    : name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                })
               }}
             />
 
@@ -214,13 +227,17 @@ export const TrainersAdminPage: React.FC = () => {
                 label="Slug"
                 required
                 value={formData.slug}
-                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, slug: e.target.value })
+                }}
               />
               <FormField
                 label="Experience (Years)"
                 type="number"
                 value={formData.experience_years}
-                onChange={(e) => setFormData({ ...formData, experience_years: Number(e.target.value) })}
+                onChange={(e) => {
+                  setFormData({ ...formData, experience_years: Number(e.target.value) })
+                }}
               />
             </div>
 
@@ -229,25 +246,38 @@ export const TrainersAdminPage: React.FC = () => {
               placeholder="e.g. Strength & Conditioning / Hypertrophy"
               required
               value={formData.specialization}
-              onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, specialization: e.target.value })
+              }}
             />
 
             <FormField
               label="Certifications (Comma-separated)"
               placeholder="CSCS, NASM-CPT, Precision Nutrition"
               value={formData.certifications}
-              onChange={(e) => setFormData({ ...formData, certifications: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, certifications: e.target.value })
+              }}
             />
 
             <TextareaField
               label="Bio"
               rows={3}
               value={formData.bio}
-              onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, bio: e.target.value })
+              }}
             />
 
             <div className="pt-4 flex justify-end gap-3 border-t border-garage-mid">
-              <Button type="button" variant="ghost" size="sm" onClick={() => setIsModalOpen(false)}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setIsModalOpen(false)
+                }}
+              >
                 Cancel
               </Button>
               <Button type="submit" variant="primary" size="sm">
@@ -258,5 +288,5 @@ export const TrainersAdminPage: React.FC = () => {
         </Modal>
       </main>
     </div>
-  );
-};
+  )
+}

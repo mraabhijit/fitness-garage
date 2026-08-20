@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
 export interface SectionHeadingProps {
-  title: string;
-  subtitle?: string;
-  badge?: string;
-  align?: 'left' | 'center' | 'right';
-  className?: string;
+  title: string
+  subtitle?: string
+  badge?: string
+  align?: 'left' | 'center' | 'right'
+  className?: string
 }
 
 export const SectionHeading: React.FC<SectionHeadingProps> = ({
@@ -19,14 +19,14 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
     left: 'text-left items-start',
     center: 'text-center items-center',
     right: 'text-right items-end',
-  };
+  }
 
   const formattedTitle = title.split('/').map((part, i) => (
     <span key={i}>
       {i > 0 && <span className="text-garage-chrome mx-2 font-display select-none">/</span>}
       {part.trim()}
     </span>
-  ));
+  ))
 
   return (
     <div className={`flex flex-col ${alignments[align]} mb-12 ${className}`}>
@@ -44,5 +44,5 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
         </p>
       )}
     </div>
-  );
-};
+  )
+}

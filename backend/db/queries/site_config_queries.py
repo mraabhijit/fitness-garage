@@ -1,16 +1,14 @@
 from typing import Dict, List, Optional
-from uuid import UUID
+
 import asyncpg
 
 
 async def get_all_site_configs(pool: asyncpg.Pool) -> List[asyncpg.Record]:
-    return await pool.fetch(
-        """
+    return await pool.fetch("""
         SELECT id, config_key, config_value, description, updated_at
         FROM site_config
         ORDER BY config_key ASC
-        """
-    )
+        """)
 
 
 async def get_site_config_by_key(pool: asyncpg.Pool, config_key: str) -> Optional[asyncpg.Record]:
@@ -29,7 +27,7 @@ async def upsert_site_config(
     config_key: str,
     config_value: str,
     description: Optional[str] = None,
-) -> asyncpg.Record:
+) -> Optional[asyncpg.Record]:
     return await pool.fetchrow(
         """
         INSERT INTO site_config (config_key, config_value, description)

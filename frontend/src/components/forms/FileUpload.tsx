@@ -1,13 +1,13 @@
-import React, { useRef, useState } from 'react';
-import { UploadCloud, File, X } from 'lucide-react';
+import React, { useRef, useState } from 'react'
+import { File, UploadCloud, X } from 'lucide-react'
 
 export interface FileUploadProps {
-  label: string;
-  accept?: string;
-  maxSizeMB?: number;
-  onFileSelect: (file: File | null) => void;
-  helperText?: string;
-  error?: string;
+  label: string
+  accept?: string
+  maxSizeMB?: number
+  onFileSelect: (file: File | null) => void
+  helperText?: string
+  error?: string
 }
 
 export const FileUpload: React.FC<FileUploadProps> = ({
@@ -18,34 +18,34 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   helperText,
   error,
 }) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [dragOver, setDragOver] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [dragOver, setDragOver] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFile = (file: File | null) => {
     if (file && file.size > maxSizeMB * 1024 * 1024) {
-      alert(`File size exceeds ${maxSizeMB}MB`);
-      return;
+      alert(`File size exceeds ${maxSizeMB}MB`)
+      return
     }
-    setSelectedFile(file);
-    onFileSelect(file);
-  };
+    setSelectedFile(file)
+    onFileSelect(file)
+  }
 
   const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setDragOver(false);
+    e.preventDefault()
+    setDragOver(false)
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFile(e.dataTransfer.files[0]);
+      handleFile(e.dataTransfer.files[0])
     }
-  };
+  }
 
   const clearFile = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    handleFile(null);
+    e.stopPropagation()
+    handleFile(null)
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = ''
     }
-  };
+  }
 
   return (
     <div className="w-full space-y-1.5">
@@ -56,17 +56,19 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       <div
         onClick={() => fileInputRef.current?.click()}
         onDragOver={(e) => {
-          e.preventDefault();
-          setDragOver(true);
+          e.preventDefault()
+          setDragOver(true)
         }}
-        onDragLeave={() => setDragOver(false)}
+        onDragLeave={() => {
+          setDragOver(false)
+        }}
         onDrop={handleDrop}
         className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-colors ${
           dragOver
             ? 'border-garage-chrome bg-garage-chrome/5'
             : error
-            ? 'border-status-expired bg-status-expired/5'
-            : 'border-garage-mid hover:border-garage-chrome/50 bg-garage-black'
+              ? 'border-status-expired bg-status-expired/5'
+              : 'border-garage-mid hover:border-garage-chrome/50 bg-garage-black'
         }`}
       >
         <input
@@ -74,7 +76,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           type="file"
           accept={accept}
           className="hidden"
-          onChange={(e) => handleFile(e.target.files?.[0] || null)}
+          onChange={(e) => {
+            handleFile(e.target.files?.[0] || null)
+          }}
         />
 
         {selectedFile ? (
@@ -98,9 +102,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         ) : (
           <div className="flex flex-col items-center justify-center space-y-2">
             <UploadCloud className="w-8 h-8 text-garage-chrome" />
-            <p className="text-xs font-semibold text-garage-white">
-              Click or drag file to upload
-            </p>
+            <p className="text-xs font-semibold text-garage-white">Click or drag file to upload</p>
             <p className="text-[11px] text-garage-muted">
               {accept ? `Accepted formats: ${accept}` : `Max size ${maxSizeMB}MB`}
             </p>
@@ -111,5 +113,5 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       {error && <p className="text-xs text-status-expired font-medium">{error}</p>}
       {helperText && !error && <p className="text-xs text-garage-muted">{helperText}</p>}
     </div>
-  );
-};
+  )
+}

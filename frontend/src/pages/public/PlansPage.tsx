@@ -82,7 +82,7 @@ export const PlansPage: React.FC = () => {
       {isLoading ? (
         <Spinner size="lg" />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 xl:gap-8">
           {filteredPlans.map((plan) => (
             <PlanCard key={plan.id} plan={plan} />
           ))}

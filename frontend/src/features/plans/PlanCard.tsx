@@ -57,24 +57,20 @@ export const PlanCard: React.FC<PlanCardProps> = ({ plan, featured = false }) =>
     <Card
       variant={isPt ? 'chrome' : 'default'}
       hoverEffect
-      className="p-6 xl:p-8 flex flex-col justify-between relative group border-garage-mid/60 hover:border-garage-chrome/50 transition-all"
+      className="p-5 sm:p-6 xl:p-8 flex flex-col justify-between relative group border-garage-mid/60 hover:border-garage-chrome/50 transition-all"
     >
       <div>
-        <div className="grid grid-cols-2 items-center gap-2 mb-6">
-          <div className="flex items-center">
-            <span
-              className={`w-full inline-flex items-center justify-center text-center text-[10px] sm:text-xs font-bold uppercase tracking-wider py-1 px-2 rounded-full truncate ${
-                isPt ? 'bg-garage-chrome text-garage-black' : 'bg-garage-mid text-garage-white'
-              }`}
-            >
-              {plan.tier === 'pt' ? 'Personal Coaching' : 'Standard'}
-            </span>
-          </div>
-          <div className="flex items-center justify-end">
-            <span className="text-xs font-bold uppercase tracking-wider text-garage-muted whitespace-nowrap text-right">
-              {DURATION_LABELS[plan.duration] || plan.duration.replace('_', ' ')}
-            </span>
-          </div>
+        <div className="flex items-center justify-between gap-2 mb-6">
+          <span
+            className={`inline-flex items-center justify-center text-[10px] sm:text-xs font-bold uppercase tracking-wide py-1 px-2.5 rounded-full whitespace-nowrap shrink-0 ${
+              isPt ? 'bg-garage-chrome text-garage-black' : 'bg-garage-mid text-garage-white'
+            }`}
+          >
+            {plan.tier === 'pt' ? 'Personal Coaching' : 'Standard'}
+          </span>
+          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-garage-muted whitespace-nowrap shrink-0 text-right">
+            {DURATION_LABELS[plan.duration] || plan.duration.replace('_', ' ')}
+          </span>
         </div>
 
         <div className="mb-2">

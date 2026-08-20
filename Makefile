@@ -1,142 +1,155 @@
 # Makefile
-# Fitness Garage — Common Development Commands
+# Fitness Garage — Development Commands (v2 — Static Frontend Only)
 #
-# Usage:
-#   make <target>
+# Backend targets removed — no backend in Phase 1.
+# Backend Makefile targets documented in docs/ARCHIVED/ for Phase 2.
 #
-# Prerequisites: Docker, Node.js 20+, Python 3.12+, uv
+# Usage: make <target>
+# Prerequisites: Node.js 20+, npm
 
-.PHONY: help setup install dev dev-backend dev-frontend \
-        test test-backend test-backend-cov test-frontend \
-        lint lint-backend lint-frontend \
-        format format-backend format-frontend \
-        migrate migrate-new \
-        docker-up docker-down docker-logs docker-build \
-        pre-commit-install pre-commit-run \
-        clean branch branch-fix ready
+.PHONY: help setup install dev lint lint-frontend format format-frontend \
+        test test-frontend validate-data \
+        docker-up docker-up-d docker-down docker-build docker-logs \
+        docker-shell docker-rebuild \
+        pre-commit-install pre-commit-run pre-commit-update \
+        branch branch-fix ready clean \
+        content-check placeholder-check
 
 # ─────────────────────────────────────────────────────────────
 # HELP
 # ─────────────────────────────────────────────────────────────
 help: ## Show this help message
 	@echo ""
-	@echo "  Fitness Garage — Development Commands"
-	@echo "  ─────────────────────────────────────"
+	@echo "  Fitness Garage — Development Commands (Static Frontend)"
+	@echo "  ────────────────────────────────────────────────────────"
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) \
 		| sort \
-		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-25s\033[0m %s\n", $$1, $$2}'
+		| awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-28s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 
 # ─────────────────────────────────────────────────────────────
 # SETUP
 # ─────────────────────────────────────────────────────────────
-setup: ## Full first-time setup — install all deps and hooks
-	@echo "→ Setting up backend..."
-	cd backend && uv sync
-	@echo "→ Setting up frontend..."
+setup: ## First-time setup — install deps and pre-commit hooks
+	@echo "→ Installing frontend dependencies..."
 	cd frontend && npm ci
-	@echo "→ Installing pre-commit hooks..."
+	@echo "→ Installing pre-commit..."
 	pip install pre-commit
 	pre-commit install
-	@echo "→ Creating .env files from examples..."
-	@[ -f backend/.env ] || cp backend/.env.example backend/.env && echo "  Created backend/.env"
-	@[ -f frontend/.env.local ] || cp frontend/.env.example frontend/.env.local && echo "  Created frontend/.env.local"
+	@echo "→ Creating .env.local from example..."
+	@[ -f frontend/.env.local ] \
+		&& echo "  .env.local already exists — skipping" \
+		|| (cp frontend/.env.example frontend/.env.local && echo "  Created frontend/.env.local")
 	@echo ""
-	@echo "✅ Setup complete. Fill in your .env files before running."
+	@echo "✅ Setup complete."
+	@echo "   Fill in VITE_GOOGLE_PLACES_API_KEY and VITE_GOOGLE_PLACE_ID in frontend/.env.local"
 
-install: ## Install dependencies only (no hooks)
-	cd backend && uv sync
+install: ## Install frontend dependencies only
 	cd frontend && npm ci
 
 # ─────────────────────────────────────────────────────────────
-# DEVELOPMENT SERVERS
+# DEVELOPMENT
 # ─────────────────────────────────────────────────────────────
-dev: ## Start both frontend and backend dev servers (run in separate terminals)
-	@echo "→ Starting backend on http://localhost:8000"
-	@echo "→ Starting frontend on http://localhost:5173"
-	@echo "→ Run 'make dev-backend' and 'make dev-frontend' in separate terminals"
-
-dev-backend: ## Start FastAPI backend dev server with hot reload
-	cd backend && uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-
-dev-frontend: ## Start Vite frontend dev server with hot reload
+dev: ## Start Vite frontend dev server (http://localhost:5173)
 	cd frontend && npm run dev
 
-# ─────────────────────────────────────────────────────────────
-# DATABASE
-# ─────────────────────────────────────────────────────────────
-migrate: ## Run all pending database migrations
-	cd backend && uv run python -m db.migrate
+dev-frontend: dev ## Alias for dev
 
-migrate-new: ## Create a new migration file (usage: make migrate-new NAME=add_column_x)
-	@[ "${NAME}" ] || ( echo "❌ Usage: make migrate-new NAME=description_of_migration"; exit 1 )
-	@NEXT=$$(ls backend/db/migrations/*.sql 2>/dev/null | wc -l | tr -d ' '); \
-	PADDED=$$(printf "%03d" $$((NEXT))); \
-	FILE="backend/db/migrations/$${PADDED}_${NAME}.sql"; \
-	echo "-- Migration: $${PADDED}_${NAME}" > $$FILE; \
-	echo "-- Created: $$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $$FILE; \
-	echo "" >> $$FILE; \
-	echo "-- Write your idempotent SQL here" >> $$FILE; \
-	echo "-- Use IF NOT EXISTS, ON CONFLICT DO NOTHING, CREATE OR REPLACE" >> $$FILE; \
-	echo "" >> $$FILE; \
-	echo "✅ Created: $$FILE"
+preview: ## Preview production build locally
+	cd frontend && npm run build && npm run preview
 
 # ─────────────────────────────────────────────────────────────
-# TESTING
+# LINTING & FORMATTING
 # ─────────────────────────────────────────────────────────────
-test: test-backend test-frontend ## Run all tests (backend + frontend)
+lint: lint-frontend ## Run all linters
 
-test-backend: ## Run backend pytest suite
-	cd backend && uv run pytest tests/ -v --tb=short
-
-test-backend-cov: ## Run backend tests with coverage report
-	cd backend && uv run pytest tests/ -v --tb=short \
-		--cov=app \
-		--cov-report=term-missing \
-		--cov-report=html:htmlcov \
-		--cov-fail-under=70
-
-test-frontend: ## Run frontend type check and build
-	cd frontend && npx tsc --noEmit && npm run build
-
-test-feature: ## Run tests for a specific feature (usage: make test-feature FEATURE=members)
-	@[ "${FEATURE}" ] || ( echo "❌ Usage: make test-feature FEATURE=<feature_name>"; exit 1 )
-	cd backend && uv run pytest tests/test_${FEATURE}.py -v --tb=long
-
-# ─────────────────────────────────────────────────────────────
-# LINTING
-# ─────────────────────────────────────────────────────────────
-lint: lint-backend lint-frontend ## Run all linters
-
-lint-backend: ## Run backend linters (flake8, mypy, bandit)
-	@echo "→ flake8..."
-	cd backend && uv run flake8 app/ db/ --max-line-length=100 --extend-ignore=E203,W503 --exclude=db/migrations/
-	@echo "→ mypy..."
-	cd backend && uv run mypy app/ db/ --ignore-missing-imports --strict --exclude=tests/
-	@echo "→ bandit..."
-	cd backend && uv run bandit -r app/ db/ --severity-level=medium --confidence-level=medium --exclude=db/migrations/
-	@echo "✅ Backend lint passed"
-
-lint-frontend: ## Run frontend linters (eslint, tsc)
+lint-frontend: ## Run ESLint + tsc type check
 	@echo "→ eslint..."
 	cd frontend && npx eslint src/ --max-warnings=0
 	@echo "→ tsc..."
 	cd frontend && npx tsc --noEmit
-	@echo "✅ Frontend lint passed"
+	@echo "✅ Lint passed"
 
-# ─────────────────────────────────────────────────────────────
-# FORMATTING
-# ─────────────────────────────────────────────────────────────
-format: format-backend format-frontend ## Format all code
+format: format-frontend ## Format all code
 
-format-backend: ## Format backend code (black + isort)
-	cd backend && uv run black app/ db/ tests/
-	cd backend && uv run isort --profile black app/ db/ tests/
-	@echo "✅ Backend formatted"
-
-format-frontend: ## Format frontend code (prettier)
+format-frontend: ## Run Prettier on all TypeScript/CSS files
 	cd frontend && npx prettier --write "src/**/*.{ts,tsx,css}"
-	@echo "✅ Frontend formatted"
+	@echo "✅ Formatted"
+
+format-check: ## Check formatting without writing (used in CI)
+	cd frontend && npx prettier --check "src/**/*.{ts,tsx,css}"
+
+# ─────────────────────────────────────────────────────────────
+# TESTING & VALIDATION
+# ─────────────────────────────────────────────────────────────
+test: test-frontend validate-data ## Run all checks (type check + build + data validation)
+
+test-frontend: ## TypeScript type check + production build
+	@echo "→ Type check..."
+	cd frontend && npx tsc --noEmit
+	@echo "→ Production build..."
+	cd frontend && npm run build
+	@echo "✅ Frontend checks passed"
+
+validate-data: ## Validate all src/data/*.json files
+	@echo "→ Validating data files..."
+	@REQUIRED="site hero services plans trainers gallery achievements reviews"; \
+	FAILED=0; \
+	for name in $$REQUIRED; do \
+		FILE="frontend/src/data/$${name}.json"; \
+		if [ ! -f "$$FILE" ]; then \
+			echo "  ❌ Missing: $$FILE"; FAILED=1; \
+		elif python3 -m json.tool "$$FILE" > /dev/null 2>&1; then \
+			echo "  ✅ $$FILE"; \
+		else \
+			echo "  ❌ Invalid JSON: $$FILE"; FAILED=1; \
+		fi; \
+	done; \
+	if [ $$FAILED -eq 1 ]; then echo "Fix data files and retry."; exit 1; fi
+	@python3 -c "\
+import json; \
+d = json.load(open('frontend/src/data/plans.json')); \
+plans = d.get('plans',[]); \
+assert len(plans)==8, f'Expected 8 plans, found {len(plans)}'; \
+print('  ✅ plans.json — 8 combinations confirmed'); \
+"
+	@echo "✅ All data files valid"
+
+placeholder-check: ## Warn about remaining placeholder values in data files
+	@echo "→ Checking for placeholder values..."
+	@FOUND=0; \
+	for FILE in frontend/src/data/*.json; do \
+		if grep -q "TBD" "$$FILE" 2>/dev/null; then \
+			echo "  ⚠️  TBD found in: $$FILE"; FOUND=1; \
+		fi; \
+	done; \
+	if [ $$FOUND -eq 0 ]; then echo "  ✅ No placeholders found"; \
+	else echo ""; echo "  Update placeholder values before launch."; fi
+
+# ─────────────────────────────────────────────────────────────
+# DOCKER — frontend only
+# ─────────────────────────────────────────────────────────────
+docker-up: ## Start frontend in Docker (http://localhost:5173)
+	docker compose up
+
+docker-up-d: ## Start frontend in Docker (background)
+	docker compose up -d
+	@echo "→ Frontend running at http://localhost:5173"
+
+docker-down: ## Stop all Docker services
+	docker compose down
+
+docker-build: ## Rebuild Docker image (use after Dockerfile changes)
+	docker compose build --no-cache
+
+docker-rebuild: docker-build docker-up-d ## Rebuild and restart
+	@echo "✅ Rebuilt and started"
+
+docker-logs: ## Tail frontend container logs
+	docker compose logs -f frontend
+
+docker-shell: ## Open a shell inside the frontend container
+	docker compose exec frontend sh
 
 # ─────────────────────────────────────────────────────────────
 # PRE-COMMIT
@@ -148,87 +161,97 @@ pre-commit-install: ## Install pre-commit hooks into git
 pre-commit-run: ## Run all pre-commit hooks against all files
 	pre-commit run --all-files
 
-pre-commit-update: ## Update all pre-commit hook versions
+pre-commit-update: ## Update all hook versions to latest
 	pre-commit autoupdate
 
 # ─────────────────────────────────────────────────────────────
-# DOCKER
+# CONTENT MANAGEMENT
 # ─────────────────────────────────────────────────────────────
-docker-up: ## Start all Docker services (postgres + backend + frontend)
-	docker compose up
-
-docker-up-d: ## Start all Docker services in background
-	docker compose up -d
-
-docker-up-tools: ## Start all services including pgAdmin
-	docker compose --profile tools up -d
-
-docker-down: ## Stop all Docker services
-	docker compose down
-
-docker-down-v: ## Stop all services and remove volumes (destroys local DB)
-	@echo "⚠️  This will destroy the local database. Are you sure? [y/N]"
-	@read -r CONFIRM; [ "$$CONFIRM" = "y" ] && docker compose down -v || echo "Aborted."
-
-docker-build: ## Rebuild all Docker images (use after Dockerfile changes)
-	docker compose build --no-cache
-
-docker-logs: ## Tail logs from all services
-	docker compose logs -f
-
-docker-logs-backend: ## Tail logs from backend only
-	docker compose logs -f backend
-
-docker-logs-frontend: ## Tail logs from frontend only
-	docker compose logs -f frontend
-
-docker-shell-backend: ## Open a shell inside the backend container
-	docker compose exec backend bash
-
-docker-shell-db: ## Open psql inside the postgres container
-	docker compose exec postgres psql -U postgres -d fitness_garage
-
-docker-migrate: ## Run database migrations inside Docker
-	docker compose run --rm backend python -m db.migrate
-
-docker-test: ## Run backend test suite inside Docker
-	docker compose run --rm backend pytest tests/ -v --tb=short
+content-check: validate-data placeholder-check ## Full content audit (validation + placeholder check)
 
 # ─────────────────────────────────────────────────────────────
-# WORKFLOW SHORTCUTS
+# GIT WORKFLOW SHORTCUTS
 # ─────────────────────────────────────────────────────────────
-branch: ## Create a feature branch (usage: make branch SCOPE=backend NAME=bulk-import)
-	@[ "${SCOPE}" ] || ( echo "❌ Usage: make branch SCOPE=<frontend|backend|db|infra|docs> NAME=<description>"; exit 1 )
-	@[ "${NAME}" ] || ( echo "❌ Usage: make branch SCOPE=<scope> NAME=<short-description>"; exit 1 )
+branch: ## Create a feature branch (usage: make branch NAME=hero-slideshow)
+	@[ "${NAME}" ] || ( echo "❌ Usage: make branch NAME=<short-description>"; exit 1 )
 	git checkout develop
 	git pull origin develop
-	git checkout -b feature/${SCOPE}/${NAME}
-	@echo "✅ Created and switched to: feature/${SCOPE}/${NAME}"
+	git checkout -b feature/frontend/${NAME}
+	@echo "✅ Created: feature/frontend/${NAME}"
 
-branch-fix: ## Create a fix branch (usage: make branch-fix SCOPE=backend NAME=null-decrypt)
-	@[ "${SCOPE}" ] || ( echo "❌ Usage: make branch-fix SCOPE=<scope> NAME=<description>"; exit 1 )
-	@[ "${NAME}" ] || ( echo "❌ Usage: make branch-fix SCOPE=<scope> NAME=<description>"; exit 1 )
+branch-content: ## Create a content update branch (usage: make branch-content NAME=update-pricing)
+	@[ "${NAME}" ] || ( echo "❌ Usage: make branch-content NAME=<description>"; exit 1 )
 	git checkout develop
 	git pull origin develop
-	git checkout -b fix/${SCOPE}/${NAME}
-	@echo "✅ Created and switched to: fix/${SCOPE}/${NAME}"
+	git checkout -b chore/content/${NAME}
+	@echo "✅ Created: chore/content/${NAME}"
 
-ready: ## Run full pre-PR checklist (lint + test + pre-commit)
-	@echo "─────────────────────────────────────────"
+branch-fix: ## Create a fix branch (usage: make branch-fix NAME=gallery-lightbox-keyboard)
+	@[ "${NAME}" ] || ( echo "❌ Usage: make branch-fix NAME=<description>"; exit 1 )
+	git checkout develop
+	git pull origin develop
+	git checkout -b fix/frontend/${NAME}
+	@echo "✅ Created: fix/frontend/${NAME}"
+
+ready: ## Full pre-PR checklist — lint + test + data validation + pre-commit
+	@echo "─────────────────────────────────────────────────"
 	@echo " Running pre-PR checklist..."
-	@echo "─────────────────────────────────────────"
-	@$(MAKE) lint
-	@$(MAKE) test
+	@echo "─────────────────────────────────────────────────"
+	@$(MAKE) format-check
+	@$(MAKE) lint-frontend
+	@$(MAKE) test-frontend
+	@$(MAKE) validate-data
 	@$(MAKE) pre-commit-run
 	@echo ""
 	@echo "✅ All checks passed — ready to commit and push"
 
 # ─────────────────────────────────────────────────────────────
+# ASSET MANAGEMENT
+# ─────────────────────────────────────────────────────────────
+list-assets: ## List all files in public/assets/ by section folder
+	@echo "Hero assets:"
+	@ls frontend/public/assets/hero/ 2>/dev/null || echo "  (empty)"
+	@echo "About assets:"
+	@ls frontend/public/assets/about/ 2>/dev/null || echo "  (empty)"
+	@echo "Service icons:"
+	@ls frontend/public/assets/services/ 2>/dev/null || echo "  (empty)"
+	@echo "Trainer photos:"
+	@ls frontend/public/assets/trainers/ 2>/dev/null || echo "  (empty)"
+	@echo "Gallery:"
+	@ls frontend/public/assets/gallery/ 2>/dev/null || echo "  (empty)"
+	@echo "Transformations:"
+	@ls frontend/public/assets/transformations/ 2>/dev/null || echo "  (empty)"
+
+# ─────────────────────────────────────────────────────────────
 # CLEAN
 # ─────────────────────────────────────────────────────────────
-clean: ## Remove all build artifacts and caches
+clean: ## Remove build artifacts and caches
 	rm -rf frontend/dist frontend/.vite frontend/node_modules/.cache
-	rm -rf backend/.mypy_cache backend/.pytest_cache backend/.ruff_cache
-	find backend -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
-	find backend -name "*.pyc" -delete 2>/dev/null || true
 	@echo "✅ Clean complete"
+
+# ─────────────────────────────────────────────────────────────
+# PHASE 2 REFERENCE (not active)
+# ─────────────────────────────────────────────────────────────
+phase2-info: ## Show what changes when backend is wired in Phase 2
+	@echo ""
+	@echo "  Phase 2 — Backend Wiring"
+	@echo "  ──────────────────────────────────────────────────────"
+	@echo "  Files that change (frontend only):"
+	@echo "    src/services/publicService.ts  → swap JSON reads for Axios calls"
+	@echo "    src/utils/buildAssetUrl.ts     → swap /assets/ path for Supabase Storage URL"
+	@echo "    package.json                   → add axios, zustand, react-hook-form, zod"
+	@echo "    .env.example                   → add VITE_API_BASE_URL, VITE_SUPABASE_*"
+	@echo ""
+	@echo "  Files that are added (new):"
+	@echo "    src/services/api.ts            → Axios instance + JWT interceptor"
+	@echo "    src/store/authStore.ts         → Zustand auth state"
+	@echo "    src/pages/auth/               → Member + admin login pages"
+	@echo "    src/pages/member/             → 3 member portal pages"
+	@echo "    src/pages/admin/              → 11 admin dashboard pages"
+	@echo ""
+	@echo "  Files that NEVER change:"
+	@echo "    All 8 public pages, all components, all hooks, all types,"
+	@echo "    all utilities, design system, SEO, public routing"
+	@echo ""
+	@echo "  Backend specs ready in: docs/ARCHIVED/"
+	@echo ""

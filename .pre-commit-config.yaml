@@ -1,18 +1,20 @@
 # .pre-commit-config.yaml
-# Fitness Garage — Pre-commit Hook Configuration
+# Fitness Garage — Pre-commit Hook Configuration (v2 — Static Frontend Only)
+#
+# Python hooks removed — no backend in Phase 1.
+# Backend hooks live in docs/ARCHIVED/ for Phase 2 reference.
 #
 # Install:
 #   pip install pre-commit
 #   pre-commit install
 #
-# Run manually against all files:
+# Run manually:
 #   pre-commit run --all-files
 #
-# Update all hooks to latest versions:
+# Update hooks to latest versions:
 #   pre-commit autoupdate
 
 default_language_version:
-  python: python3.12
   node: "20"
 
 repos:
@@ -34,6 +36,9 @@ repos:
 
       - id: check-json
         name: "General › Validate JSON syntax"
+        # Covers all src/data/*.json files — catches malformed content updates
+        files: \.(json)$
+        exclude: node_modules/
 
       - id: check-toml
         name: "General › Validate TOML syntax"
@@ -44,6 +49,8 @@ repos:
       - id: check-added-large-files
         name: "General › Block files larger than 5MB"
         args: ["--maxkb=5120"]
+        # Assets in public/assets/ are excluded — images/videos can be large
+        exclude: ^frontend/public/assets/
 
       - id: detect-private-key
         name: "General › Detect accidentally committed private keys"
@@ -56,11 +63,12 @@ repos:
         args: ["--fix=lf"]
 
       - id: no-commit-to-branch
-        name: "General › Prevent direct commits to main and develop"
-        args: ["--branch", "main", "--branch", "develop"]
+        name: "General › Prevent direct commits to main"
+        args: ["--branch", "main"]
 
   # ─────────────────────────────────────────────────────────────
-  # SECRET DETECTION — blocks accidental secret commits
+  # SECRET DETECTION — blocks accidental API key commits
+  # Critical: VITE_GOOGLE_PLACES_API_KEY must never be committed
   # ─────────────────────────────────────────────────────────────
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.5.0
@@ -70,74 +78,13 @@ repos:
         args: ["--baseline", ".secrets.baseline"]
         exclude: |
           (?x)^(
-            \.env\.example|
-            docs/.*
+            frontend/\.env\.example|
+            docs/.*|
+            .*\.md
           )$
 
   # ─────────────────────────────────────────────────────────────
-  # PYTHON — backend/
-  # ─────────────────────────────────────────────────────────────
-  - repo: https://github.com/psf/black
-    rev: 24.4.2
-    hooks:
-      - id: black
-        name: "Python › black — code formatting"
-        files: ^backend/
-        language_version: python3.12
-
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        name: "Python › isort — import ordering"
-        files: ^backend/
-        args: ["--profile", "black"]
-
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.1.0
-    hooks:
-      - id: flake8
-        name: "Python › flake8 — style and lint"
-        files: ^backend/
-        args:
-          - "--max-line-length=100"
-          - "--extend-ignore=E203,W503"
-          - "--exclude=.git,__pycache__,.venv,migrations"
-        additional_dependencies:
-          - flake8-bugbear
-          - flake8-comprehensions
-          - flake8-simplify
-
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.10.0
-    hooks:
-      - id: mypy
-        name: "Python › mypy — type checking"
-        files: ^backend/app/|^backend/db/
-        args:
-          - "--ignore-missing-imports"
-          - "--strict"
-          - "--exclude=tests/|migrations/"
-        additional_dependencies:
-          - pydantic
-          - fastapi
-          - asyncpg-stubs
-
-  - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.9
-    hooks:
-      - id: bandit
-        name: "Python › bandit — security vulnerability scan"
-        files: ^backend/app/|^backend/db/
-        args:
-          - "--recursive"
-          - "--severity-level=medium"
-          - "--confidence-level=medium"
-          - "--exclude=tests/,migrations/,db/migrations/"
-        exclude: ^backend/tests/|^backend/db/migrations/
-
-  # ─────────────────────────────────────────────────────────────
-  # TYPESCRIPT / JAVASCRIPT — frontend/
+  # TYPESCRIPT / JAVASCRIPT — frontend/src/
   # ─────────────────────────────────────────────────────────────
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v4.0.0-alpha.8
@@ -145,7 +92,7 @@ repos:
       - id: prettier
         name: "TypeScript › prettier — code formatting"
         files: ^frontend/src/
-        types_or: [javascript, jsx, ts, tsx, css, json]
+        types_or: [javascript, jsx, ts, tsx, css]
         args: ["--write"]
         additional_dependencies:
           - prettier@3.3.0
@@ -161,7 +108,7 @@ repos:
         pass_filenames: false
 
       - id: tsc
-        name: "TypeScript › tsc — type checking (no emit)"
+        name: "TypeScript › tsc — type check (no emit)"
         language: node
         entry: bash -c 'cd frontend && npx tsc --noEmit'
         files: ^frontend/src/
@@ -169,24 +116,31 @@ repos:
         pass_filenames: false
 
   # ─────────────────────────────────────────────────────────────
-  # SQL — migration files
+  # JSON DATA FILES — src/data/*.json
+  # Validates structure of all content data files
   # ─────────────────────────────────────────────────────────────
-  - repo: https://github.com/sqlfluff/sqlfluff
-    rev: 3.1.0
+  - repo: local
     hooks:
-      - id: sqlfluff-lint
-        name: "SQL › sqlfluff — lint migration files"
-        files: ^backend/db/migrations/.*\.sql$
-        args:
-          - "--dialect=postgres"
-          - "--rules=AL01,AL02,AL03,AL04,AL05,AM01,AM02,CP01,CP02,CP03,CP04"
-
-      - id: sqlfluff-fix
-        name: "SQL › sqlfluff — auto-fix migration files"
-        files: ^backend/db/migrations/.*\.sql$
-        args:
-          - "--dialect=postgres"
-          - "--rules=AL01,AL02,AL03,AL04,AL05"
+      - id: validate-data-files
+        name: "Data › Validate src/data/*.json structure"
+        language: node
+        entry: node -e "
+          const fs = require('fs');
+          const path = require('path');
+          const dir = 'frontend/src/data';
+          const required = ['site','hero','services','plans','trainers','gallery','achievements','reviews'];
+          let ok = true;
+          required.forEach(f => {
+            const file = path.join(dir, f + '.json');
+            if (!fs.existsSync(file)) { console.error('Missing: ' + file); ok = false; return; }
+            try { JSON.parse(fs.readFileSync(file, 'utf8')); }
+            catch(e) { console.error('Invalid JSON: ' + file + ' — ' + e.message); ok = false; }
+          });
+          if (!ok) process.exit(1);
+          console.log('All data files valid.');
+        "
+        files: ^frontend/src/data/.*\.json$
+        pass_filenames: false
 
   # ─────────────────────────────────────────────────────────────
   # MARKDOWN — documentation files

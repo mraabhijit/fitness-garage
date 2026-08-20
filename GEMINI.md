@@ -19,15 +19,15 @@
 | 10 | [`10_Dev_Handover_README_Fitness_Garage_v2.md`](file:///home/arch/projects/fitness-garage/docs/10_Dev_Handover_README_Fitness_Garage_v2.md) | Developer setup, content update workflows, asset management, and Phase 2 swap checklist |
 | 11 | [`11_Dev_Methodology_Fitness_Garage.md`](file:///home/arch/projects/fitness-garage/docs/11_Dev_Methodology_Fitness_Garage.md) | Git branching, conventional commits, pre-commit enforcement, Ponytail reviews, and Definition of Done |
 
-### 0.2 New Config & Tooling Templates in `docs/`
+### 0.2 Root Configuration & Automation Tooling
 
 | File | Purpose |
 |---|---|
-| [`docs/Makefile`](file:///home/arch/projects/fitness-garage/docs/Makefile) | Streamlined development automation targets for frontend dev, data validation, placeholder audit, and pre-PR checks |
-| [`docs/ci.yml`](file:///home/arch/projects/fitness-garage/docs/ci.yml) | GitHub Actions CI workflow (formatting, linting, type-checking, Vite build, JSON data validation, Lighthouse CI) |
-| [`docs/docker-compose.yml`](file:///home/arch/projects/fitness-garage/docs/docker-compose.yml) | Local frontend development container with hot-reload volume mounts, with Phase 2 services documented |
-| [`docs/gitignore`](file:///home/arch/projects/fitness-garage/docs/gitignore) | Root `.gitignore` template covering environment secrets, Node.js, Vite build artifacts, and Phase 2 Python rules |
-| [`docs/pre-commit-config.yaml`](file:///home/arch/projects/fitness-garage/docs/pre-commit-config.yaml) | Pre-commit configuration with Yelp secret detection, Prettier, ESLint, tsc, JSON data validator, and markdownlint |
+| [`Makefile`](file:///home/arch/projects/fitness-garage/Makefile) | Streamlined development automation targets for frontend dev, data validation, placeholder audit, and pre-PR checks |
+| [`.github/workflows/ci.yml`](file:///home/arch/projects/fitness-garage/.github/workflows/ci.yml) | GitHub Actions CI workflow (formatting, linting, type-checking, Vite build, JSON data validation, Lighthouse CI) |
+| [`docker-compose.yml`](file:///home/arch/projects/fitness-garage/docker-compose.yml) | Local frontend development container with hot-reload volume mounts, with Phase 2 services documented |
+| [`.gitignore`](file:///home/arch/projects/fitness-garage/.gitignore) | Root `.gitignore` covering environment secrets, Node.js, Vite build artifacts, and Phase 2 Python rules |
+| [`.pre-commit-config.yaml`](file:///home/arch/projects/fitness-garage/.pre-commit-config.yaml) | Pre-commit configuration with Yelp secret detection, Prettier, ESLint, tsc, JSON data validator, and markdownlint |
 
 ### 0.3 Archived Specifications — Phase 2 (Future Backend & Portal Integration)
 

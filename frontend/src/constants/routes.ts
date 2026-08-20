@@ -31,6 +31,6 @@ export const ROUTES = {
   ADMIN_GALLERY: '/admin/gallery',
   ADMIN_STATS: '/admin/stats',
   ADMIN_SETTINGS: '/admin/settings',
-} as const;
+} as const
 
-export type AppRoute = typeof ROUTES[keyof typeof ROUTES];
+export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES]

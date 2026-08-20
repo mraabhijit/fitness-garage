@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { AdminSidebar } from '../../components/layout/AdminSidebar';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { Spinner } from '../../components/common/Spinner';
-import { Modal } from '../../components/common/Modal';
-import { FormField } from '../../components/forms/FormField';
-import { SelectField } from '../../components/forms/SelectField';
-import { adminService } from '../../services/adminService';
-import { Member, MembershipPlan, Payment } from '../../types';
-import { formatDate, formatCurrency } from '../../utils/formatters';
-import { Download, Plus } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { AdminSidebar } from '../../components/layout/AdminSidebar'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { Spinner } from '../../components/common/Spinner'
+import { Modal } from '../../components/common/Modal'
+import { FormField } from '../../components/forms/FormField'
+import { SelectField } from '../../components/forms/SelectField'
+import { adminService } from '../../services/adminService'
+import type { Member, MembershipPlan, Payment } from '../../types'
+import { formatCurrency, formatDate } from '../../utils/formatters'
+import { Download, Plus } from 'lucide-react'
 
 export const PaymentsPage: React.FC = () => {
-  const [payments, setPayments] = useState<Payment[]>([]);
-  const [members, setMembers] = useState<Member[]>([]);
-  const [plans, setPlans] = useState<MembershipPlan[]>([]);
-  const [page] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [payments, setPayments] = useState<Payment[]>([])
+  const [members, setMembers] = useState<Member[]>([])
+  const [plans, setPlans] = useState<MembershipPlan[]>([])
+  const [page] = useState(1)
+  const [isLoading, setIsLoading] = useState(true)
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [formData, setFormData] = useState({
     member_id: '',
     membership_plan_id: '',
@@ -27,36 +27,36 @@ export const PaymentsPage: React.FC = () => {
     payment_method: 'cash',
     notes: '',
     generate_invoice: true,
-  });
+  })
 
   const loadData = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       const [paymentsRes, membersRes, plansRes] = await Promise.all([
         adminService.getPayments(page, 15),
         adminService.getMembers(1, 100).catch(() => ({ data: [] })),
         adminService.getPlans().catch(() => []),
-      ]);
-      setPayments(paymentsRes.data || []);
-      setMembers(membersRes.data || []);
-      setPlans(plansRes);
+      ])
+      setPayments(paymentsRes.data || [])
+      setMembers(membersRes.data || [])
+      setPlans(plansRes)
       if (membersRes.data && membersRes.data.length > 0 && !formData.member_id) {
-        setFormData((prev) => ({ ...prev, member_id: membersRes.data[0].id }));
+        setFormData((prev) => ({ ...prev, member_id: membersRes.data[0].id }))
       }
     } catch (e) {
-      console.error(e);
+      console.error(e)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   useEffect(() => {
-    loadData();
+    loadData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page])
 
   const handleRecordPayment = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
       await adminService.recordPayment({
         member_id: formData.member_id,
@@ -66,22 +66,23 @@ export const PaymentsPage: React.FC = () => {
         payment_method: formData.payment_method,
         notes: formData.notes,
         generate_invoice: formData.generate_invoice,
-      });
-      setIsModalOpen(false);
-      loadData();
-    } catch (err: any) {
-      alert(err.message || 'Failed to record payment');
+      })
+      setIsModalOpen(false)
+      loadData()
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to record payment'
+      alert(message)
     }
-  };
+  }
 
   const handleDownloadInvoice = async (paymentId: string) => {
     try {
-      const { download_url } = await adminService.getInvoiceUrl(paymentId);
-      window.open(download_url, '_blank');
+      const { download_url } = await adminService.getInvoiceUrl(paymentId)
+      window.open(download_url, '_blank')
     } catch {
-      alert('Could not retrieve invoice download URL');
+      alert('Could not retrieve invoice download URL')
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen bg-garage-black">
@@ -101,7 +102,9 @@ export const PaymentsPage: React.FC = () => {
           <Button
             variant="primary"
             size="sm"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setIsModalOpen(true)
+            }}
             leftIcon={<Plus className="w-4 h-4" />}
           >
             Record Payment
@@ -131,8 +134,12 @@ export const PaymentsPage: React.FC = () => {
                   {payments.map((p) => (
                     <tr key={p.id} className="hover:bg-garage-mid/20 transition-colors">
                       <td className="py-3.5">
-                        <div className="font-bold text-garage-white">{p.member_name || 'Member'}</div>
-                        <div className="text-[11px] text-garage-muted font-mono">{p.member_id.slice(0, 8)}</div>
+                        <div className="font-bold text-garage-white">
+                          {p.member_name || 'Member'}
+                        </div>
+                        <div className="text-[11px] text-garage-muted font-mono">
+                          {p.member_id.slice(0, 8)}
+                        </div>
                       </td>
                       <td className="py-3.5 font-bold text-garage-chrome">
                         {formatCurrency(p.amount)}
@@ -168,7 +175,9 @@ export const PaymentsPage: React.FC = () => {
         {/* Record Payment Modal */}
         <Modal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onClose={() => {
+            setIsModalOpen(false)
+          }}
           title="Record Manual Payment"
         >
           <form onSubmit={handleRecordPayment} className="space-y-4">
@@ -176,7 +185,9 @@ export const PaymentsPage: React.FC = () => {
               label="Select Member"
               required
               value={formData.member_id}
-              onChange={(e) => setFormData({ ...formData, member_id: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, member_id: e.target.value })
+              }}
               options={members.map((m) => ({
                 value: m.id,
                 label: `${m.full_name} (${m.phone_number || m.email_address || m.id.slice(0, 6)})`,
@@ -187,13 +198,13 @@ export const PaymentsPage: React.FC = () => {
               label="Membership Plan"
               value={formData.membership_plan_id}
               onChange={(e) => {
-                const planId = e.target.value;
-                const p = plans.find((pl) => pl.id === planId);
+                const planId = e.target.value
+                const p = plans.find((pl) => pl.id === planId)
                 setFormData({
                   ...formData,
                   membership_plan_id: planId,
                   amount: p ? Number(p.price) : formData.amount,
-                });
+                })
               }}
               options={[
                 { value: '', label: 'Custom / Direct Payment' },
@@ -210,21 +221,27 @@ export const PaymentsPage: React.FC = () => {
                 type="number"
                 required
                 value={formData.amount}
-                onChange={(e) => setFormData({ ...formData, amount: Number(e.target.value) })}
+                onChange={(e) => {
+                  setFormData({ ...formData, amount: Number(e.target.value) })
+                }}
               />
               <FormField
                 label="Payment Date"
                 type="date"
                 required
                 value={formData.payment_date}
-                onChange={(e) => setFormData({ ...formData, payment_date: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, payment_date: e.target.value })
+                }}
               />
             </div>
 
             <SelectField
               label="Payment Method"
               value={formData.payment_method}
-              onChange={(e) => setFormData({ ...formData, payment_method: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, payment_method: e.target.value })
+              }}
               options={[
                 { value: 'cash', label: 'Cash' },
                 { value: 'upi', label: 'UPI / QR' },
@@ -237,11 +254,20 @@ export const PaymentsPage: React.FC = () => {
             <FormField
               label="Payment Notes / Transaction ID"
               value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, notes: e.target.value })
+              }}
             />
 
             <div className="pt-4 flex justify-end gap-3 border-t border-garage-mid">
-              <Button type="button" variant="ghost" size="sm" onClick={() => setIsModalOpen(false)}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setIsModalOpen(false)
+                }}
+              >
                 Cancel
               </Button>
               <Button type="submit" variant="primary" size="sm">
@@ -252,5 +278,5 @@ export const PaymentsPage: React.FC = () => {
         </Modal>
       </main>
     </div>
-  );
-};
+  )
+}

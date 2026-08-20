@@ -1,51 +1,51 @@
-import React, { useEffect, useState } from 'react';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { Spinner } from '../../components/common/Spinner';
-import { memberService } from '../../services/memberService';
-import { Payment } from '../../types';
-import { formatDate, formatCurrency } from '../../utils/formatters';
-import { CreditCard, Download, Calendar, Receipt, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { Spinner } from '../../components/common/Spinner'
+import { memberService } from '../../services/memberService'
+import type { Payment } from '../../types'
+import { formatCurrency, formatDate } from '../../utils/formatters'
+import { Calendar, ChevronLeft, ChevronRight, CreditCard, Download, Receipt } from 'lucide-react'
 
 export const PaymentHistoryPage: React.FC = () => {
-  const [payments, setPayments] = useState<Payment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [payments, setPayments] = useState<Payment[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [downloadingId, setDownloadingId] = useState<string | null>(null)
 
   // Pagination state
-  const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-  const pageSize = 10;
+  const [page, setPage] = useState(1)
+  const [total, setTotal] = useState(0)
+  const pageSize = 10
 
   useEffect(() => {
     async function loadPayments() {
-      setIsLoading(true);
+      setIsLoading(true)
       try {
-        const res = await memberService.getMyPayments(page, pageSize);
-        setPayments(res.data || []);
-        setTotal(res.total || 0);
+        const res = await memberService.getMyPayments(page, pageSize)
+        setPayments(res.data || [])
+        setTotal(res.total || 0)
       } catch (err) {
-        console.error('Error loading payment history:', err);
+        console.error('Error loading payment history:', err)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
     }
-    loadPayments();
-  }, [page]);
+    loadPayments()
+  }, [page])
 
   const handleDownloadInvoice = async (paymentId: string) => {
     try {
-      setDownloadingId(paymentId);
-      const { download_url } = await memberService.getInvoiceUrl(paymentId);
-      window.open(download_url, '_blank');
+      setDownloadingId(paymentId)
+      const { download_url } = await memberService.getInvoiceUrl(paymentId)
+      window.open(download_url, '_blank')
     } catch {
-      alert('Could not generate invoice download link. Please contact reception.');
+      alert('Could not generate invoice download link. Please contact reception.')
     } finally {
-      setDownloadingId(null);
+      setDownloadingId(null)
     }
-  };
+  }
 
-  const totalPages = Math.ceil(total / pageSize) || 1;
+  const totalPages = Math.ceil(total / pageSize) || 1
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
@@ -61,7 +61,9 @@ export const PaymentHistoryPage: React.FC = () => {
         </div>
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-garage-dark border border-garage-mid text-xs font-semibold text-garage-muted">
           <Receipt className="w-4 h-4 text-garage-chrome" />
-          <span>Total Transactions: <strong className="text-garage-white">{total}</strong></span>
+          <span>
+            Total Transactions: <strong className="text-garage-white">{total}</strong>
+          </span>
         </div>
       </div>
 
@@ -74,7 +76,8 @@ export const PaymentHistoryPage: React.FC = () => {
             No Transactions Found
           </h3>
           <p className="text-xs text-garage-muted font-body max-w-sm mx-auto">
-            Payment records and PDF receipts will be listed here as soon as staff logs your transactions.
+            Payment records and PDF receipts will be listed here as soon as staff logs your
+            transactions.
           </p>
         </Card>
       ) : (
@@ -183,7 +186,8 @@ export const PaymentHistoryPage: React.FC = () => {
           {totalPages > 1 && (
             <div className="flex items-center justify-between pt-4 border-t border-garage-mid/60 text-xs text-garage-muted">
               <span>
-                Page <strong className="text-garage-white">{page}</strong> of <strong className="text-garage-white">{totalPages}</strong>
+                Page <strong className="text-garage-white">{page}</strong> of{' '}
+                <strong className="text-garage-white">{totalPages}</strong>
               </span>
 
               <div className="flex items-center gap-2">
@@ -191,7 +195,9 @@ export const PaymentHistoryPage: React.FC = () => {
                   variant="outline"
                   size="sm"
                   disabled={page <= 1}
-                  onClick={() => setPage(page - 1)}
+                  onClick={() => {
+                    setPage(page - 1)
+                  }}
                   leftIcon={<ChevronLeft className="w-4 h-4" />}
                 >
                   Prev
@@ -200,7 +206,9 @@ export const PaymentHistoryPage: React.FC = () => {
                   variant="outline"
                   size="sm"
                   disabled={page >= totalPages}
-                  onClick={() => setPage(page + 1)}
+                  onClick={() => {
+                    setPage(page + 1)
+                  }}
                   rightIcon={<ChevronRight className="w-4 h-4" />}
                 >
                   Next
@@ -211,5 +219,5 @@ export const PaymentHistoryPage: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

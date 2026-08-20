@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Fitness Garage — Local Postgres",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "fitness_garage",
+      "Username": "postgres",
+      "SSLMode": "prefer",
+      "PassFile": "/pgpassfile"
+    }
+  }
+}

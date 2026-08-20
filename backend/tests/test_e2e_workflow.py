@@ -3,14 +3,16 @@ from datetime import date, datetime
 from decimal import Decimal
 from unittest.mock import AsyncMock, patch
 from uuid import uuid4
+
 import pytest
 from httpx import AsyncClient
+
+from app.core.auth import AuthenticatedUser, get_current_user
 from app.main import app
-from db.connection import get_pool
-from app.core.auth import get_current_user, AuthenticatedUser
 from app.schemas.member import MemberResponse
 from app.schemas.payment import PaymentResponse
 from app.services.import_service import import_members_from_file, parse_date
+from db.connection import get_pool
 
 
 @pytest.fixture
@@ -56,9 +58,12 @@ Vikram Singh,9876543212,vikram@example.com,basic,annual,2026-01-01,2026-12-31,VI
         {"id": uuid4(), "tier": "basic", "duration": "annual"},
     ]
 
-    with patch("db.queries.plan_queries.get_all_plans", return_value=mock_plans), patch(
-        "app.services.import_service.create_new_member", return_value=AsyncMock()
-    ) as mock_create:
+    with (
+        patch("db.queries.plan_queries.get_all_plans", return_value=mock_plans),
+        patch(
+            "app.services.import_service.create_new_member", return_value=AsyncMock()
+        ) as mock_create,
+    ):
         result = await import_members_from_file(
             pool=mock_db_pool,
             file_bytes=csv_content,
@@ -108,8 +113,9 @@ async def test_admin_member_and_payment_e2e(
         updated_at=datetime(2026, 8, 1, 10, 0, 0),
     )
 
-    with patch("app.services.member_service.create_new_member", return_value=mock_member), patch(
-        "app.services.payment_service.record_payment", return_value=mock_payment
+    with (
+        patch("app.services.member_service.create_new_member", return_value=mock_member),
+        patch("app.services.payment_service.record_payment", return_value=mock_payment),
     ):
         # 1. Create Member
         create_resp = await client.post(

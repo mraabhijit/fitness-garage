@@ -1,9 +1,11 @@
 import io
 import logging
 from datetime import date, datetime
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
+
 import asyncpg
 import pandas as pd
+
 from app.schemas.member import MemberCreate
 from app.services.member_service import create_new_member
 from db.queries import plan_queries
@@ -63,13 +65,15 @@ async def import_members_from_file(
             if not full_name or full_name.lower() == "nan":
                 continue
 
-            phone = str(row.get("phone_number") or row.get("phone") or "").strip()
-            if phone.lower() == "nan":
-                phone = None
+            raw_phone = str(row.get("phone_number") or row.get("phone") or "").strip()
+            phone: Optional[str] = (
+                None if not raw_phone or raw_phone.lower() == "nan" else raw_phone
+            )
 
-            email = str(row.get("email_address") or row.get("email") or "").strip()
-            if email.lower() == "nan":
-                email = None
+            raw_email = str(row.get("email_address") or row.get("email") or "").strip()
+            email: Optional[str] = (
+                None if not raw_email or raw_email.lower() == "nan" else raw_email
+            )
 
             start_d = parse_date(row.get("start_date"))
             expiry_d = parse_date(row.get("expiry_date"))
@@ -82,9 +86,10 @@ async def import_members_from_file(
             if expiry_d < date.today():
                 status = "expired"
 
-            notes = str(row.get("notes", "")).strip()
-            if notes.lower() == "nan":
-                notes = None
+            raw_notes = str(row.get("notes", "")).strip()
+            notes: Optional[str] = (
+                None if not raw_notes or raw_notes.lower() == "nan" else raw_notes
+            )
 
             member_in = MemberCreate(
                 full_name=full_name,

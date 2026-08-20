@@ -1,41 +1,42 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuthStore } from '../../store/authStore';
-import { ROUTES } from '../../constants/routes';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { FormField } from '../../components/forms/FormField';
-import { ShieldCheck, Lock } from 'lucide-react';
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuthStore } from '../../store/authStore'
+import { ROUTES } from '../../constants/routes'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { FormField } from '../../components/forms/FormField'
+import { Lock, ShieldCheck } from 'lucide-react'
 
 export const AdminLoginPage: React.FC = () => {
-  const navigate = useNavigate();
-  const setAuth = useAuthStore((s) => s.setAuth);
+  const navigate = useNavigate()
+  const setAuth = useAuthStore((s) => s.setAuth)
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
+    e.preventDefault()
+    setIsLoading(true)
+    setError(null)
 
     try {
       // In production, this verifies via Supabase Auth admin role JWT
-      const fakeAdminToken = `mock-admin-jwt-${Date.now()}`;
+      const fakeAdminToken = `mock-admin-jwt-${Date.now()}`
       setAuth(fakeAdminToken, {
         id: '22222222-2222-2222-2222-222222222222',
         email: email || 'admin@fitnessgarage.com',
         role: 'admin',
-      });
-      navigate(ROUTES.ADMIN_DASHBOARD);
-    } catch (err: any) {
-      setError(err.message || 'Authentication failed');
+      })
+      navigate(ROUTES.ADMIN_DASHBOARD)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Authentication failed'
+      setError(message)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
@@ -65,7 +66,9 @@ export const AdminLoginPage: React.FC = () => {
             required
             placeholder="admin@fitnessgarage.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value)
+            }}
           />
 
           <FormField
@@ -74,7 +77,9 @@ export const AdminLoginPage: React.FC = () => {
             required
             placeholder="••••••••"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value)
+            }}
           />
 
           <Button
@@ -90,11 +95,14 @@ export const AdminLoginPage: React.FC = () => {
         </form>
 
         <div className="mt-8 pt-6 border-t border-garage-mid text-center text-xs text-garage-muted">
-          <Link to={ROUTES.MEMBER_LOGIN} className="text-garage-muted hover:text-garage-white transition-colors">
+          <Link
+            to={ROUTES.MEMBER_LOGIN}
+            className="text-garage-muted hover:text-garage-white transition-colors"
+          >
             ← Back to Member Login
           </Link>
         </div>
       </Card>
     </div>
-  );
-};
+  )
+}

@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { SectionHeading } from '../../components/common/SectionHeading';
-import { Spinner } from '../../components/common/Spinner';
-import { publicService } from '../../services/publicService';
-import { GalleryItem } from '../../types';
-import { Image as ImageIcon } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { SectionHeading } from '../../components/common/SectionHeading'
+import { Spinner } from '../../components/common/Spinner'
+import { publicService } from '../../services/publicService'
+import type { GalleryItem } from '../../types'
+import { Image as ImageIcon } from 'lucide-react'
 
 export const GalleryPage: React.FC = () => {
-  const [items, setItems] = useState<GalleryItem[]>([]);
-  const [filter, setFilter] = useState<'all' | 'gallery' | 'transformations'>('all');
-  const [isLoading, setIsLoading] = useState(true);
+  const [items, setItems] = useState<GalleryItem[]>([])
+  const [filter, setFilter] = useState<'all' | 'gallery' | 'transformations'>('all')
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     async function load() {
@@ -17,18 +17,18 @@ export const GalleryPage: React.FC = () => {
           filter === 'gallery'
             ? 'assets/gallery'
             : filter === 'transformations'
-            ? 'assets/transformations'
-            : undefined;
-        const data = await publicService.getGallery(folder);
-        setItems(data);
+              ? 'assets/transformations'
+              : undefined
+        const data = await publicService.getGallery(folder)
+        setItems(data)
       } catch (e) {
-        console.error(e);
+        console.error(e)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
     }
-    load();
-  }, [filter]);
+    load()
+  }, [filter])
 
   return (
     <div className="py-16 md:py-24 px-4 max-w-7xl mx-auto">
@@ -42,23 +42,33 @@ export const GalleryPage: React.FC = () => {
       <div className="flex justify-center mb-12">
         <div className="inline-flex p-1 bg-garage-dark border border-garage-mid rounded-xl">
           <button
-            onClick={() => setFilter('all')}
+            onClick={() => {
+              setFilter('all')
+            }}
             className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-              filter === 'all' ? 'bg-garage-chrome text-garage-black' : 'text-garage-muted hover:text-garage-white'
+              filter === 'all'
+                ? 'bg-garage-chrome text-garage-black'
+                : 'text-garage-muted hover:text-garage-white'
             }`}
           >
             All Media
           </button>
           <button
-            onClick={() => setFilter('gallery')}
+            onClick={() => {
+              setFilter('gallery')
+            }}
             className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-              filter === 'gallery' ? 'bg-garage-chrome text-garage-black' : 'text-garage-muted hover:text-garage-white'
+              filter === 'gallery'
+                ? 'bg-garage-chrome text-garage-black'
+                : 'text-garage-muted hover:text-garage-white'
             }`}
           >
             Gym Facility
           </button>
           <button
-            onClick={() => setFilter('transformations')}
+            onClick={() => {
+              setFilter('transformations')
+            }}
             className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
               filter === 'transformations'
                 ? 'bg-garage-chrome text-garage-black'
@@ -75,7 +85,9 @@ export const GalleryPage: React.FC = () => {
       ) : items.length === 0 ? (
         <div className="text-center py-20 text-garage-muted">
           <ImageIcon className="w-12 h-12 mx-auto mb-4 opacity-50" />
-          <p className="text-lg uppercase font-display tracking-wider">No media items available yet.</p>
+          <p className="text-lg uppercase font-display tracking-wider">
+            No media items available yet.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -106,5 +118,5 @@ export const GalleryPage: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

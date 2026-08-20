@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Shield, User, LogOut } from 'lucide-react';
-import { ROUTES } from '../../constants/routes';
-import { useAuthStore } from '../../store/authStore';
-import { Button } from '../common/Button';
+import React, { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { LogOut, Menu, Shield, User, X } from 'lucide-react'
+import { ROUTES } from '../../constants/routes'
+import { useAuthStore } from '../../store/authStore'
+import { Button } from '../common/Button'
 
 export const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const [isOpen, setIsOpen] = useState(false)
+  const location = useLocation()
+  const { isAuthenticated, user, logout } = useAuthStore()
 
   const navLinks = [
     { label: 'Home', path: ROUTES.HOME },
@@ -19,9 +19,9 @@ export const Navbar: React.FC = () => {
     { label: 'Gallery', path: ROUTES.GALLERY },
     { label: 'Reviews', path: ROUTES.TESTIMONIALS },
     { label: 'Contact', path: ROUTES.CONTACT },
-  ];
+  ]
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname === path
 
   return (
     <nav className="sticky top-0 z-40 w-full bg-garage-black/90 backdrop-blur-md border-b border-garage-mid/60">
@@ -44,7 +44,9 @@ export const Navbar: React.FC = () => {
                 key={link.path}
                 to={link.path}
                 className={`text-sm font-semibold uppercase tracking-wider transition-colors hover:text-garage-chrome ${
-                  isActive(link.path) ? 'text-garage-chrome border-b-2 border-garage-chrome pb-1' : 'text-garage-muted'
+                  isActive(link.path)
+                    ? 'text-garage-chrome border-b-2 border-garage-chrome pb-1'
+                    : 'text-garage-muted'
                 }`}
               >
                 {link.label}
@@ -58,13 +60,21 @@ export const Navbar: React.FC = () => {
               <div className="flex items-center gap-3">
                 {user?.role === 'admin' || user?.role === 'dev' ? (
                   <Link to={ROUTES.ADMIN_DASHBOARD}>
-                    <Button variant="secondary" size="sm" leftIcon={<Shield className="w-4 h-4 text-garage-chrome" />}>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      leftIcon={<Shield className="w-4 h-4 text-garage-chrome" />}
+                    >
                       Admin
                     </Button>
                   </Link>
                 ) : (
                   <Link to={ROUTES.MEMBER_DASHBOARD}>
-                    <Button variant="secondary" size="sm" leftIcon={<User className="w-4 h-4 text-garage-chrome" />}>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      leftIcon={<User className="w-4 h-4 text-garage-chrome" />}
+                    >
                       Portal
                     </Button>
                   </Link>
@@ -96,7 +106,9 @@ export const Navbar: React.FC = () => {
           {/* Mobile menu button */}
           <div className="lg:hidden flex items-center">
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => {
+                setIsOpen(!isOpen)
+              }}
               className="p-2 rounded-md text-garage-white hover:text-garage-chrome hover:bg-garage-dark focus:outline-none"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -112,7 +124,9 @@ export const Navbar: React.FC = () => {
             <Link
               key={link.path}
               to={link.path}
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false)
+              }}
               className={`block px-3 py-2 rounded-md text-base font-semibold uppercase tracking-wider ${
                 isActive(link.path)
                   ? 'text-garage-chrome bg-garage-mid/50'
@@ -126,25 +140,51 @@ export const Navbar: React.FC = () => {
             {isAuthenticated ? (
               <>
                 <Link
-                  to={user?.role === 'admin' || user?.role === 'dev' ? ROUTES.ADMIN_DASHBOARD : ROUTES.MEMBER_DASHBOARD}
-                  onClick={() => setIsOpen(false)}
+                  to={
+                    user?.role === 'admin' || user?.role === 'dev'
+                      ? ROUTES.ADMIN_DASHBOARD
+                      : ROUTES.MEMBER_DASHBOARD
+                  }
+                  onClick={() => {
+                    setIsOpen(false)
+                  }}
                 >
                   <Button variant="primary" size="md" className="w-full">
-                    {user?.role === 'admin' || user?.role === 'dev' ? 'Admin Dashboard' : 'Member Dashboard'}
+                    {user?.role === 'admin' || user?.role === 'dev'
+                      ? 'Admin Dashboard'
+                      : 'Member Dashboard'}
                   </Button>
                 </Link>
-                <Button variant="outline" size="md" onClick={() => { logout(); setIsOpen(false); }} className="w-full">
+                <Button
+                  variant="outline"
+                  size="md"
+                  onClick={() => {
+                    logout()
+                    setIsOpen(false)
+                  }}
+                  className="w-full"
+                >
                   Log Out
                 </Button>
               </>
             ) : (
               <>
-                <Link to={ROUTES.MEMBER_LOGIN} onClick={() => setIsOpen(false)}>
+                <Link
+                  to={ROUTES.MEMBER_LOGIN}
+                  onClick={() => {
+                    setIsOpen(false)
+                  }}
+                >
                   <Button variant="secondary" size="md" className="w-full">
                     Member Login
                   </Button>
                 </Link>
-                <Link to={ROUTES.CONTACT} onClick={() => setIsOpen(false)}>
+                <Link
+                  to={ROUTES.CONTACT}
+                  onClick={() => {
+                    setIsOpen(false)
+                  }}
+                >
                   <Button variant="primary" size="md" className="w-full">
                     Join Now
                   </Button>
@@ -155,5 +195,5 @@ export const Navbar: React.FC = () => {
         </div>
       )}
     </nav>
-  );
-};
+  )
+}

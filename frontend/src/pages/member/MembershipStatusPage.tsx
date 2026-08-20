@@ -1,52 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import { Card } from '../../components/common/Card';
-import { Badge } from '../../components/common/Badge';
-import { Button } from '../../components/common/Button';
-import { Spinner } from '../../components/common/Spinner';
-import { memberService } from '../../services/memberService';
-import { Member } from '../../types';
-import { formatDate, formatCurrency } from '../../utils/formatters';
+import React, { useEffect, useState } from 'react'
+import { Card } from '../../components/common/Card'
+import { Badge } from '../../components/common/Badge'
+import { Button } from '../../components/common/Button'
+import { Spinner } from '../../components/common/Spinner'
+import { memberService } from '../../services/memberService'
+import type { Member } from '../../types'
+import { formatCurrency, formatDate } from '../../utils/formatters'
 import {
+  AlertTriangle,
   Calendar,
+  CheckCircle,
   Clock,
   Dumbbell,
-  AlertTriangle,
-  PhoneCall,
   Mail,
-  CheckCircle,
-} from 'lucide-react';
-import { useSiteConfigStore } from '../../store/siteConfigStore';
+  PhoneCall,
+} from 'lucide-react'
+import { useSiteConfigStore } from '../../store/siteConfigStore'
 
 export const MembershipStatusPage: React.FC = () => {
-  const [member, setMember] = useState<Member | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const getConfig = useSiteConfigStore((s) => s.getConfig);
+  const [member, setMember] = useState<Member | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const getConfig = useSiteConfigStore((s) => s.getConfig)
 
-  const gymPhone = getConfig('gym_phone', '+91 98765 43210');
-  const gymEmail = getConfig('gym_email', 'contact@fitnessgarage.com');
+  const gymPhone = getConfig('gym_phone', '+91 98765 43210')
+  const gymEmail = getConfig('gym_email', 'contact@fitnessgarage.com')
 
   useEffect(() => {
     async function load() {
       try {
-        const profile = await memberService.getMyProfile();
-        setMember(profile);
+        const profile = await memberService.getMyProfile()
+        setMember(profile)
       } catch (err) {
-        console.error('Error fetching membership status:', err);
+        console.error('Error fetching membership status:', err)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
     }
-    load();
-  }, []);
+    load()
+  }, [])
 
-  if (isLoading) return <Spinner size="lg" className="my-24" />;
+  if (isLoading) return <Spinner size="lg" className="my-24" />
 
   // Calculate days remaining
-  const calculateDaysRemaining = (d?: string) => (d ? Math.ceil((new Date(d).getTime() - Date.now()) / 864e5) : 0);
+  const calculateDaysRemaining = (d?: string) =>
+    d ? Math.ceil((new Date(d).getTime() - Date.now()) / 864e5) : 0
 
-  const daysRemaining = calculateDaysRemaining(member?.expiry_date);
-  const isExpiringSoon = daysRemaining > 0 && daysRemaining <= 14;
-  const isExpired = daysRemaining <= 0 || member?.status === 'expired';
+  const daysRemaining = calculateDaysRemaining(member?.expiry_date)
+  const isExpiringSoon = daysRemaining > 0 && daysRemaining <= 14
+  const isExpired = daysRemaining <= 0 || member?.status === 'expired'
 
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
@@ -75,7 +76,11 @@ export const MembershipStatusPage: React.FC = () => {
               Membership Expiring Soon ({daysRemaining} Days Left)
             </h4>
             <p className="text-xs mt-1 text-garage-white/90 font-body">
-              Your gym pass will expire on <span className="font-semibold text-status-pending">{formatDate(member?.expiry_date)}</span>. Please renew at the front desk to avoid gate interruption.
+              Your gym pass will expire on{' '}
+              <span className="font-semibold text-status-pending">
+                {formatDate(member?.expiry_date)}
+              </span>
+              . Please renew at the front desk to avoid gate interruption.
             </p>
           </div>
         </div>
@@ -90,7 +95,8 @@ export const MembershipStatusPage: React.FC = () => {
               Membership Expired
             </h4>
             <p className="text-xs mt-1 text-garage-white/90 font-body">
-              Your subscription lapsed on {formatDate(member?.expiry_date)}. Please visit the gym reception to renew your pass.
+              Your subscription lapsed on {formatDate(member?.expiry_date)}. Please visit the gym
+              reception to renew your pass.
             </p>
           </div>
         </div>
@@ -116,7 +122,9 @@ export const MembershipStatusPage: React.FC = () => {
                 Tier &amp; Duration
               </span>
               <p className="text-2xl font-display uppercase text-garage-chrome tracking-wide">
-                {member?.plan ? `${member.plan.tier.toUpperCase()} — ${member.plan.duration}` : 'General Fitness Pass'}
+                {member?.plan
+                  ? `${member.plan.tier.toUpperCase()} — ${member.plan.duration}`
+                  : 'General Fitness Pass'}
               </p>
             </div>
 
@@ -136,7 +144,8 @@ export const MembershipStatusPage: React.FC = () => {
                 Package Inclusions
               </span>
               <p className="text-xs text-garage-muted mt-1 leading-relaxed">
-                {member?.plan?.description || 'Full unrestricted floor access, locker access, and coach assistance.'}
+                {member?.plan?.description ||
+                  'Full unrestricted floor access, locker access, and coach assistance.'}
               </p>
             </div>
           </div>
@@ -221,7 +230,8 @@ export const MembershipStatusPage: React.FC = () => {
             Need to Renew or Upgrade Your Tier?
           </h4>
           <p className="text-xs text-garage-muted font-body">
-            Speak directly with the Fitness Garage coaching staff at reception or reach out via email.
+            Speak directly with the Fitness Garage coaching staff at reception or reach out via
+            email.
           </p>
         </div>
 
@@ -249,5 +259,5 @@ export const MembershipStatusPage: React.FC = () => {
         </div>
       </Card>
     </div>
-  );
-};
+  )
+}

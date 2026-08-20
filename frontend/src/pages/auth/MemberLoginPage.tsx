@@ -1,133 +1,144 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuthStore } from '../../store/authStore';
-import { ROUTES } from '../../constants/routes';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { FormField } from '../../components/forms/FormField';
-import { User, KeyRound, Mail, Smartphone, ArrowRight, CheckCircle2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuthStore } from '../../store/authStore'
+import { ROUTES } from '../../constants/routes'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { FormField } from '../../components/forms/FormField'
+import { ArrowRight, CheckCircle2, KeyRound, Mail, Smartphone, User } from 'lucide-react'
 
-type AuthTab = 'password' | 'magic-link' | 'phone-otp';
+type AuthTab = 'password' | 'magic-link' | 'phone-otp'
 
 export const MemberLoginPage: React.FC = () => {
-  const navigate = useNavigate();
-  const setAuth = useAuthStore((s) => s.setAuth);
+  const navigate = useNavigate()
+  const setAuth = useAuthStore((s) => s.setAuth)
 
-  const [activeTab, setActiveTab] = useState<AuthTab>('password');
+  const [activeTab, setActiveTab] = useState<AuthTab>('password')
 
   // Form states
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
-  const [otpSent, setOtpSent] = useState(false);
-  const [countdown, setCountdown] = useState(0);
-  const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [phone, setPhone] = useState('')
+  const [otp, setOtp] = useState(['', '', '', '', '', ''])
+  const [otpSent, setOtpSent] = useState(false)
+  const [countdown, setCountdown] = useState(0)
+  const [magicLinkSent, setMagicLinkSent] = useState(false)
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   // Timer countdown effect for OTP resend
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: NodeJS.Timeout
     if (countdown > 0) {
-      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1)
+      }, 1000)
     }
-    return () => clearTimeout(timer);
-  }, [countdown]);
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [countdown])
 
   const handlePasswordLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
+    e.preventDefault()
+    setIsLoading(true)
+    setError(null)
     try {
       // In live environment, wires to supabase.auth.signInWithPassword
-      const fakeToken = `mock-member-jwt-${Date.now()}`;
+      const fakeToken = `mock-member-jwt-${Date.now()}`
       setAuth(fakeToken, {
         id: '11111111-1111-1111-1111-111111111111',
         email: email || 'member@example.com',
         role: 'member',
-      });
-      navigate(ROUTES.MEMBER_DASHBOARD);
-    } catch (err: any) {
-      setError(err.message || 'Authentication failed. Please verify credentials.');
+      })
+      navigate(ROUTES.MEMBER_DASHBOARD)
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : 'Authentication failed. Please verify credentials.'
+      setError(message)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleMagicLinkSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
+    e.preventDefault()
+    setIsLoading(true)
+    setError(null)
     try {
       // In live environment, wires to supabase.auth.signInWithOtp({ email })
-      await new Promise((r) => setTimeout(r, 600));
-      setMagicLinkSent(true);
-    } catch (err: any) {
-      setError(err.message || 'Failed to send magic link. Please try again.');
+      await new Promise((r) => setTimeout(r, 600))
+      setMagicLinkSent(true)
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : 'Failed to send magic link. Please try again.'
+      setError(message)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleSendOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     if (!phone) {
-      setError('Please enter a valid phone number.');
-      return;
+      setError('Please enter a valid phone number.')
+      return
     }
-    setIsLoading(true);
-    setError(null);
+    setIsLoading(true)
+    setError(null)
     try {
       // In live environment, wires to supabase.auth.signInWithOtp({ phone })
-      await new Promise((r) => setTimeout(r, 600));
-      setOtpSent(true);
-      setCountdown(30);
-    } catch (err: any) {
-      setError(err.message || 'Failed to send SMS code. Please try again.');
+      await new Promise((r) => setTimeout(r, 600))
+      setOtpSent(true)
+      setCountdown(30)
+    } catch (err: unknown) {
+      const message =
+        err instanceof Error ? err.message : 'Failed to send SMS code. Please try again.'
+      setError(message)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const enteredOtp = otp.join('');
+    e.preventDefault()
+    const enteredOtp = otp.join('')
     if (enteredOtp.length < 6) {
-      setError('Please enter the full 6-digit verification code.');
-      return;
+      setError('Please enter the full 6-digit verification code.')
+      return
     }
-    setIsLoading(true);
-    setError(null);
+    setIsLoading(true)
+    setError(null)
     try {
       // In live environment, wires to supabase.auth.verifyOtp({ phone, token, type: 'sms' })
-      const fakeToken = `mock-member-jwt-${Date.now()}`;
+      const fakeToken = `mock-member-jwt-${Date.now()}`
       setAuth(fakeToken, {
         id: '11111111-1111-1111-1111-111111111111',
         email: phone,
         role: 'member',
-      });
-      navigate(ROUTES.MEMBER_DASHBOARD);
-    } catch (err: any) {
-      setError(err.message || 'Invalid OTP code. Please try again.');
+      })
+      navigate(ROUTES.MEMBER_DASHBOARD)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Invalid OTP code. Please try again.'
+      setError(message)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleOtpChange = (index: number, val: string) => {
-    if (val.length > 1) val = val.slice(-1);
-    const newOtp = [...otp];
-    newOtp[index] = val;
-    setOtp(newOtp);
+    if (val.length > 1) val = val.slice(-1)
+    const newOtp = [...otp]
+    newOtp[index] = val
+    setOtp(newOtp)
 
     // Auto-advance focus to next input
     if (val && index < 5) {
-      const nextInput = document.getElementById(`otp-input-${index + 1}`);
-      nextInput?.focus();
+      const nextInput = document.getElementById(`otp-input-${index + 1}`)
+      nextInput?.focus()
     }
-  };
+  }
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
@@ -148,7 +159,10 @@ export const MemberLoginPage: React.FC = () => {
         <div className="grid grid-cols-3 gap-1 p-1 bg-garage-black rounded-lg border border-garage-mid mb-6 text-xs font-semibold uppercase">
           <button
             type="button"
-            onClick={() => { setActiveTab('password'); setError(null); }}
+            onClick={() => {
+              setActiveTab('password')
+              setError(null)
+            }}
             className={`py-2 px-1 rounded-md transition-colors flex items-center justify-center gap-1 ${
               activeTab === 'password'
                 ? 'bg-garage-chrome text-garage-black font-bold shadow'
@@ -160,7 +174,10 @@ export const MemberLoginPage: React.FC = () => {
           </button>
           <button
             type="button"
-            onClick={() => { setActiveTab('magic-link'); setError(null); }}
+            onClick={() => {
+              setActiveTab('magic-link')
+              setError(null)
+            }}
             className={`py-2 px-1 rounded-md transition-colors flex items-center justify-center gap-1 ${
               activeTab === 'magic-link'
                 ? 'bg-garage-chrome text-garage-black font-bold shadow'
@@ -172,7 +189,10 @@ export const MemberLoginPage: React.FC = () => {
           </button>
           <button
             type="button"
-            onClick={() => { setActiveTab('phone-otp'); setError(null); }}
+            onClick={() => {
+              setActiveTab('phone-otp')
+              setError(null)
+            }}
             className={`py-2 px-1 rounded-md transition-colors flex items-center justify-center gap-1 ${
               activeTab === 'phone-otp'
                 ? 'bg-garage-chrome text-garage-black font-bold shadow'
@@ -199,7 +219,9 @@ export const MemberLoginPage: React.FC = () => {
               required
               placeholder="athlete@fitnessgarage.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value)
+              }}
             />
             <FormField
               label="Account Password"
@@ -207,7 +229,9 @@ export const MemberLoginPage: React.FC = () => {
               required
               placeholder="••••••••"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value)
+              }}
             />
             <Button
               type="submit"
@@ -232,12 +256,16 @@ export const MemberLoginPage: React.FC = () => {
                   Magic Link Dispatched
                 </h4>
                 <p className="text-xs text-garage-muted font-body">
-                  We have sent an instant login link to <span className="text-garage-white font-semibold">{email}</span>. Click the link in your inbox to enter your portal.
+                  We have sent an instant login link to{' '}
+                  <span className="text-garage-white font-semibold">{email}</span>. Click the link
+                  in your inbox to enter your portal.
                 </p>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setMagicLinkSent(false)}
+                  onClick={() => {
+                    setMagicLinkSent(false)
+                  }}
                   className="mt-4"
                 >
                   Send to different email
@@ -251,10 +279,13 @@ export const MemberLoginPage: React.FC = () => {
                   required
                   placeholder="athlete@fitnessgarage.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                  }}
                 />
                 <p className="text-[11px] text-garage-muted">
-                  No password required. We will send a secure one-click authentication link directly to your inbox.
+                  No password required. We will send a secure one-click authentication link directly
+                  to your inbox.
                 </p>
                 <Button
                   type="submit"
@@ -282,7 +313,9 @@ export const MemberLoginPage: React.FC = () => {
                   required
                   placeholder="+91 98765 43210"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {
+                    setPhone(e.target.value)
+                  }}
                 />
                 <p className="text-[11px] text-garage-muted">
                   Enter your registered phone number to receive a 6-digit verification PIN via SMS.
@@ -302,7 +335,8 @@ export const MemberLoginPage: React.FC = () => {
               <form onSubmit={handleVerifyOtp} className="space-y-5">
                 <div className="text-center">
                   <p className="text-xs text-garage-muted">
-                    Enter the 6-digit code sent to <span className="text-garage-white font-semibold">{phone}</span>
+                    Enter the 6-digit code sent to{' '}
+                    <span className="text-garage-white font-semibold">{phone}</span>
                   </p>
                 </div>
 
@@ -315,7 +349,9 @@ export const MemberLoginPage: React.FC = () => {
                       inputMode="numeric"
                       maxLength={1}
                       value={digit}
-                      onChange={(e) => handleOtpChange(idx, e.target.value)}
+                      onChange={(e) => {
+                        handleOtpChange(idx, e.target.value)
+                      }}
                       className="w-11 h-12 text-center text-xl font-bold rounded-lg bg-garage-black border border-garage-mid text-garage-white focus:border-garage-chrome focus:outline-none transition-colors"
                     />
                   ))}
@@ -335,7 +371,8 @@ export const MemberLoginPage: React.FC = () => {
                 <div className="text-center pt-2">
                   {countdown > 0 ? (
                     <span className="text-xs text-garage-muted">
-                      Resend code in <span className="text-garage-chrome font-mono font-bold">{countdown}s</span>
+                      Resend code in{' '}
+                      <span className="text-garage-chrome font-mono font-bold">{countdown}s</span>
                     </span>
                   ) : (
                     <button
@@ -366,5 +403,5 @@ export const MemberLoginPage: React.FC = () => {
         </div>
       </Card>
     </div>
-  );
-};
+  )
+}

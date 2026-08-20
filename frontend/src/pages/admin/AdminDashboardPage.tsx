@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { AdminSidebar } from '../../components/layout/AdminSidebar';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { StatBlock } from '../../components/common/StatBlock';
-import { ROUTES } from '../../constants/routes';
-import { adminService } from '../../services/adminService';
-import { Users, CreditCard, UploadCloud, UserPlus, FileSpreadsheet } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { AdminSidebar } from '../../components/layout/AdminSidebar'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { StatBlock } from '../../components/common/StatBlock'
+import { ROUTES } from '../../constants/routes'
+import { adminService } from '../../services/adminService'
+import { CreditCard, FileSpreadsheet, UploadCloud, UserPlus, Users } from 'lucide-react'
 
 export const AdminDashboardPage: React.FC = () => {
-  const [memberCount, setMemberCount] = useState<number>(0);
-  const [activeMembers, setActiveMembers] = useState<number>(0);
-  const [totalPayments, setTotalPayments] = useState<number>(0);
+  const [memberCount, setMemberCount] = useState<number>(0)
+  const [activeMembers, setActiveMembers] = useState<number>(0)
+  const [totalPayments, setTotalPayments] = useState<number>(0)
 
   useEffect(() => {
     async function loadStats() {
@@ -20,16 +20,16 @@ export const AdminDashboardPage: React.FC = () => {
           adminService.getMembers(1, 1).catch(() => ({ total: 215 })),
           adminService.getMembers(1, 1, undefined, 'active').catch(() => ({ total: 198 })),
           adminService.getPayments(1, 1).catch(() => ({ total: 340 })),
-        ]);
-        setMemberCount(membersRes.total);
-        setActiveMembers(activeRes.total);
-        setTotalPayments(paymentsRes.total);
+        ])
+        setMemberCount(membersRes.total)
+        setActiveMembers(activeRes.total)
+        setTotalPayments(paymentsRes.total)
       } catch (e) {
-        console.error(e);
+        console.error(e)
       }
     }
-    loadStats();
-  }, []);
+    loadStats()
+  }, [])
 
   return (
     <div className="flex min-h-screen bg-garage-black">
@@ -49,7 +49,11 @@ export const AdminDashboardPage: React.FC = () => {
 
           <div className="flex items-center gap-3">
             <Link to={ROUTES.ADMIN_MEMBER_IMPORT}>
-              <Button variant="secondary" size="sm" leftIcon={<FileSpreadsheet className="w-4 h-4 text-garage-chrome" />}>
+              <Button
+                variant="secondary"
+                size="sm"
+                leftIcon={<FileSpreadsheet className="w-4 h-4 text-garage-chrome" />}
+              >
                 Bulk Import
               </Button>
             </Link>
@@ -63,9 +67,21 @@ export const AdminDashboardPage: React.FC = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatBlock value={memberCount.toString()} label="Total Members" subtext="All time registered" />
-          <StatBlock value={activeMembers.toString()} label="Active Athletes" subtext="Valid memberships" />
-          <StatBlock value={totalPayments.toString()} label="Logged Payments" subtext="Invoices generated" />
+          <StatBlock
+            value={memberCount.toString()}
+            label="Total Members"
+            subtext="All time registered"
+          />
+          <StatBlock
+            value={activeMembers.toString()}
+            label="Active Athletes"
+            subtext="Valid memberships"
+          />
+          <StatBlock
+            value={totalPayments.toString()}
+            label="Logged Payments"
+            subtext="Invoices generated"
+          />
           <StatBlock value="100%" label="System Uptime" subtext="Zero data loss" />
         </div>
 
@@ -124,5 +140,5 @@ export const AdminDashboardPage: React.FC = () => {
         </div>
       </main>
     </div>
-  );
-};
+  )
+}

@@ -1,8 +1,8 @@
-import React from 'react';
+import React from 'react'
 
 export interface DividerProps {
-  className?: string;
-  withSlash?: boolean;
+  className?: string
+  withSlash?: boolean
 }
 
 export const Divider: React.FC<DividerProps> = ({ className = '', withSlash = false }) => {
@@ -13,8 +13,8 @@ export const Divider: React.FC<DividerProps> = ({ className = '', withSlash = fa
         <span className="px-4 text-garage-chrome font-display text-xl select-none">/</span>
         <div className="flex-grow border-t border-garage-mid" />
       </div>
-    );
+    )
   }
 
-  return <hr className={`border-t border-garage-mid my-6 ${className}`} />;
-};
+  return <hr className={`border-t border-garage-mid my-6 ${className}`} />
+}

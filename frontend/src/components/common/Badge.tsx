@@ -1,13 +1,13 @@
-import React from 'react';
-import { MembershipStatus } from '../../types';
-import { getMembershipStatusConfig } from '../../utils/status';
+import React from 'react'
+import type { MembershipStatus } from '../../types'
+import { getMembershipStatusConfig } from '../../utils/status'
 
 export interface BadgeProps {
-  children?: React.ReactNode;
-  status?: MembershipStatus | string;
-  variant?: 'active' | 'expired' | 'pending' | 'suspended' | 'default';
-  className?: string;
-  withDot?: boolean;
+  children?: React.ReactNode
+  status?: MembershipStatus | string
+  variant?: 'active' | 'expired' | 'pending' | 'suspended' | 'default'
+  className?: string
+  withDot?: boolean
 }
 
 export const Badge: React.FC<BadgeProps> = ({
@@ -18,7 +18,7 @@ export const Badge: React.FC<BadgeProps> = ({
   withDot = true,
 }) => {
   if (status) {
-    const config = getMembershipStatusConfig(status);
+    const config = getMembershipStatusConfig(status)
     return (
       <span
         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${config.badgeClass} ${className}`}
@@ -26,7 +26,7 @@ export const Badge: React.FC<BadgeProps> = ({
         {withDot && <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${config.dotClass}`} />}
         {children || config.label}
       </span>
-    );
+    )
   }
 
   const variants = {
@@ -35,9 +35,9 @@ export const Badge: React.FC<BadgeProps> = ({
     pending: 'bg-status-pending/10 text-status-pending border-status-pending/30',
     suspended: 'bg-garage-mid text-garage-muted border-garage-mid',
     default: 'bg-garage-dark text-garage-white border-garage-mid',
-  };
+  }
 
-  const selectedVariant = variant || 'default';
+  const selectedVariant = variant || 'default'
 
   return (
     <span
@@ -45,5 +45,5 @@ export const Badge: React.FC<BadgeProps> = ({
     >
       {children}
     </span>
-  );
-};
+  )
+}

@@ -1,8 +1,8 @@
-import React from 'react';
-import { SectionHeading } from '../../components/common/SectionHeading';
-import { Card } from '../../components/common/Card';
-import { StatBlock } from '../../components/common/StatBlock';
-import { Shield, Target, Award, Zap } from 'lucide-react';
+import React from 'react'
+import { SectionHeading } from '../../components/common/SectionHeading'
+import { Card } from '../../components/common/Card'
+import { StatBlock } from '../../components/common/StatBlock'
+import { Award, Shield, Target, Zap } from 'lucide-react'
 
 export const AboutPage: React.FC = () => {
   return (
@@ -16,13 +16,17 @@ export const AboutPage: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
         <div className="space-y-6 text-garage-muted font-body leading-relaxed text-base md:text-lg">
           <p>
-            Fitness Garage was founded with a single mission: to eliminate commercial gym fluff and deliver an authentic, industrial-grade iron sanctum where progress is the only currency that matters.
+            Fitness Garage was founded with a single mission: to eliminate commercial gym fluff and
+            deliver an authentic, industrial-grade iron sanctum where progress is the only currency
+            that matters.
           </p>
           <p>
-            Every dumbbell, barbell, and custom machine in our facility has been selected with biomechanical precision to ensure safe, maximal hypertrophic and strength stimulation.
+            Every dumbbell, barbell, and custom machine in our facility has been selected with
+            biomechanical precision to ensure safe, maximal hypertrophic and strength stimulation.
           </p>
           <p>
-            Whether you are stepping under a barbell for the first time or prepping for a national powerlifting meet, our coaches and community hold you to the standard you deserve.
+            Whether you are stepping under a barbell for the first time or prepping for a national
+            powerlifting meet, our coaches and community hold you to the standard you deserve.
           </p>
         </div>
 
@@ -82,5 +86,5 @@ export const AboutPage: React.FC = () => {
         </Card>
       </div>
     </div>
-  );
-};
+  )
+}

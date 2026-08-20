@@ -1,6 +1,8 @@
 from uuid import UUID
+
 import asyncpg
 from fastapi import APIRouter, Depends, HTTPException, status
+
 from app.core.auth import AuthenticatedUser, require_member
 from app.schemas.common import PaginatedResponse, SuccessResponse
 from app.schemas.member import MemberResponse
@@ -67,11 +69,15 @@ async def get_payment_invoice(
 
     payment_rec = await payment_queries.get_payment_by_id(pool, payment_id)
     if not payment_rec or payment_rec["member_id"] != member.id:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Payment record not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Payment record not found"
+        )
 
     invoice_path = payment_rec.get("invoice_path")
     if not invoice_path:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Invoice not generated for this payment")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Invoice not generated for this payment"
+        )
 
     signed_url = await get_invoice_signed_url(invoice_path, expires_in=3600)
     return SuccessResponse(

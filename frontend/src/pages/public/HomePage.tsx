@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Flame, Star } from 'lucide-react';
-import { ROUTES } from '../../constants/routes';
-import { publicService } from '../../services/publicService';
-import { Achievement, MembershipPlan, Review, Service } from '../../types';
-import { Button } from '../../components/common/Button';
-import { Card } from '../../components/common/Card';
-import { SectionHeading } from '../../components/common/SectionHeading';
-import { StatBlock } from '../../components/common/StatBlock';
-import { formatCurrency } from '../../utils/formatters';
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, Flame, ShieldCheck, Star } from 'lucide-react'
+import { ROUTES } from '../../constants/routes'
+import { publicService } from '../../services/publicService'
+import type { Achievement, MembershipPlan, Review, Service } from '../../types'
+import { Button } from '../../components/common/Button'
+import { Card } from '../../components/common/Card'
+import { SectionHeading } from '../../components/common/SectionHeading'
+import { StatBlock } from '../../components/common/StatBlock'
+import { formatCurrency } from '../../utils/formatters'
 
 export const HomePage: React.FC = () => {
-  const [services, setServices] = useState<Service[]>([]);
-  const [plans, setPlans] = useState<MembershipPlan[]>([]);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [achievements, setAchievements] = useState<Achievement[]>([]);
+  const [services, setServices] = useState<Service[]>([])
+  const [plans, setPlans] = useState<MembershipPlan[]>([])
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [achievements, setAchievements] = useState<Achievement[]>([])
 
   useEffect(() => {
     async function loadData() {
@@ -24,17 +24,17 @@ export const HomePage: React.FC = () => {
           publicService.getPlans(),
           publicService.getReviews(),
           publicService.getAchievements(),
-        ]);
-        setServices(servicesRes.slice(0, 4));
-        setPlans(plansRes.slice(0, 4));
-        setReviews(reviewsRes.slice(0, 3));
-        setAchievements(achRes);
+        ])
+        setServices(servicesRes.slice(0, 4))
+        setPlans(plansRes.slice(0, 4))
+        setReviews(reviewsRes.slice(0, 3))
+        setAchievements(achRes)
       } catch (err) {
-        console.error('Error fetching homepage data', err);
+        console.error('Error fetching homepage data', err)
       }
     }
-    loadData();
-  }, []);
+    loadData()
+  }, [])
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -54,7 +54,8 @@ export const HomePage: React.FC = () => {
           </h1>
 
           <p className="text-lg md:text-xl text-garage-muted max-w-2xl mx-auto font-body mb-10 leading-relaxed">
-            Welcome to Fitness Garage — an elite dark industrial strength arena equipped with competition-grade iron, certified coaching, and proven transformation blueprints.
+            Welcome to Fitness Garage — an elite dark industrial strength arena equipped with
+            competition-grade iron, certified coaching, and proven transformation blueprints.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -109,7 +110,8 @@ export const HomePage: React.FC = () => {
                   {service.name}
                 </h3>
                 <p className="text-sm text-garage-muted font-body leading-relaxed">
-                  {service.description || 'State-of-the-art equipment designed for maximum muscle engagement.'}
+                  {service.description ||
+                    'State-of-the-art equipment designed for maximum muscle engagement.'}
                 </p>
               </Card>
             ))}
@@ -153,12 +155,17 @@ export const HomePage: React.FC = () => {
                     {formatCurrency(plan.price)}
                   </div>
                   <p className="text-xs text-garage-muted font-body mb-6">
-                    {plan.description || 'Full unrestricted gym access with free locker facilities and coaching support.'}
+                    {plan.description ||
+                      'Full unrestricted gym access with free locker facilities and coaching support.'}
                   </p>
                 </div>
 
                 <Link to={ROUTES.CONTACT} className="w-full">
-                  <Button variant={plan.tier === 'pt' ? 'primary' : 'outline'} size="sm" className="w-full">
+                  <Button
+                    variant={plan.tier === 'pt' ? 'primary' : 'outline'}
+                    size="sm"
+                    className="w-full"
+                  >
                     Enroll Now
                   </Button>
                 </Link>
@@ -194,10 +201,15 @@ export const HomePage: React.FC = () => {
                   ))}
                 </div>
                 <p className="text-sm text-garage-muted italic mb-6 font-body">
-                  "{review.review_text || 'Incredible gym aesthetic, top-tier trainers, and a serious lifting atmosphere!'}"
+                  "
+                  {review.review_text ||
+                    'Incredible gym aesthetic, top-tier trainers, and a serious lifting atmosphere!'}
+                  "
                 </p>
                 <div className="flex items-center justify-between border-t border-garage-mid/50 pt-4 text-xs">
-                  <span className="font-bold text-garage-white uppercase">{review.reviewer_name}</span>
+                  <span className="font-bold text-garage-white uppercase">
+                    {review.reviewer_name}
+                  </span>
                   <span className="text-garage-muted">Verified Google Review</span>
                 </div>
               </Card>
@@ -223,5 +235,5 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
     </div>
-  );
-};
+  )
+}

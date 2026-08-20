@@ -1,14 +1,16 @@
-from unittest.mock import AsyncMock, patch
-from uuid import uuid4
 from datetime import date, datetime
 from decimal import Decimal
+from unittest.mock import AsyncMock, patch
+from uuid import uuid4
+
 import pytest
 from httpx import AsyncClient
+
+from app.core.auth import AuthenticatedUser, get_current_user
 from app.main import app
-from db.connection import get_pool
-from app.core.auth import get_current_user, AuthenticatedUser
 from app.schemas.member import MemberResponse
 from app.schemas.plan import MembershipPlanResponse
+from db.connection import get_pool
 
 
 @pytest.fixture
@@ -101,12 +103,15 @@ async def test_member_payments_list(
         updated_at=datetime(2026, 1, 1, 0, 0, 0),
     )
 
-    with patch(
-        "app.services.member_service.get_member_by_auth",
-        return_value=mock_member_resp,
-    ), patch(
-        "app.services.payment_service.list_payments",
-        return_value=([], 0),
+    with (
+        patch(
+            "app.services.member_service.get_member_by_auth",
+            return_value=mock_member_resp,
+        ),
+        patch(
+            "app.services.payment_service.list_payments",
+            return_value=([], 0),
+        ),
     ):
         response = await client.get("/api/v1/member/payments")
         assert response.status_code == 200

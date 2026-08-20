@@ -1,9 +1,11 @@
 from uuid import uuid4
+
 import pytest
 from httpx import AsyncClient
+
+from app.core.auth import AuthenticatedUser, get_current_user
+from app.core.security import decrypt_pii, encrypt_pii
 from app.main import app
-from app.core.auth import get_current_user, AuthenticatedUser
-from app.core.security import encrypt_pii, decrypt_pii
 
 
 @pytest.fixture
@@ -57,11 +59,24 @@ async def test_aes256_pii_encryption_hardening():
     "method,endpoint,json_payload",
     [
         ("GET", "/api/v1/admin/members", None),
-        ("POST", "/api/v1/admin/members", {"full_name": "Test", "start_date": "2026-01-01", "expiry_date": "2026-02-01"}),
+        (
+            "POST",
+            "/api/v1/admin/members",
+            {"full_name": "Test", "start_date": "2026-01-01", "expiry_date": "2026-02-01"},
+        ),
         ("GET", f"/api/v1/admin/members/{uuid4()}", None),
         ("DELETE", f"/api/v1/admin/members/{uuid4()}", None),
         ("GET", "/api/v1/admin/payments", None),
-        ("POST", "/api/v1/admin/payments", {"member_id": str(uuid4()), "amount": 100, "payment_date": "2026-01-01", "payment_method": "cash"}),
+        (
+            "POST",
+            "/api/v1/admin/payments",
+            {
+                "member_id": str(uuid4()),
+                "amount": 100,
+                "payment_date": "2026-01-01",
+                "payment_method": "cash",
+            },
+        ),
         ("GET", "/api/v1/admin/plans", None),
         ("GET", "/api/v1/admin/services", None),
         ("GET", "/api/v1/admin/trainers", None),
@@ -73,7 +88,11 @@ async def test_aes256_pii_encryption_hardening():
     ],
 )
 async def test_role_escalation_forbidden_for_members(
-    client: AsyncClient, mock_member_auth: AuthenticatedUser, method: str, endpoint: str, json_payload: dict
+    client: AsyncClient,
+    mock_member_auth: AuthenticatedUser,
+    method: str,
+    endpoint: str,
+    json_payload: dict,
 ):
     if method == "GET":
         resp = await client.get(endpoint)

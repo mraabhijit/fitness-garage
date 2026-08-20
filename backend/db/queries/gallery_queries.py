@@ -1,5 +1,6 @@
-from typing import List, Optional
+from typing import Any, List, Optional
 from uuid import UUID
+
 import asyncpg
 
 
@@ -9,7 +10,7 @@ async def get_gallery_items(
     active_only: bool = False,
 ) -> List[asyncpg.Record]:
     conditions = []
-    params: list = []
+    params: List[Any] = []
 
     if folder_path:
         params.append(folder_path)
@@ -51,7 +52,7 @@ async def create_gallery_item(
     display_order: int = 0,
     is_active: bool = True,
     uploaded_by: Optional[UUID] = None,
-) -> asyncpg.Record:
+) -> Optional[asyncpg.Record]:
     return await pool.fetchrow(
         """
         INSERT INTO gallery (

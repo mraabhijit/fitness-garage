@@ -1,6 +1,8 @@
 import logging
-from typing import AsyncGenerator
+from typing import Any, AsyncGenerator
+
 import asyncpg
+
 from app.core.config import settings
 
 logger = logging.getLogger("fitness_garage.db")
@@ -38,11 +40,13 @@ async def close_pool() -> None:
 
 async def get_pool() -> asyncpg.Pool:
     if _pool is None:
-        raise RuntimeError("Database pool is not initialized. Check your DATABASE_URL configuration.")
+        raise RuntimeError(
+            "Database pool is not initialized. Check your DATABASE_URL configuration."
+        )
     return _pool
 
 
-async def get_db_connection() -> AsyncGenerator[asyncpg.Connection, None]:
+async def get_db_connection() -> AsyncGenerator[Any, None]:
     pool = await get_pool()
     async with pool.acquire() as conn:
         yield conn

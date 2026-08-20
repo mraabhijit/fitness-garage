@@ -1,38 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { SectionHeading } from '../../components/common/SectionHeading';
-import { Card } from '../../components/common/Card';
-import { Button } from '../../components/common/Button';
-import { Spinner } from '../../components/common/Spinner';
-import { ROUTES } from '../../constants/routes';
-import { publicService } from '../../services/publicService';
-import { MembershipPlan } from '../../types';
-import { formatCurrency } from '../../utils/formatters';
-import { Check } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { SectionHeading } from '../../components/common/SectionHeading'
+import { Card } from '../../components/common/Card'
+import { Button } from '../../components/common/Button'
+import { Spinner } from '../../components/common/Spinner'
+import { ROUTES } from '../../constants/routes'
+import { publicService } from '../../services/publicService'
+import type { MembershipPlan } from '../../types'
+import { formatCurrency } from '../../utils/formatters'
+import { Check } from 'lucide-react'
 
 export const PlansPage: React.FC = () => {
-  const [plans, setPlans] = useState<MembershipPlan[]>([]);
-  const [selectedTier, setSelectedTier] = useState<'all' | 'basic' | 'pt'>('all');
-  const [isLoading, setIsLoading] = useState(true);
+  const [plans, setPlans] = useState<MembershipPlan[]>([])
+  const [selectedTier, setSelectedTier] = useState<'all' | 'basic' | 'pt'>('all')
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     async function load() {
       try {
-        const data = await publicService.getPlans();
-        setPlans(data);
+        const data = await publicService.getPlans()
+        setPlans(data)
       } catch (e) {
-        console.error(e);
+        console.error(e)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
     }
-    load();
-  }, []);
+    load()
+  }, [])
 
   const filteredPlans = plans.filter((p) => {
-    if (selectedTier === 'all') return true;
-    return p.tier === selectedTier;
-  });
+    if (selectedTier === 'all') return true
+    return p.tier === selectedTier
+  })
 
   return (
     <div className="py-16 md:py-24 px-4 max-w-7xl mx-auto">
@@ -46,25 +46,37 @@ export const PlansPage: React.FC = () => {
       <div className="flex justify-center mb-12">
         <div className="inline-flex p-1 bg-garage-dark border border-garage-mid rounded-xl">
           <button
-            onClick={() => setSelectedTier('all')}
+            onClick={() => {
+              setSelectedTier('all')
+            }}
             className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-              selectedTier === 'all' ? 'bg-garage-chrome text-garage-black' : 'text-garage-muted hover:text-garage-white'
+              selectedTier === 'all'
+                ? 'bg-garage-chrome text-garage-black'
+                : 'text-garage-muted hover:text-garage-white'
             }`}
           >
             All Plans
           </button>
           <button
-            onClick={() => setSelectedTier('basic')}
+            onClick={() => {
+              setSelectedTier('basic')
+            }}
             className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-              selectedTier === 'basic' ? 'bg-garage-chrome text-garage-black' : 'text-garage-muted hover:text-garage-white'
+              selectedTier === 'basic'
+                ? 'bg-garage-chrome text-garage-black'
+                : 'text-garage-muted hover:text-garage-white'
             }`}
           >
             General Access
           </button>
           <button
-            onClick={() => setSelectedTier('pt')}
+            onClick={() => {
+              setSelectedTier('pt')
+            }}
             className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
-              selectedTier === 'pt' ? 'bg-garage-chrome text-garage-black' : 'text-garage-muted hover:text-garage-white'
+              selectedTier === 'pt'
+                ? 'bg-garage-chrome text-garage-black'
+                : 'text-garage-muted hover:text-garage-white'
             }`}
           >
             Personal Training (PT)
@@ -147,5 +159,5 @@ export const PlansPage: React.FC = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

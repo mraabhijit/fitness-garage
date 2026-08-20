@@ -58,8 +58,8 @@ export const ServicesAdminPage: React.FC = () => {
       name: svc.name,
       slug: svc.slug,
       description: svc.description || '',
-      display_order: svc.display_order,
-      is_active: svc.is_active,
+      display_order: svc.display_order ?? 0,
+      is_active: svc.is_active ?? true,
     })
     setIsModalOpen(true)
   }

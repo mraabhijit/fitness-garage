@@ -54,8 +54,8 @@ export const StatsAdminPage: React.FC = () => {
     setFormData({
       label: ach.label,
       value: ach.value || '',
-      display_order: ach.display_order,
-      is_active: ach.is_active,
+      display_order: ach.display_order ?? 0,
+      is_active: ach.is_active ?? true,
     })
     setIsModalOpen(true)
   }

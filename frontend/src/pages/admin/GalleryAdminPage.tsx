@@ -120,7 +120,7 @@ export const GalleryAdminPage: React.FC = () => {
                       <ImageIcon className="w-10 h-10 text-garage-muted/40" />
                     )}
                     <span className="absolute top-2 left-2 px-2 py-0.5 rounded bg-garage-black/80 text-[10px] uppercase font-bold text-garage-chrome border border-garage-mid">
-                      {item.folder_path.replace('assets/', '')}
+                      {(item.folder_path || item.folder || 'gallery').replace('assets/', '')}
                     </span>
                   </div>
 

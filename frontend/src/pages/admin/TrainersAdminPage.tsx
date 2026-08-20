@@ -67,8 +67,8 @@ export const TrainersAdminPage: React.FC = () => {
       experience_years: t.experience_years,
       certifications: (t.certifications || []).join(', '),
       bio: t.bio || '',
-      display_order: t.display_order,
-      is_active: t.is_active,
+      display_order: t.display_order ?? 0,
+      is_active: t.is_active ?? true,
     })
     setIsModalOpen(true)
   }

@@ -42,7 +42,7 @@ export const PlansAdminPage: React.FC = () => {
     setFormData({
       price: Number(plan.price),
       description: plan.description || '',
-      is_active: plan.is_active,
+      is_active: plan.is_active ?? true,
     })
   }
 

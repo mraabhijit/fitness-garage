@@ -20,8 +20,10 @@ on:
     branches:
       - develop
       - "feature/**"
+      - "feat/**"
       - "fix/**"
       - "chore/**"
+      - "deploy/**"
   pull_request:
     branches:
       - develop

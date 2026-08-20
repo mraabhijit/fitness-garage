@@ -1,7 +1,6 @@
 /**
  * Constructs asset URLs for static and media assets.
- * Phase 1: Serves static assets from Vercel CDN (/public/assets/<folder>/<filename>)
- * Phase 2: Single swap point to prefix Supabase Storage URL if needed.
+ * Supports root and subpath deployments (e.g. GitHub Pages /fitness-garage/).
  */
 export function buildAssetUrl(folder: string, filename?: string | null): string {
   if (!filename) return ''
@@ -10,9 +9,10 @@ export function buildAssetUrl(folder: string, filename?: string | null): string 
   }
   const cleanFolder = folder.replace(/^\/+|\/+$/g, '')
   const cleanFilename = filename.replace(/^\/+/, '')
+  const base = import.meta.env.BASE_URL.replace(/\/+$/, '')
 
   if (cleanFolder.startsWith('assets/')) {
-    return `/${cleanFolder}/${cleanFilename}`
+    return `${base}/${cleanFolder}/${cleanFilename}`
   }
-  return `/assets/${cleanFolder}/${cleanFilename}`
+  return `${base}/assets/${cleanFolder}/${cleanFilename}`
 }

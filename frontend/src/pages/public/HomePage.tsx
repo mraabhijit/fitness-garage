@@ -15,6 +15,7 @@ import { GoogleReviews } from '../../features/reviews/GoogleReviews'
 export const HomePage: React.FC = () => {
   const [services, setServices] = useState<Service[]>([])
   const [plans, setPlans] = useState<MembershipPlan[]>([])
+  const [activeTier, setActiveTier] = useState<'basic' | 'pt'>('basic')
   const [heroData, setHeroData] = useState<HeroData | null>(null)
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export const HomePage: React.FC = () => {
           publicService.getHeroData(),
         ])
         setServices(servicesRes.slice(0, 4))
-        setPlans(plansRes.slice(0, 4))
+        setPlans(plansRes)
         setHeroData(heroRes)
       } catch (err) {
         console.error('Error fetching homepage data', err)
@@ -34,6 +35,8 @@ export const HomePage: React.FC = () => {
     }
     loadData()
   }, [])
+
+  const displayedPlans = plans.filter((p) => p.tier === activeTier)
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -46,7 +49,7 @@ export const HomePage: React.FC = () => {
           />
         )}
 
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-garage-dark via-garage-black to-black opacity-80" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-garage-dark/40 via-garage-black/60 to-black/80 pointer-events-none" />
 
         <div className="relative z-10 max-w-5xl mx-auto text-center py-20">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-garage-chrome/10 border border-garage-chrome/30 text-garage-chrome text-xs font-bold uppercase tracking-widest mb-8">
@@ -123,8 +126,36 @@ export const HomePage: React.FC = () => {
             subtitle="Straightforward plans with zero hidden maintenance fees or long-term lock-ins."
           />
 
+          {/* Tier Filter Toggle */}
+          <div className="flex justify-center mb-10">
+            <div className="inline-flex p-1 bg-garage-dark border border-garage-mid rounded-xl">
+              <button
+                type="button"
+                onClick={() => setActiveTier('basic')}
+                className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  activeTier === 'basic'
+                    ? 'bg-garage-chrome text-garage-black shadow-md'
+                    : 'text-garage-muted hover:text-garage-white'
+                }`}
+              >
+                General Access
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTier('pt')}
+                className={`px-5 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  activeTier === 'pt'
+                    ? 'bg-garage-chrome text-garage-black shadow-md'
+                    : 'text-garage-muted hover:text-garage-white'
+                }`}
+              >
+                Personal Training (PT)
+              </button>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {plans.map((plan) => (
+            {displayedPlans.map((plan) => (
               <PlanCard key={plan.id} plan={plan} />
             ))}
           </div>

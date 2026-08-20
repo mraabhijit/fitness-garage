@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#D4AF37" stop-opacity="0.2"/>
+      <stop offset="70%" stop-color="#222222" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#141414" stop-opacity="1"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="600" fill="#1A1A1A"/>
+  <rect width="800" height="600" fill="url(#glow)"/>
+  <rect x="40" y="40" width="720" height="520" rx="16" fill="none" stroke="#3D3D3D" stroke-width="2"/>
+  <circle cx="400" cy="240" r="80" fill="#2C2C2C" stroke="#D4AF37" stroke-width="4"/>
+  <text x="400" y="255" font-family="sans-serif" font-size="48" font-weight="bold" fill="#D4AF37" text-anchor="middle">FG</text>
+  <text x="400" y="380" font-family="sans-serif" font-size="28" font-weight="bold" fill="#F0F0F0" text-anchor="middle" letter-spacing="2">12-WEEK TRANSFORMATION</text>
+  <text x="400" y="420" font-family="sans-serif" font-size="16" fill="#9A9A9A" text-anchor="middle">-14kg Fat Loss & Core Definition</text>
+</svg>

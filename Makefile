@@ -8,7 +8,7 @@
 # Prerequisites: Node.js 20+, npm
 
 .PHONY: help setup install dev lint lint-frontend format format-frontend \
-        test test-frontend validate-data \
+        test test-frontend validate-data sync-reviews \
         docker-up docker-up-d docker-down docker-build docker-logs \
         docker-shell docker-rebuild \
         pre-commit-install pre-commit-run pre-commit-update \
@@ -168,6 +168,9 @@ pre-commit-update: ## Update all hook versions to latest
 # CONTENT MANAGEMENT
 # ─────────────────────────────────────────────────────────────
 content-check: validate-data placeholder-check ## Full content audit (validation + placeholder check)
+
+sync-reviews: ## Sync up to 20 verified reviews from Google Maps into src/data/reviews.json
+	@python3 scripts/sync_reviews.py
 
 # ─────────────────────────────────────────────────────────────
 # GIT WORKFLOW SHORTCUTS

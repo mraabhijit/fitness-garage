@@ -5,56 +5,108 @@
       "tier": "basic",
       "duration": "monthly",
       "price": 1500,
-      "description": "Full access to gym floor, cardio arena, and locker facilities for 1 month."
+      "description": "Standard full gym access for 1 month.",
+      "features": [
+        "Unrestricted Gym Floor Access",
+        "Free Weights & Competition Racks",
+        "Locker Room & Shower Facilities"
+      ],
+      "badge": null
     },
     {
       "id": "2",
       "tier": "basic",
       "duration": "quarterly",
       "price": 4000,
-      "description": "3 months of full gym access with complimentary fitness assessment."
+      "description": "3 months full gym access with 11% savings.",
+      "features": [
+        "Unrestricted Gym Floor Access",
+        "Free Weights & Competition Racks",
+        "Locker Room & Shower Facilities"
+      ],
+      "badge": "Save ₹500"
     },
     {
       "id": "3",
       "tier": "basic",
       "duration": "half_yearly",
       "price": 7500,
-      "description": "6 months access including 1 free personal trainer orientation session."
+      "description": "6 months full gym access with 17% savings.",
+      "features": [
+        "Unrestricted Gym Floor Access",
+        "Free Weights & Competition Racks",
+        "Locker Room & Shower Facilities"
+      ],
+      "badge": "Save ₹1,500"
     },
     {
       "id": "4",
       "tier": "basic",
       "duration": "annual",
       "price": 13500,
-      "description": "12 months unlimited access, 2 trainer sessions, and priority locker access."
+      "description": "12 months unlimited access with 25% annual savings.",
+      "features": [
+        "Unrestricted Gym Floor Access",
+        "Free Weights & Competition Racks",
+        "Locker Room & Shower Facilities"
+      ],
+      "badge": "Best Value (Save ₹4,500)"
     },
     {
       "id": "5",
       "tier": "pt",
       "duration": "monthly",
       "price": 5000,
-      "description": "Full gym access plus 12 dedicated 1-on-1 personal training sessions per month."
+      "description": "1 month of dedicated 1-on-1 personal coaching.",
+      "features": [
+        "All General Floor & Locker Access",
+        "Dedicated 1-on-1 Certified Coach",
+        "Custom Workout & Periodized Split",
+        "Personalized Macro & Nutrition Plan"
+      ],
+      "badge": null
     },
     {
       "id": "6",
       "tier": "pt",
       "duration": "quarterly",
       "price": 14000,
-      "description": "3 months with 36 personal coaching sessions, customized diet chart, and biometric tracking."
+      "description": "3 months of personal coaching with 7% savings.",
+      "features": [
+        "All General Floor & Locker Access",
+        "Dedicated 1-on-1 Certified Coach",
+        "Custom Workout & Periodized Split",
+        "Personalized Macro & Nutrition Plan"
+      ],
+      "badge": "Save ₹1,000"
     },
     {
       "id": "7",
       "tier": "pt",
       "duration": "half_yearly",
       "price": 26000,
-      "description": "6 months comprehensive coaching with 72 sessions and bi-weekly nutrition reviews."
+      "description": "6 months of personal coaching with 13% savings.",
+      "features": [
+        "All General Floor & Locker Access",
+        "Dedicated 1-on-1 Certified Coach",
+        "Custom Workout & Periodized Split",
+        "Personalized Macro & Nutrition Plan"
+      ],
+      "badge": "Save ₹4,000"
     },
     {
       "id": "8",
       "tier": "pt",
       "duration": "annual",
       "price": 48000,
-      "description": "Full year VIP personal coaching with unlimited guidance, nutrition planning, and transformation tracking."
+      "description": "12 months VIP coaching with 20% annual savings.",
+      "features": [
+        "All General Floor & Locker Access",
+        "Dedicated 1-on-1 Certified Coach",
+        "Custom Workout & Periodized Split",
+        "Personalized Macro & Nutrition Plan"
+      ],
+      "badge": "Best Value (Save ₹12,000)"
     }
   ]
 }

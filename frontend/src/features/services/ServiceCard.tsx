@@ -1,18 +1,55 @@
-import React from 'react'
+import React, { useState } from 'react'
 import type { Service } from '../../types'
 import { Card } from '../../components/common/Card'
 import { buildAssetUrl } from '../../utils/buildAssetUrl'
-import { Dumbbell } from 'lucide-react'
+import {
+  Activity,
+  Dumbbell,
+  Flame,
+  HeartPulse,
+  Scale,
+  Shield,
+  Sparkles,
+  Zap,
+  type LucideIcon,
+} from 'lucide-react'
 
 export interface ServiceCardProps {
   service: Service
   index?: number
 }
 
+const SERVICE_ICON_MAP: Record<string, LucideIcon> = {
+  'personal-training': Dumbbell,
+  'strength-conditioning': Flame,
+  'bodybuilding-hypertrophy': Activity,
+  'hiit-cardio': Zap,
+  'functional-fitness': Shield,
+  'nutrition-consultation': Scale,
+  'weight-loss-transformation': Sparkles,
+  'recovery-mobility': HeartPulse,
+}
+
+const DEFAULT_ICONS: LucideIcon[] = [
+  Dumbbell,
+  Flame,
+  Activity,
+  Zap,
+  Shield,
+  Scale,
+  Sparkles,
+  HeartPulse,
+]
+
 export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index = 0 }) => {
-  const iconUrl = service.icon_filename
-    ? buildAssetUrl('services', service.icon_filename)
-    : null
+  const [imageError, setImageError] = useState(false)
+  const FallbackIcon =
+    SERVICE_ICON_MAP[service.slug] || DEFAULT_ICONS[index % DEFAULT_ICONS.length]
+
+  const iconUrl =
+    !imageError && service.icon_filename
+      ? buildAssetUrl('services', service.icon_filename)
+      : null
 
   return (
     <Card hoverEffect className="p-8 flex flex-col justify-between group">
@@ -23,12 +60,10 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index = 0 }) 
               src={iconUrl}
               alt={service.name}
               className="w-7 h-7 object-contain"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none'
-              }}
+              onError={() => setImageError(true)}
             />
           ) : (
-            <Dumbbell className="w-7 h-7" />
+            <FallbackIcon className="w-7 h-7" />
           )}
         </div>
         <h3 className="text-2xl font-display uppercase tracking-wider text-garage-white mb-3">
@@ -37,10 +72,6 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index = 0 }) 
         <p className="text-garage-muted text-sm leading-relaxed font-body">
           {service.description}
         </p>
-      </div>
-      <div className="mt-8 pt-4 border-t border-garage-mid/40 flex items-center justify-between text-xs text-garage-chrome uppercase tracking-wider font-semibold">
-        <span>Elite Protocol</span>
-        <span className="text-garage-muted">FG-{String(index + 1).padStart(2, '0')}</span>
       </div>
     </Card>
   )

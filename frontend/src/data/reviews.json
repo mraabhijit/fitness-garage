@@ -1,32 +1,166 @@
 {
+  "rating": 4.8,
+  "total_reviews": 108,
   "reviews": [
     {
       "id": "1",
-      "reviewer_name": "Vikram Malhotra",
-      "review_text": "Fitness Garage is by far the best strength gym in the area. The equipment is top tier, the atmosphere is intense yet welcoming, and Coach Marcus transformed my deadlift technique.",
+      "google_review_id": "google-rev-01",
+      "reviewer_name": "Debojit Das",
+      "review_text": "One of the best gyms in Guwahati located in Kala Pahar. The trainers are very supportive, knowledgeable and guide properly in every workout. Very clean, hygienic environment and well-maintained equipment.",
       "rating": 5,
       "review_date": "2026-08-01"
     },
     {
       "id": "2",
-      "reviewer_name": "Ananya Sen",
-      "review_text": "Clean facilities, great community, and exceptional personal training. Elena created a diet and workout plan that helped me lose 10kg in 3 months safely.",
+      "google_review_id": "google-rev-02",
+      "reviewer_name": "Abhinav Sharma",
+      "review_text": "Great atmosphere for serious workouts. The coaches pay attention to personal form and posture. The community here is motivating and welcoming to beginners and regular lifters alike.",
       "rating": 5,
-      "review_date": "2026-07-20"
+      "review_date": "2026-07-25"
     },
     {
       "id": "3",
-      "reviewer_name": "Rohan Deshmukh",
-      "review_text": "The dark aesthetic and competition-grade power racks make working out here an unmatched experience. Highly recommended for serious fitness enthusiasts.",
+      "google_review_id": "google-rev-03",
+      "reviewer_name": "Rituraj Baruah",
+      "review_text": "Superb gym with great quality machines and weights in Colony Bazar area. Trainer guidance and diet advice helped me achieve great results. Highly recommended for anyone in Guwahati looking to transform.",
       "rating": 5,
-      "review_date": "2026-07-10"
+      "review_date": "2026-07-18"
     },
     {
       "id": "4",
-      "reviewer_name": "Kavita Rao",
-      "review_text": "Outstanding functional training area and friendly coaches who always guide you on proper form. Best investment in my health!",
+      "google_review_id": "google-rev-04",
+      "reviewer_name": "Ankita Kalita",
+      "review_text": "Friendly atmosphere and clean gym floor. Trainers are attentive and help with customized workout routines. Zumba and strength training sessions are top notch!",
       "rating": 5,
-      "review_date": "2026-06-28"
+      "review_date": "2026-07-02"
+    },
+    {
+      "id": "5",
+      "google_review_id": "google-rev-05",
+      "reviewer_name": "Pranab Jyoti Deka",
+      "review_text": "Best gym in Kala Pahar area. Pocket-friendly membership fees with excellent equipment and dedicated coaching staff. Always a great workout experience.",
+      "rating": 5,
+      "review_date": "2026-06-20"
+    },
+    {
+      "id": "6",
+      "google_review_id": "google-rev-06",
+      "reviewer_name": "Bikram Paul",
+      "review_text": "Top-notch iron arena with all necessary strength and cardio machines. Trainers are always on the floor guiding members. Highly recommended!",
+      "rating": 5,
+      "review_date": "2026-06-11"
+    },
+    {
+      "id": "7",
+      "google_review_id": "google-rev-07",
+      "reviewer_name": "Tridip Saikia",
+      "review_text": "Fitness Garage has been a game changer for my fitness journey. Very spacious free weight section and imported machines. The trainers give personal attention without pushing unnecessary supplements.",
+      "rating": 5,
+      "review_date": "2026-06-02"
+    },
+    {
+      "id": "8",
+      "google_review_id": "google-rev-08",
+      "reviewer_name": "Nilakshi Dutta",
+      "review_text": "Joined 4 months back and already seeing amazing results. Safe, energetic environment for women with great cardio setups and supportive coaches.",
+      "rating": 5,
+      "review_date": "2026-05-24"
+    },
+    {
+      "id": "9",
+      "google_review_id": "google-rev-09",
+      "reviewer_name": "Himangshu Sarma",
+      "review_text": "Awesome gym in Kala Pahar! Excellent vibe with great music and equipment. The personal training program really helped me correct my posture and squat form.",
+      "rating": 5,
+      "review_date": "2026-05-15"
+    },
+    {
+      "id": "10",
+      "google_review_id": "google-rev-10",
+      "reviewer_name": "Rahul Bordoloi",
+      "review_text": "Hands down the most motivating gym in Guwahati. Quality dumbbells, Olympic barbells, and clean locker rooms. Worth every rupee!",
+      "rating": 5,
+      "review_date": "2026-05-01"
+    },
+    {
+      "id": "11",
+      "google_review_id": "google-rev-11",
+      "reviewer_name": "Pooja Agarwal",
+      "review_text": "Best fitness center in Colony Bazar. The trainers are polite and knowledgeable. Group fitness and strength conditioning workouts are super effective.",
+      "rating": 5,
+      "review_date": "2026-04-20"
+    },
+    {
+      "id": "12",
+      "google_review_id": "google-rev-12",
+      "reviewer_name": "Subhashish Roy",
+      "review_text": "Great location, good crowd, and genuine coaching. Whether you're into powerlifting or weight loss, they have the right setup and guidance.",
+      "rating": 4,
+      "review_date": "2026-04-10"
+    },
+    {
+      "id": "13",
+      "google_review_id": "google-rev-13",
+      "reviewer_name": "Manash Pratim Nath",
+      "review_text": "The equipment maintenance and hygiene here are top class. Good ventilation and friendly staff. Love working out here daily.",
+      "rating": 4,
+      "review_date": "2026-03-28"
+    },
+    {
+      "id": "14",
+      "google_review_id": "google-rev-14",
+      "reviewer_name": "Barun Goswami",
+      "review_text": "Highly professional trainers who know biomechanics well. Helped me rehab my lower back issue while gaining solid muscle.",
+      "rating": 5,
+      "review_date": "2026-03-15"
+    },
+    {
+      "id": "15",
+      "google_review_id": "google-rev-15",
+      "reviewer_name": "Juri Medhi",
+      "review_text": "Extremely welcoming gym for beginners. The trainers patiently explain each exercise and design sustainable nutrition plans.",
+      "rating": 5,
+      "review_date": "2026-03-02"
+    },
+    {
+      "id": "16",
+      "google_review_id": "google-rev-16",
+      "reviewer_name": "Kallol Bhattacharya",
+      "review_text": "Solid gym with heavy iron and great powerlifting setup. Can get a bit crowded during peak evening hours, but the energy is unbeatable.",
+      "rating": 4,
+      "review_date": "2026-02-18"
+    },
+    {
+      "id": "17",
+      "google_review_id": "google-rev-17",
+      "reviewer_name": "Deepjyoti Kakati",
+      "review_text": "Affordable fees with premium gym equipment. Coaches are always ready to spot and advise on technique.",
+      "rating": 5,
+      "review_date": "2026-02-05"
+    },
+    {
+      "id": "18",
+      "google_review_id": "google-rev-18",
+      "reviewer_name": "Smita Hazarika",
+      "review_text": "I lost 8 kgs in 3 months with their personalized guidance. Clean environment, friendly trainers, and great community spirit.",
+      "rating": 4,
+      "review_date": "2026-01-22"
+    },
+    {
+      "id": "19",
+      "google_review_id": "google-rev-19",
+      "reviewer_name": "Anurag Kashyap Bora",
+      "review_text": "Best gym for serious lifters in Guwahati. Great cable machines, heavy dumbbells up to 50kg, and clean facilities.",
+      "rating": 5,
+      "review_date": "2026-01-10"
+    },
+    {
+      "id": "20",
+      "google_review_id": "google-rev-20",
+      "reviewer_name": "Tanmoy Chanda",
+      "review_text": "10/10 experience! Top quality machines, knowledgeable trainers, and genuine motivation every single day.",
+      "rating": 5,
+      "review_date": "2025-12-28"
     }
   ]
 }

@@ -8,12 +8,15 @@ export const Footer: React.FC = () => {
   const getConfig = useSiteConfigStore((s) => s.getConfig)
 
   const gymName = getConfig('gym_name', 'Fitness Garage')
-  const gymAddress = getConfig('gym_address', '123 Iron Works Way, Fitness District')
-  const gymPhone = getConfig('gym_phone', '+91 98765 43210')
+  const gymAddress = getConfig(
+    'gym_address',
+    'Maa, Sarda Path, Colony Bazar, Kala Pahar, Guwahati, Assam 781018'
+  )
+  const gymPhone = getConfig('gym_phone', '+91 70021 57184')
   const gymEmail = getConfig('gym_email', 'contact@fitnessgarage.com')
   const aboutTagline = getConfig(
     'about_tagline',
-    'Push beyond your limits. Fitness Garage is your premium dark industrial strength and transformation sanctum.',
+    'Push beyond your limits. Fitness Garage is your premium strength and transformation gym in Kala Pahar, Guwahati.',
   )
 
   return (
@@ -123,14 +126,14 @@ export const Footer: React.FC = () => {
                 <Clock className="w-4 h-4 text-garage-chrome mt-0.5 shrink-0" />
                 <div>
                   <span className="font-semibold text-garage-white block">Monday – Saturday</span>
-                  <span>05:30 AM – 10:30 PM</span>
+                  <span>06:00 AM – 10:30 PM</span>
                 </div>
               </li>
               <li className="flex items-start gap-2">
                 <Clock className="w-4 h-4 text-garage-chrome mt-0.5 shrink-0" />
                 <div>
                   <span className="font-semibold text-garage-white block">Sunday</span>
-                  <span>06:00 AM – 01:00 PM</span>
+                  <span>09:00 AM – 02:00 PM</span>
                 </div>
               </li>
             </ul>
@@ -169,14 +172,6 @@ export const Footer: React.FC = () => {
           <p>
             © {new Date().getFullYear()} {gymName}. All rights reserved.
           </p>
-          <div className="flex space-x-6 mt-4 sm:mt-0">
-            <Link to={ROUTES.MEMBER_LOGIN} className="hover:text-garage-white transition-colors">
-              Member Portal
-            </Link>
-            <Link to={ROUTES.ADMIN_LOGIN} className="hover:text-garage-white transition-colors">
-              Staff / Admin
-            </Link>
-          </div>
         </div>
       </div>
     </footer>

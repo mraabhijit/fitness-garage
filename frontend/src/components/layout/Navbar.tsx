@@ -89,11 +89,6 @@ export const Navbar: React.FC = () => {
               </div>
             ) : (
               <div className="flex items-center space-x-3">
-                <Link to={ROUTES.MEMBER_LOGIN}>
-                  <Button variant="ghost" size="sm">
-                    Member Login
-                  </Button>
-                </Link>
                 <Link to={ROUTES.CONTACT}>
                   <Button variant="primary" size="sm">
                     Join Now
@@ -168,28 +163,16 @@ export const Navbar: React.FC = () => {
                 </Button>
               </>
             ) : (
-              <>
-                <Link
-                  to={ROUTES.MEMBER_LOGIN}
-                  onClick={() => {
-                    setIsOpen(false)
-                  }}
-                >
-                  <Button variant="secondary" size="md" className="w-full">
-                    Member Login
-                  </Button>
-                </Link>
-                <Link
-                  to={ROUTES.CONTACT}
-                  onClick={() => {
-                    setIsOpen(false)
-                  }}
-                >
-                  <Button variant="primary" size="md" className="w-full">
-                    Join Now
-                  </Button>
-                </Link>
-              </>
+              <Link
+                to={ROUTES.CONTACT}
+                onClick={() => {
+                  setIsOpen(false)
+                }}
+              >
+                <Button variant="primary" size="md" className="w-full">
+                  Join Now
+                </Button>
+              </Link>
             )}
           </div>
         </div>

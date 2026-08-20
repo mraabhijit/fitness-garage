@@ -4,7 +4,8 @@ import { Card } from '../../components/common/Card'
 import { Button } from '../../components/common/Button'
 import { FormField } from '../../components/forms/FormField'
 import { TextareaField } from '../../components/forms/TextareaField'
-import { CheckCircle2, Clock, Mail, MapPin, Phone, Send } from 'lucide-react'
+import { CheckCircle2, Clock, ExternalLink, Mail, MapPin, Phone, Send } from 'lucide-react'
+import { useSiteConfigStore } from '../../store/siteConfigStore'
 
 export const ContactPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false)
@@ -14,6 +15,23 @@ export const ContactPage: React.FC = () => {
     email: '',
     message: '',
   })
+
+  const getConfig = useSiteConfigStore((s) => s.getConfig)
+  const address = getConfig(
+    'address',
+    'Maa, Sarda Path, Colony Bazar, Kala Pahar, Gopinath Nagar, Guwahati, Assam 781018'
+  )
+  const phone = getConfig('phone', '+91 70021 57184')
+  const email = getConfig('email', 'contact@fitnessgarage.com')
+  const hours = getConfig('opening_hours', 'Mon–Sat: 6:00 AM – 10:30 PM, Sun: 9:00 AM – 2:00 PM')
+  const mapsEmbedUrl = getConfig(
+    'google_maps_embed_url',
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3581.488349275037!2d91.738850!3d26.1519396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a5b2a02da4f27%3A0x47c15d7aac48af26!2sFITNESS%20GARAGE%20GYM%20GUWAHATI!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin'
+  )
+  const mapsPlaceUrl = getConfig(
+    'google_maps_place_url',
+    'https://www.google.com/maps/place/FITNESS+GARAGE+GYM+GUWAHATI/@26.1519396,91.7414249,17z/data=!3m1!4b1!4m6!3m5!1s0x375a5b2a02da4f27:0x47c15d7aac48af26!8m2!3d26.1519396!4d91.7414249!16s%2Fg%2F11n0g3x3yp'
+  )
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,9 +51,20 @@ export const ContactPage: React.FC = () => {
         {/* Contact Info & Hours */}
         <div className="space-y-8">
           <Card className="p-8 space-y-6">
-            <h3 className="text-2xl font-display uppercase tracking-wider text-garage-white">
-              Location & Details
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-2xl font-display uppercase tracking-wider text-garage-white">
+                Location & Details
+              </h3>
+              <a
+                href={mapsPlaceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-garage-chrome hover:underline inline-flex items-center gap-1 font-semibold"
+              >
+                <span>Directions</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
 
             <div className="space-y-4 text-sm font-body">
               <div className="flex items-start gap-4">
@@ -46,9 +75,7 @@ export const ContactPage: React.FC = () => {
                   <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">
                     Address
                   </h5>
-                  <p className="text-garage-muted mt-0.5">
-                    123 Iron Works Way, Fitness District, Bangalore, 560001
-                  </p>
+                  <p className="text-garage-muted mt-0.5">{address}</p>
                 </div>
               </div>
 
@@ -60,7 +87,12 @@ export const ContactPage: React.FC = () => {
                   <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">
                     Phone
                   </h5>
-                  <p className="text-garage-muted mt-0.5">+91 98765 43210 / +91 98765 43211</p>
+                  <a
+                    href={`tel:${phone.replace(/\s+/g, '')}`}
+                    className="text-garage-muted hover:text-garage-chrome transition-colors mt-0.5 block"
+                  >
+                    {phone}
+                  </a>
                 </div>
               </div>
 
@@ -72,7 +104,12 @@ export const ContactPage: React.FC = () => {
                   <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">
                     Email
                   </h5>
-                  <p className="text-garage-muted mt-0.5">contact@fitnessgarage.com</p>
+                  <a
+                    href={`mailto:${email}`}
+                    className="text-garage-muted hover:text-garage-chrome transition-colors mt-0.5 block"
+                  >
+                    {email}
+                  </a>
                 </div>
               </div>
 
@@ -84,10 +121,20 @@ export const ContactPage: React.FC = () => {
                   <h5 className="font-bold text-garage-white uppercase tracking-wider text-xs">
                     Operating Hours
                   </h5>
-                  <p className="text-garage-muted mt-0.5">Mon – Sat: 05:30 AM – 10:30 PM</p>
-                  <p className="text-garage-muted">Sunday: 06:00 AM – 01:00 PM</p>
+                  <p className="text-garage-muted mt-0.5">{hours}</p>
                 </div>
               </div>
+            </div>
+
+            {/* Embedded Google Maps */}
+            <div className="pt-4 border-t border-garage-mid/40">
+              <iframe
+                title="Fitness Garage Guwahati Location"
+                src={mapsEmbedUrl}
+                className="w-full h-64 rounded-xl border border-garage-mid/60"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
           </Card>
         </div>

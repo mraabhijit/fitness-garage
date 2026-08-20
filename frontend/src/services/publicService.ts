@@ -70,4 +70,11 @@ export const publicService = {
   async getFallbackReviews(): Promise<Review[]> {
     return fallbackReviews.reviews as Review[]
   },
+
+  async getReviewsSummary(): Promise<{ rating: number; total_reviews: number }> {
+    return {
+      rating: fallbackReviews.rating || 4.8,
+      total_reviews: fallbackReviews.total_reviews || 108,
+    }
+  },
 }

@@ -4,7 +4,6 @@ import { useGoogleReviews } from '../../hooks/useGoogleReviews'
 import { ReviewCard } from './ReviewCard'
 import { Spinner } from '../../components/common/Spinner'
 import { Button } from '../../components/common/Button'
-import { useSiteConfigStore } from '../../store/siteConfigStore'
 
 export interface GoogleReviewsProps {
   limit?: number
@@ -15,8 +14,6 @@ const DEFAULT_MAPS_URL =
 
 export const GoogleReviews: React.FC<GoogleReviewsProps> = ({ limit }) => {
   const { reviews, rating, totalReviews, loading } = useGoogleReviews()
-  const getConfig = useSiteConfigStore((s) => s.getConfig)
-  const mapsPlaceUrl = getConfig('google_maps_place_url', DEFAULT_MAPS_URL)
 
   if (loading) {
     return <Spinner size="lg" className="my-12" />
@@ -31,9 +28,7 @@ export const GoogleReviews: React.FC<GoogleReviewsProps> = ({ limit }) => {
       {/* Header Summary Card */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10 p-6 bg-garage-dark border border-garage-mid rounded-xl">
         <div className="flex items-center gap-4">
-          <div className="text-4xl font-display font-extrabold text-garage-chrome">
-            {avgRating}
-          </div>
+          <div className="text-4xl font-display font-extrabold text-garage-chrome">{avgRating}</div>
           <div>
             <div className="flex items-center gap-1 text-garage-chrome">
               {Array.from({ length: 5 }).map((_, i) => (
@@ -57,7 +52,7 @@ export const GoogleReviews: React.FC<GoogleReviewsProps> = ({ limit }) => {
 
         <div className="flex items-center gap-3">
           <a
-            href={mapsPlaceUrl}
+            href={DEFAULT_MAPS_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-garage-chrome text-garage-black hover:bg-garage-chrome-dim transition-all text-xs font-bold uppercase tracking-wider"
@@ -87,21 +82,17 @@ export const GoogleReviews: React.FC<GoogleReviewsProps> = ({ limit }) => {
         </div>
 
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <a
-            href={mapsPlaceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={DEFAULT_MAPS_URL} target="_blank" rel="noopener noreferrer">
             <Button variant="outline" size="sm" rightIcon={<ExternalLink className="w-4 h-4" />}>
               All Google Reviews
             </Button>
           </a>
-          <a
-            href={mapsPlaceUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button variant="secondary" size="sm" rightIcon={<MessageSquarePlus className="w-4 h-4" />}>
+          <a href={DEFAULT_MAPS_URL} target="_blank" rel="noopener noreferrer">
+            <Button
+              variant="secondary"
+              size="sm"
+              rightIcon={<MessageSquarePlus className="w-4 h-4" />}
+            >
               Write a Review
             </Button>
           </a>

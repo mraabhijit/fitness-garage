@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { LogOut, Menu, Shield, User, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { ROUTES } from '../../constants/routes'
-import { useAuthStore } from '../../store/authStore'
 import { Button } from '../common/Button'
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
-  const { isAuthenticated, user, logout } = useAuthStore()
 
   const navLinks = [
     { label: 'Home', path: ROUTES.HOME },
@@ -56,46 +54,11 @@ export const Navbar: React.FC = () => {
 
           {/* User / CTA actions */}
           <div className="hidden lg:flex items-center space-x-4">
-            {isAuthenticated ? (
-              <div className="flex items-center gap-3">
-                {user?.role === 'admin' || user?.role === 'dev' ? (
-                  <Link to={ROUTES.ADMIN_DASHBOARD}>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      leftIcon={<Shield className="w-4 h-4 text-garage-chrome" />}
-                    >
-                      Admin
-                    </Button>
-                  </Link>
-                ) : (
-                  <Link to={ROUTES.MEMBER_DASHBOARD}>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      leftIcon={<User className="w-4 h-4 text-garage-chrome" />}
-                    >
-                      Portal
-                    </Button>
-                  </Link>
-                )}
-                <button
-                  onClick={logout}
-                  title="Logout"
-                  className="p-2 rounded-md text-garage-muted hover:text-status-expired hover:bg-garage-dark transition-colors"
-                >
-                  <LogOut className="w-5 h-5" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-3">
-                <Link to={ROUTES.CONTACT}>
-                  <Button variant="primary" size="sm">
-                    Join Now
-                  </Button>
-                </Link>
-              </div>
-            )}
+            <Link to={ROUTES.CONTACT}>
+              <Button variant="primary" size="sm">
+                Join Now
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -132,48 +95,16 @@ export const Navbar: React.FC = () => {
             </Link>
           ))}
           <div className="pt-4 border-t border-garage-mid/60 flex flex-col gap-2">
-            {isAuthenticated ? (
-              <>
-                <Link
-                  to={
-                    user?.role === 'admin' || user?.role === 'dev'
-                      ? ROUTES.ADMIN_DASHBOARD
-                      : ROUTES.MEMBER_DASHBOARD
-                  }
-                  onClick={() => {
-                    setIsOpen(false)
-                  }}
-                >
-                  <Button variant="primary" size="md" className="w-full">
-                    {user?.role === 'admin' || user?.role === 'dev'
-                      ? 'Admin Dashboard'
-                      : 'Member Dashboard'}
-                  </Button>
-                </Link>
-                <Button
-                  variant="outline"
-                  size="md"
-                  onClick={() => {
-                    logout()
-                    setIsOpen(false)
-                  }}
-                  className="w-full"
-                >
-                  Log Out
-                </Button>
-              </>
-            ) : (
-              <Link
-                to={ROUTES.CONTACT}
-                onClick={() => {
-                  setIsOpen(false)
-                }}
-              >
-                <Button variant="primary" size="md" className="w-full">
-                  Join Now
-                </Button>
-              </Link>
-            )}
+            <Link
+              to={ROUTES.CONTACT}
+              onClick={() => {
+                setIsOpen(false)
+              }}
+            >
+              <Button variant="primary" size="md" className="w-full">
+                Join Now
+              </Button>
+            </Link>
           </div>
         </div>
       )}

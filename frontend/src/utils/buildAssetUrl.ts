@@ -10,7 +10,7 @@ export function buildAssetUrl(folder: string, filename?: string | null): string 
   }
   const cleanFolder = folder.replace(/^\/+|\/+$/g, '')
   const cleanFilename = filename.replace(/^\/+/, '')
-  
+
   if (cleanFolder.startsWith('assets/')) {
     return `/${cleanFolder}/${cleanFilename}`
   }

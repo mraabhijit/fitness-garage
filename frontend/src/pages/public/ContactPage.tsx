@@ -1,13 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SectionHeading } from '../../components/common/SectionHeading'
 import { Card } from '../../components/common/Card'
 import { Button } from '../../components/common/Button'
 import { FormField } from '../../components/forms/FormField'
 import { TextareaField } from '../../components/forms/TextareaField'
 import { CheckCircle2, Clock, ExternalLink, Mail, MapPin, Phone, Send } from 'lucide-react'
-import { useSiteConfigStore } from '../../store/siteConfigStore'
+import { publicService } from '../../services/publicService'
+import type { SiteConfig } from '../../types'
+
+const DEFAULT_CONFIG: SiteConfig = {
+  gym_name: 'Fitness Garage',
+  tagline: 'Forge Your Ultimate Physique',
+  about_story: '',
+  address: 'Maa, Sarda Path, Colony Bazar, Kala Pahar, Gopinath Nagar, Guwahati, Assam 781018',
+  phone: '+91 70021 57184',
+  email: 'contact@fitnessgarage.com',
+  google_maps_embed_url:
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3581.488349275037!2d91.738850!3d26.1519396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a5b2a02da4f27%3A0x47c15d7aac48af26!2sFITNESS%20GARAGE%20GYM%20GUWAHATI!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin',
+  google_maps_place_url:
+    'https://www.google.com/maps/place/FITNESS+GARAGE+GYM+GUWAHATI/@26.1519396,91.7414249,17z/data=!3m1!4b1!4m6!3m5!1s0x375a5b2a02da4f27:0x47c15d7aac48af26!8m2!3d26.1519396!4d91.7414249!16s%2Fg%2F11n0g3x3yp',
+  google_form_url:
+    'https://docs.google.com/forms/d/e/1FAIpQLSc_EXAMPLE_FORM_ID/viewform?embedded=true',
+  google_place_id: 'ChIJN1t_tDeuEmsRUsoyG83frY4',
+  opening_hours: 'Mon–Sat: 6:00 AM – 10:30 PM, Sun: 9:00 AM – 2:00 PM',
+}
 
 export const ContactPage: React.FC = () => {
+  const [config, setConfig] = useState<SiteConfig>(DEFAULT_CONFIG)
   const [submitted, setSubmitted] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -16,26 +35,19 @@ export const ContactPage: React.FC = () => {
     message: '',
   })
 
-  const getConfig = useSiteConfigStore((s) => s.getConfig)
-  const address = getConfig(
-    'address',
-    'Maa, Sarda Path, Colony Bazar, Kala Pahar, Gopinath Nagar, Guwahati, Assam 781018'
-  )
-  const phone = getConfig('phone', '+91 70021 57184')
-  const email = getConfig('email', 'contact@fitnessgarage.com')
-  const hours = getConfig('opening_hours', 'Mon–Sat: 6:00 AM – 10:30 PM, Sun: 9:00 AM – 2:00 PM')
-  const mapsEmbedUrl = getConfig(
-    'google_maps_embed_url',
-    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3581.488349275037!2d91.738850!3d26.1519396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x375a5b2a02da4f27%3A0x47c15d7aac48af26!2sFITNESS%20GARAGE%20GYM%20GUWAHATI!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin'
-  )
-  const mapsPlaceUrl = getConfig(
-    'google_maps_place_url',
-    'https://www.google.com/maps/place/FITNESS+GARAGE+GYM+GUWAHATI/@26.1519396,91.7414249,17z/data=!3m1!4b1!4m6!3m5!1s0x375a5b2a02da4f27:0x47c15d7aac48af26!8m2!3d26.1519396!4d91.7414249!16s%2Fg%2F11n0g3x3yp'
-  )
+  useEffect(() => {
+    publicService.getSiteConfig().then(setConfig).catch(console.error)
+  }, [])
+
+  const address = config.address || DEFAULT_CONFIG.address
+  const phone = config.phone || DEFAULT_CONFIG.phone
+  const email = config.email || DEFAULT_CONFIG.email
+  const hours = config.opening_hours || DEFAULT_CONFIG.opening_hours
+  const mapsEmbedUrl = config.google_maps_embed_url || DEFAULT_CONFIG.google_maps_embed_url
+  const mapsPlaceUrl = config.google_maps_place_url || DEFAULT_CONFIG.google_maps_place_url
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulate submission / lead capture
     setSubmitted(true)
   }
 

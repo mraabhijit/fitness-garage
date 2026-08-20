@@ -8,10 +8,7 @@ export interface HeroSlideshowProps {
   intervalMs?: number
 }
 
-export const HeroSlideshow: React.FC<HeroSlideshowProps> = ({
-  slides,
-  intervalMs = 5000,
-}) => {
+export const HeroSlideshow: React.FC<HeroSlideshowProps> = ({ slides, intervalMs = 5000 }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   const goToNext = useCallback(() => {

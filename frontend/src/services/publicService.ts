@@ -22,7 +22,7 @@ import type {
  * Replaceable Service Layer for public data.
  *
  * Phase 1 (Static): Loads content asynchronously from local version-controlled JSON data files.
- * Phase 2 (Backend Wired): Swap these implementations to make Axios calls to FastAPI endpoints.
+ * Phase 2 (Backend Wired): Swap these implementations to make API calls to FastAPI endpoints.
  * Zero UI components or pages need to change.
  */
 export const publicService = {
@@ -55,7 +55,7 @@ export const publicService = {
       (item) =>
         item.folder === folder ||
         item.folder_path === folder ||
-        item.folder_path === `assets/${folder}`
+        item.folder_path === `assets/${folder}`,
     )
   },
 
@@ -64,10 +64,6 @@ export const publicService = {
   },
 
   async getReviews(): Promise<Review[]> {
-    return fallbackReviews.reviews as Review[]
-  },
-
-  async getFallbackReviews(): Promise<Review[]> {
     return fallbackReviews.reviews as Review[]
   },
 

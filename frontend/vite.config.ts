@@ -15,7 +15,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom', 'react-router-dom'],
-          state: ['zustand', 'axios'],
           icons: ['lucide-react'],
         },
       },
@@ -24,11 +23,5 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      },
-    },
   },
 });

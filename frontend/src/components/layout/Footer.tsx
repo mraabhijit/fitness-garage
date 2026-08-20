@@ -1,23 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Clock, Facebook, Instagram, Mail, MapPin, Phone, Youtube } from 'lucide-react'
 import { ROUTES } from '../../constants/routes'
-import { useSiteConfigStore } from '../../store/siteConfigStore'
+import { publicService } from '../../services/publicService'
+import type { SiteConfig } from '../../types'
+
+const DEFAULT_CONFIG: SiteConfig = {
+  gym_name: 'Fitness Garage',
+  tagline: 'Forge Your Ultimate Physique',
+  about_story: '',
+  address: 'Maa, Sarda Path, Colony Bazar, Kala Pahar, Guwahati, Assam 781018',
+  phone: '+91 70021 57184',
+  email: 'contact@fitnessgarage.com',
+  google_maps_embed_url: '',
+  google_form_url: '',
+  google_place_id: '',
+  opening_hours: 'Mon–Sat: 6:00 AM – 10:30 PM, Sun: 9:00 AM – 2:00 PM',
+}
 
 export const Footer: React.FC = () => {
-  const getConfig = useSiteConfigStore((s) => s.getConfig)
+  const [config, setConfig] = useState<SiteConfig>(DEFAULT_CONFIG)
 
-  const gymName = getConfig('gym_name', 'Fitness Garage')
-  const gymAddress = getConfig(
-    'gym_address',
-    'Maa, Sarda Path, Colony Bazar, Kala Pahar, Guwahati, Assam 781018'
-  )
-  const gymPhone = getConfig('gym_phone', '+91 70021 57184')
-  const gymEmail = getConfig('gym_email', 'contact@fitnessgarage.com')
-  const aboutTagline = getConfig(
-    'about_tagline',
-    'Push beyond your limits. Fitness Garage is your premium strength and transformation gym in Kala Pahar, Guwahati.',
-  )
+  useEffect(() => {
+    publicService.getSiteConfig().then(setConfig).catch(console.error)
+  }, [])
+
+  const gymName = config.gym_name || DEFAULT_CONFIG.gym_name
+  const gymAddress = config.address || DEFAULT_CONFIG.address
+  const gymPhone = config.phone || DEFAULT_CONFIG.phone
+  const gymEmail = config.email || DEFAULT_CONFIG.email
+  const aboutTagline =
+    config.tagline ||
+    'Push beyond your limits. Fitness Garage is your premium strength and transformation gym in Kala Pahar, Guwahati.'
 
   return (
     <footer className="bg-[#121212] border-t border-garage-mid/60 text-garage-white">

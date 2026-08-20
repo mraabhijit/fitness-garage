@@ -17,7 +17,7 @@ export function useGoogleReviews() {
     setError(null)
     try {
       const [data, summary] = await Promise.all([
-        publicService.getFallbackReviews(),
+        publicService.getReviews(),
         publicService.getReviewsSummary(),
       ])
       setReviews(data)
@@ -36,5 +36,3 @@ export function useGoogleReviews() {
 
   return { reviews, rating, totalReviews, loading, error, refetch: fetchReviews }
 }
-
-

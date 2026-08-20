@@ -43,10 +43,7 @@ export const HomePage: React.FC = () => {
       {/* 1. HERO SECTION */}
       <section className="relative min-h-[90vh] flex items-center justify-center bg-garage-black overflow-hidden px-4">
         {heroData?.slides && (
-          <HeroSlideshow
-            slides={heroData.slides}
-            intervalMs={heroData.slideshow_interval_ms}
-          />
+          <HeroSlideshow slides={heroData.slides} intervalMs={heroData.slideshow_interval_ms} />
         )}
 
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-garage-dark/40 via-garage-black/60 to-black/80 pointer-events-none" />
@@ -58,8 +55,7 @@ export const HomePage: React.FC = () => {
           </div>
 
           <h1 className="text-5xl sm:text-7xl md:text-8xl font-display font-extrabold uppercase tracking-tight text-garage-white leading-none mb-6">
-            {heroData?.headline_before || 'PUSH'}{' '}
-            <span className="text-garage-chrome">/</span>{' '}
+            {heroData?.headline_before || 'PUSH'} <span className="text-garage-chrome">/</span>{' '}
             {heroData?.headline_after || 'BEYOND LIMITS'}
           </h1>
 

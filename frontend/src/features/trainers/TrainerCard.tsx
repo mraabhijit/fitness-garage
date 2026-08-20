@@ -30,7 +30,13 @@ export const TrainerCard: React.FC<TrainerCardProps> = ({ trainer }) => {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-garage-muted bg-garage-mid/20 font-display text-4xl">
-              {trainer.name.slice(0, 2).toUpperCase()}
+              {trainer.name
+                .split(' ')
+                .filter(Boolean)
+                .map((part) => part[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase() || 'JD'}
             </div>
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-garage-dark via-transparent to-transparent pointer-events-none" />
